@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".account.SettingComicReadActivity">
+
+    <com.sena.dmzjthird.custom.NormalToolbar
+        android:id="@+id/normalToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:isShowFavorite="false"
+        app:isShowOther="false"
+        app:toolbarTitle="@string/icon_comic_setting_title"
+        android:background="?colorPrimary"
+        android:elevation="20dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="?colorPrimaryDark" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <TextView
+            style="@style/comicReadSettingTitle"
+            android:text="@string/use_system_light"
+            tools:ignore="MissingConstraints" />
+
+        <Switch
+            android:id="@+id/lightSwitch"
+            style="@style/comicReadSettingSwitch"
+            tools:ignore="MissingConstraints"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lightCons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_light_dark" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_light_bright" />
+
+        <SeekBar
+            android:id="@+id/lightSeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="10"
+            android:progress="2"
+            android:maxHeight="7dp"
+            android:minHeight="7dp"
+            android:progressDrawable="@drawable/bg_seekbar"
+            android:thumb="@drawable/select_thumb_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintStart_toEndOf="@+id/imageView1"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <TextView
+            style="@style/comicReadSettingTitle"
+            android:text="@string/vertical_reading"
+            tools:ignore="MissingConstraints" />
+
+        <Switch
+            android:id="@+id/verticalSwitch"
+            style="@style/comicReadSettingSwitch"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/modeCons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <TextView
+            style="@style/comicReadSettingTitle"
+            android:text="@string/japanese_comic_mode"
+            tools:ignore="MissingConstraints" />
+
+        <Switch
+            android:id="@+id/modeSwitch"
+            style="@style/comicReadSettingSwitch"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <TextView
+            style="@style/comicReadSettingTitle"
+            android:text="@string/keep_screen_light"
+            tools:ignore="MissingConstraints" />
+
+        <Switch
+            android:id="@+id/keepSwitch"
+            style="@style/comicReadSettingSwitch"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <TextView
+            style="@style/comicReadSettingTitle"
+            android:text="@string/fullscreen_reading"
+            tools:ignore="MissingConstraints" />
+
+        <Switch
+            android:id="@+id/fullSwitch"
+            style="@style/comicReadSettingSwitch"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <TextView
+            style="@style/comicReadSettingTitle"
+            android:text="@string/status_information"
+            tools:ignore="MissingConstraints" />
+
+        <Switch
+            android:id="@+id/stateSwitch"
+            style="@style/comicReadSettingSwitch"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".home.AccountFragment"
+    android:background="@color/layout_bg">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+
+            <LinearLayout
+                android:id="@+id/accountLogin"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:elevation="20dp"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/bg_avator"
+                    android:src="@drawable/ic_account2"
+                    android:scaleType="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/icon_login_title"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.6"
+                android:background="@drawable/bg_img"
+                android:elevation="10dp" />
+
+        </RelativeLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/accountFavorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_account_item"
+            android:clickable="true"
+            android:padding="15dp">
+
+            <ImageView
+                style="@style/accountItemImage1"
+                android:id="@+id/imageView1"
+                android:src="@drawable/ic_favorite"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                style="@style/accountItemTitle"
+                android:text="@string/icon_favorite_title"
+                app:layout_constraintStart_toEndOf="@+id/imageView1"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                style="@style/accountItemImage2"
+                android:src="@drawable/ic_right"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/accountHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_account_item"
+            android:clickable="true"
+            android:padding="15dp">
+
+            <ImageView
+                style="@style/accountItemImage1"
+                android:id="@+id/imageView2"
+                android:src="@drawable/ic_history"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                style="@style/accountItemTitle"
+                android:text="@string/icon_history_title"
+                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                style="@style/accountItemImage2"
+                android:src="@drawable/ic_right"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/accountMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_account_item"
+            android:clickable="true"
+            android:padding="15dp">
+
+            <ImageView
+                style="@style/accountItemImage1"
+                android:id="@+id/imageView3"
+                android:src="@drawable/ic_message"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                style="@style/accountItemTitle"
+                android:text="@string/icon_message_title"
+                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                style="@style/accountItemImage2"
+                android:src="@drawable/ic_right"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/accountDownload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_account_item"
+            android:clickable="true"
+            android:padding="15dp">
+
+            <ImageView
+                style="@style/accountItemImage1"
+                android:id="@+id/imageView4"
+                android:src="@drawable/ic_save"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                style="@style/accountItemTitle"
+                android:text="@string/icon_download_title"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/accountNight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_account_item"
+            android:clickable="true"
+            android:padding="15dp">
+
+            <ImageView
+                style="@style/accountItemImage1"
+                android:id="@+id/imageView5"
+                android:src="@drawable/ic_night"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                style="@style/accountItemTitle"
+                android:text="@string/icon_night_title"
+                app:layout_constraintStart_toEndOf="@+id/imageView5"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                style="@style/accountItemImage2"
+                android:src="@drawable/ic_right"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/accountSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_account_item"
+            android:clickable="true"
+            android:padding="15sp">
+
+            <ImageView
+                style="@style/accountItemImage1"
+                android:id="@+id/imageView6"
+                android:src="@drawable/ic_setting"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                style="@style/accountItemTitle"
+                android:text="@string/icon_setting_title"
+                app:layout_constraintStart_toEndOf="@+id/imageView6"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                style="@style/accountItemImage2"
+                android:src="@drawable/ic_right"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </LinearLayout>
+</FrameLayout>

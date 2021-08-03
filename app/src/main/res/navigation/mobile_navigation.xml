@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_comic">
+
+    <fixFragment
+        android:id="@+id/navigation_comic"
+        android:name="com.sena.dmzjthird.home.ComicFragment"
+        android:label="@string/icon_comic_title"
+        tools:layout="@layout/fragment_comic" />
+
+    <fixFragment
+        android:id="@+id/navigation_topic"
+        android:name="com.sena.dmzjthird.home.TopicFragment"
+        android:label="@string/icon_topic_title"
+        tools:layout="@layout/fragment_topic" />
+
+    <fixFragment
+        android:id="@+id/navigation_novel"
+        android:name="com.sena.dmzjthird.home.NovelFragment"
+        android:label="@string/icon_novel_title"
+        tools:layout="@layout/fragment_novel" />
+    <fixFragment
+        android:id="@+id/navigation_account"
+        android:name="com.sena.dmzjthird.home.AccountFragment"
+        android:label="@string/icon_account_title"
+        tools:layout="@layout/fragment_account" />
+</navigation>

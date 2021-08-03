@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">DMZJThird</string>
+
+    // 数据出错处理
+    <string name="no_data">没有数据</string>
+    <string name="default_text">默认文字</string>
+
+
+    // 主题颜色名称
+    <string name="theme_dialog_title">切换主题</string>
+    <string name="theme_blue">胖次蓝</string>
+    <string name="theme_pink">少女粉</string>
+    <string name="theme_green">早苗绿</string>
+    <string name="theme_purple">基佬紫</string>
+    <string name="theme_red">姨妈红</string>
+    <string name="theme_yellow">咸蛋黄</string>
+
+    // nav_bottom_icon名称
+    <string name="icon_comic_title">漫画</string>
+    <string name="icon_topic_title">专题</string>
+    <string name="icon_novel_title">轻小说</string>
+    <string name="icon_account_title">我的</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //account条目文字
+    <string name="icon_favorite_title">我的订阅</string>
+    <string name="icon_history_title">浏览历史</string>
+    <string name="icon_message_title">我的评论</string>
+    <string name="icon_download_title">我的下载</string>
+    <string name="icon_night_title">夜间模式</string>
+    <string name="icon_setting_title">设置</string>
+    <string name="icon_theme_title">主题切换</string>
+    <string name="icon_comic_setting_title">漫画阅读设置</string>
+    <string name="icon_novel_setting_title">小说阅读设置</string>
+    <string name="icon_comic_download_title">漫画下载设置</string>
+    <string name="icon_novel_download_title">小说下载设置</string>
+    <string name="icon_update_title">检查更新</string>
+    <string name="icon_about_title">关于</string>
+
+
+    // 夜间模式选项
+
+
+    <string name="icon_login_title">点击登录</string>
+
+    // 漫画阅读设置item文字
+    <string name="use_system_light">使用系统亮度</string>
+    <string name="vertical_reading">竖直阅读</string>
+    <string name="japanese_comic_mode">日漫模式</string>
+    <string name="keep_screen_light">屏幕常亮</string>
+    <string name="fullscreen_reading">全屏阅读</string>
+    <string name="status_information">显示状态信息</string>
+
+    // TabLayout文字
+    <string name="recommend">推荐</string>
+    <string name="update">更新</string>
+    <string name="classify">分类</string>
+    <string name="rank">排行</string>
+    <string name="topic">专题</string>
+
+</resources>
