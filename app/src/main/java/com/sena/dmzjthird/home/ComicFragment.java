@@ -44,6 +44,8 @@ public class ComicFragment extends Fragment {
             binding.tableLayout.addTab(binding.tableLayout.newTab().setText(s).setIcon(R.drawable.ic_search));
         }
 
+        binding.viewPager.setOffscreenPageLimit(4);
+
         binding.viewPager.setAdapter(new FragmentPagerAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             @NonNull
             @NotNull
