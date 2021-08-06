@@ -27,13 +27,14 @@
                 android:elevation="20dp"
                 android:gravity="center">
                 <ImageView
+                    android:id="@+id/avatar"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@drawable/bg_avator"
-                    android:src="@drawable/ic_account2"
-                    android:scaleType="center"/>
+                    android:background="@drawable/layer_avatar"
+                    android:scaleType="centerCrop"/>
 
                 <TextView
+                    android:id="@+id/nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/icon_login_title"

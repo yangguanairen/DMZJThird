@@ -20,7 +20,6 @@
         <com.sena.dmzjthird.custom.ProgressWheel
             xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
             android:id="@+id/progress"
-            android:visibility="gone"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="200dp"
             android:layout_width="60dp"

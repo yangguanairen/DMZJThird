@@ -32,20 +32,20 @@ public class ComicRecommendAdapter extends BaseQuickAdapter<ComicRecommendBean, 
     @Override
     protected void convert(@NotNull BaseViewHolder holder, ComicRecommendBean bean) {
 
-        RecyclerView recyclerView = holder.getView(R.id.recyclerview);
-        ComicRecommendChildAdapter adapter = new ComicRecommendChildAdapter(mContext);
-        recyclerView.setAdapter(adapter);
-
         String title = bean.getTitle();
         holder.setText(R.id.title, title);
         int id = bean.getCategory_id();
         if (id == 47 || id == 51 || id == 53 || id == 55) {
-            holder.getView(R.id.refresh).setVisibility(View.GONE);
-        } else if (id == 48 || id == 56) {
-            holder.getView(R.id.refresh).setBackgroundResource(R.drawable.ic_right);
+            holder.setVisible(R.id.refresh, false);
+        } else if (id == 48 || id == 49 || id == 56) {
+            holder.setBackgroundResource(R.id.refresh, R.drawable.ic_right);
         } else {
-            holder.getView(R.id.refresh).setBackgroundResource(R.drawable.ic_refresh);
+            holder.setBackgroundResource(R.id.refresh, R.drawable.ic_refresh);
         }
+
+        RecyclerView recyclerView = holder.getView(R.id.recyclerview);
+        ComicRecommendChildAdapter adapter = new ComicRecommendChildAdapter(mContext);
+        recyclerView.setAdapter(adapter);
 
         if (id == 48 || id == 53 || id == 55) {
             recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
@@ -55,5 +55,10 @@ public class ComicRecommendAdapter extends BaseQuickAdapter<ComicRecommendBean, 
 
         adapter.setList(bean.getData());
 
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
 }
