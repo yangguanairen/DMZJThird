@@ -17,6 +17,7 @@ import com.sena.dmzjthird.comic.bean.ComicRecommendBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean1;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean2;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean3;
+import com.sena.dmzjthird.custom.AutoBanner;
 import com.sena.dmzjthird.databinding.FragmentComicRecommendBinding;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.PreferenceHelper;
@@ -58,6 +59,9 @@ public class ComicRecommendFragment extends Fragment {
     private ComicRecommendAdapter adapter;
     private final List<ComicRecommendBean> list = new ArrayList<>();
 
+    private Handler mHandler;
+    private boolean isTouch = false;
+
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -67,16 +71,17 @@ public class ComicRecommendFragment extends Fragment {
 
         binding.progress.spin();
 
+        initBanner();
+
         initAdapter();
 
 
         return binding.getRoot();
     }
 
-
     private void setRecommendList(ComicRecommendBean bean) {
         list.add(bean);
-        if (list.size() == 9) {
+        if (list.size() == (PreferenceHelper.findStringByKey(getActivity(), PreferenceHelper.USER_UID)==null?8:9)) {
 //            binding.progress.stopSpinning();
 //            binding.progress.setVisibility(View.GONE);
             // 设置adapter
@@ -87,17 +92,26 @@ public class ComicRecommendFragment extends Fragment {
             });
             adapter.setList(list);
             new Handler().postDelayed(() -> {
+                binding.banner.setVisibility(View.VISIBLE);
                 binding.progress.stopSpinning();
                 binding.progress.setVisibility(View.GONE);
             }, 2000);
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
+
+    private void initBanner() {
+
+        AutoBanner banner = new AutoBanner(getActivity());
+
+        RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
+
+        service.getComicRecommend1(46)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bean -> binding.banner.setDataList(bean.getData().getData()));
     }
+
 
     private void initAdapter() {
 
@@ -205,5 +219,12 @@ public class ComicRecommendFragment extends Fragment {
         };
         return observer;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
+
 
 }
