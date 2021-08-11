@@ -1,60 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".comic.fragment.ComicRecommendFragment"
     android:background="@color/layout_bg">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.sena.dmzjthird.custom.AutoBanner
-            android:id="@+id/banner"
-            android:layout_margin="@dimen/dp_10"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.sena.dmzjthird.custom.AutoBanner
+                android:id="@+id/banner"
+                android:layout_margin="@dimen/dp_10"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        // 数据加载动画
-        <com.sena.dmzjthird.custom.ProgressWheel
-            xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/progress"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="200dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            ProgressWheel:barColor="?colorPrimary"
-            ProgressWheel:barLength="90dp"
-            ProgressWheel:barWidth="6dp"
-            ProgressWheel:delayMillis="75"
-            ProgressWheel:rimColor="@color/white"
-            ProgressWheel:rimWidth="2dp"
-            ProgressWheel:spinSpeed="14dp"
-            ProgressWheel:textColor="#222222"
-            ProgressWheel:textSize="14sp" />
-
-
-        // 数据出错处理
-        <TextView
-            android:id="@+id/no_data"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:gravity="center"
-            android:text="@string/no_data"
-            android:textSize="20sp"
-            android:visibility="gone" />
-
-    </LinearLayout>
+            // 数据加载动画
+            <com.sena.dmzjthird.custom.ProgressWheel
+                xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/progress"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="200dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                ProgressWheel:barColor="?colorPrimary"
+                ProgressWheel:barLength="90dp"
+                ProgressWheel:barWidth="6dp"
+                ProgressWheel:delayMillis="75"
+                ProgressWheel:rimColor="@color/white"
+                ProgressWheel:rimWidth="2dp"
+                ProgressWheel:spinSpeed="14dp"
+                ProgressWheel:textColor="#222222"
+                ProgressWheel:textSize="14sp" />
 
 
-</androidx.core.widget.NestedScrollView>
+            // 数据出错处理
+            <TextView
+                android:id="@+id/no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="@string/no_data"
+                android:textSize="20sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

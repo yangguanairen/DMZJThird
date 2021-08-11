@@ -1,15 +1,14 @@
-package com.sena.dmzjthird.account.bean;
+package com.sena.dmzjthird.comic.bean;
 
 import java.util.List;
 
 /**
  * Created by Android Studio.
  * User: Sena
- * Date: 2021/8/6
- * Time: 21:50
+ * Date: 2021/8/11
+ * Time: 12:33
  */
 public class ComicTopicBean {
-
     private int code;
     private String msg;
     private List<Data> data;
@@ -42,7 +41,7 @@ public class ComicTopicBean {
         private String id;
         private String title;
         private String short_title;
-        private long createTime;
+        private long create_time;
         private String small_cover;
         private int page_type;
         private int sort;
@@ -72,12 +71,12 @@ public class ComicTopicBean {
             this.short_title = short_title;
         }
 
-        public long getCreateTime() {
-            return createTime;
+        public long getCreate_time() {
+            return create_time;
         }
 
-        public void setCreateTime(long createTime) {
-            this.createTime = createTime;
+        public void setCreate_time(long create_time) {
+            this.create_time = create_time;
         }
 
         public String getSmall_cover() {
@@ -112,4 +111,6 @@ public class ComicTopicBean {
             this.page_url = page_url;
         }
     }
+
+
 }

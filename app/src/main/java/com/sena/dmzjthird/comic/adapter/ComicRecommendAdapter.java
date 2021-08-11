@@ -1,7 +1,6 @@
 package com.sena.dmzjthird.comic.adapter;
 
 import android.content.Context;
-import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,7 +9,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.bean.ComicRecommendBean;
-import com.sena.dmzjthird.utils.LogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ComicRecommendAdapter extends BaseQuickAdapter<ComicRecommendBean, BaseViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
 
     public ComicRecommendAdapter(Context context) {
         super(R.layout.item_comic_recommend);

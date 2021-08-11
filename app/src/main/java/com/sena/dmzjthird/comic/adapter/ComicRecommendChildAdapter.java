@@ -12,7 +12,6 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.bean.ComicRecommendBean;
 import com.sena.dmzjthird.utils.GlideUtil;
-import com.sena.dmzjthird.utils.LogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ComicRecommendChildAdapter extends BaseQuickAdapter<ComicRecommendBean.Data, BaseViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
 
     public ComicRecommendChildAdapter(Context context) {
         super(R.layout.item_recommend_child);

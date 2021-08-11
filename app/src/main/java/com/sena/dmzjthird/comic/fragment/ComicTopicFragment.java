@@ -3,64 +3,110 @@ package com.sena.dmzjthird.comic.fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.RetrofitService;
+import com.sena.dmzjthird.comic.adapter.ComicTopicAdapter;
+import com.sena.dmzjthird.comic.bean.ComicTopicBean;
+import com.sena.dmzjthird.databinding.FragmentComicTopicBinding;
+import com.sena.dmzjthird.utils.LogUtil;
+import com.sena.dmzjthird.utils.RetrofitHelper;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ComicTopicFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import retrofit2.HttpException;
+
+
 public class ComicTopicFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ComicTopicFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ComicTopicFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ComicTopicFragment newInstance(String param1, String param2) {
-        ComicTopicFragment fragment = new ComicTopicFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private FragmentComicTopicBinding binding;
+    private ComicTopicAdapter adapter;
+    private int page = 0;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_comic_topic, container, false);
+
+        binding = FragmentComicTopicBinding.inflate(inflater, container, false);
+
+        binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new ComicTopicAdapter(getActivity());
+        binding.recyclerview.setAdapter(adapter);
+
+        adapter.setOnItemChildClickListener((adapter, view, position) -> {
+            // 跳转
+        });
+
+        adapter.getLoadMoreModule().setOnLoadMoreListener(() -> getResponse());
+        adapter.getLoadMoreModule().setAutoLoadMore(true);
+        adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(true);
+
+        getResponse();
+
+
+        return binding.getRoot();
+    }
+
+    private void getResponse() {
+        RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
+        service.getComicTopic(page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ComicTopicBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ComicTopicBean bean) {
+//                        if ((beans == null && page == 0) || beans != null && page == 0 && beans.size() == 0) {
+//                            binding.tvNoData.setVisibility(View.VISIBLE);
+//                            binding.recyclerViewRank.setVisibility(View.GONE);
+//                            Toast.makeText(getApplicationContext(), "没有数据了", Toast.LENGTH_LONG).show();
+//                        }
+                        if (bean.getData().size() < 10) {
+                            adapter.getLoadMoreModule().loadMoreEnd();
+                        } else {
+                            adapter.getLoadMoreModule().loadMoreComplete();
+                            page++;
+                        }
+                        if (page == 0) {
+                            adapter.setList(bean.getData());
+                        } else {
+                            adapter.addData(bean.getData());
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        if (e instanceof HttpException) {
+                            LogUtil.d("HttpError: " + ((HttpException) e).code() );
+                        } else {
+                            LogUtil.d("OtherError: " + e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

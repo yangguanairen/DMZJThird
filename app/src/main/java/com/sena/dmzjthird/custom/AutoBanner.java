@@ -3,14 +3,12 @@ package com.sena.dmzjthird.custom;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,18 +40,17 @@ import java.util.List;
 public class AutoBanner extends ConstraintLayout {
 
     private View view;
-    private ViewPager viewPager;
+    private MyViewPager viewPager;
     private LinearLayout linear;
     private TextView titleTV;
 
     private Context mContext;
-    private Handler handler;
-    private boolean isTouch = false;
+    private static Handler handler;
+    private boolean mIsTouch = false;
 
     private List<ComicRecommendBean.Data> dataList = new ArrayList<>();
 
-    private Runnable runnable;
-
+    private static Runnable runnable;
 
 
     public AutoBanner(@NonNull @NotNull Context context) {
@@ -78,14 +75,17 @@ public class AutoBanner extends ConstraintLayout {
             runnable = new Runnable() {
                 @Override
                 public void run() {
-                    if (!isTouch) {
-                        viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                    LogUtil.e("mIsTouch: "  + mIsTouch);
+                    if (!mIsTouch) {
+                        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                         handler.postDelayed(this, 5000);
                     }
                 }
             };
 
             viewPager.setOffscreenPageLimit(6);
+            // 用户滑动时，取消自动循环
+            viewPager.setOnViewPagerListener(isTouch -> mIsTouch = isTouch);
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
                 @Override
@@ -105,15 +105,15 @@ public class AutoBanner extends ConstraintLayout {
 //                        viewPager.setCurrentItem(dataList.size()-2, false);
 //                        return;
 //                    }
-                    if (position == dataList.size()-1) {
+                    if (position == dataList.size() - 1) {
                         position = 1;
                     } else if (position == 0) {
-                        position = dataList.size()-2;
+                        position = dataList.size() - 2;
                     }
                     viewPager.setCurrentItem(position, false);
                     // 改变title和point选中状态
                     titleTV.setText(dataList.get(position).getTitle());
-                    selectedPoint(position-1);
+                    selectedPoint(position - 1);
                 }
 
                 @Override
@@ -134,7 +134,7 @@ public class AutoBanner extends ConstraintLayout {
         if (list == null) {
             return;
         }
-        this.dataList.add(list.get(list.size()-1));
+        this.dataList.add(list.get(list.size() - 1));
         this.dataList.addAll(list);
         this.dataList.add(list.get(0));
 
@@ -159,18 +159,68 @@ public class AutoBanner extends ConstraintLayout {
 //        }
         for (int i = 0; i < linear.getChildCount(); i++) {
             View point = linear.getChildAt(i);
-            point.setBackgroundResource(i==position ? R.drawable.shape_point_selected : R.drawable.shape_point_normal);
+            point.setBackgroundResource(i == position ? R.drawable.shape_point_selected : R.drawable.shape_point_normal);
         }
     }
 
     private void initPoints() {
-        for (int i = 0; i < dataList.size()-2; i++) {
+        for (int i = 0; i < dataList.size() - 2; i++) {
             View point = new View(mContext);
             point.setBackgroundResource(R.drawable.shape_point_normal);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(20, 20);
             params.leftMargin = 10;
             point.setLayoutParams(params);
             linear.addView(point);
+        }
+    }
+
+
+
+    public static class MyViewPager extends ViewPager {
+
+        private OnViewPagerTouchListener listener;
+
+        public MyViewPager(@NonNull @NotNull Context context) {
+            super(context);
+        }
+
+        public MyViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+
+        // 难点: Runnable采用if判断，当触点在屏幕上停留超过5s，内部会执行false，不在运行条件体内的语句
+        // 解决: 触点发生时，取消Runnable，触点结束时，再把Runnable添加回去
+        // 另外，DOWN没有用，未探究原因。可能是最外围使用NestedScrollView，事件分发机制出现问题。
+        @Override
+        public boolean onTouchEvent(MotionEvent ev) {
+            switch (ev.getAction()) {
+                case MotionEvent.ACTION_MOVE:
+                    if (listener != null) {
+                        listener.onViewPagerTouch(true);
+                        handler.removeCallbacks(runnable);
+                    }
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_OUTSIDE:
+                    if (listener != null) {
+                        listener.onViewPagerTouch(false);
+                        handler.post(runnable);
+                    }
+                    break;
+            }
+
+            return super.onTouchEvent(ev);
+        }
+
+        public void setOnViewPagerListener(OnViewPagerTouchListener listener) {
+            this.listener = listener;
+        }
+
+
+        public interface OnViewPagerTouchListener {
+            void onViewPagerTouch(boolean isTouch);
         }
     }
 

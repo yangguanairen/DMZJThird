@@ -1,11 +1,17 @@
 package com.sena.dmzjthird;
 
-import com.sena.dmzjthird.account.bean.ComicTopicBean;
 import com.sena.dmzjthird.account.bean.LoginBean;
+import com.sena.dmzjthird.comic.bean.ComicClassifyCoverBean;
+import com.sena.dmzjthird.comic.bean.ComicComplaintRankBean;
+import com.sena.dmzjthird.comic.bean.ComicPopularityRankBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean1;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean2;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean3;
+import com.sena.dmzjthird.comic.bean.ComicSubscribeBean;
+import com.sena.dmzjthird.comic.bean.ComicSubscribeRankBean;
+import com.sena.dmzjthird.comic.bean.ComicTopicBean;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -47,18 +53,56 @@ public interface RetrofitService {
             @Query("category_id") int category_id
     );
 
-    // http://nnv3api.muwai.com/subject_with_level/0/{page}.json
-    @GET("subject_with_level/0/{page}.json")
-    Observable<ComicTopicBean> getComicTopic(
-      @Path("page") int page
+    // nnv3api.muwai.com/0/category_with_level.json
+    @GET("0/category_with_level.json")
+    Observable<ComicClassifyCoverBean> getComicClassifyCover(
+
     );
 
+    // nnv3api.muwai.com/subject_with_level/0/0.json
+    @GET("subject_with_level/0/{page}.json")
+    Observable<ComicTopicBean> getComicTopic(
+            @Path("page") int page
+    );
+
+    // https://m.dmzj.com/rank/0-0-0-0.json
+    @GET("rank/0-{id}}.json")
+    Observable<List<ComicPopularityRankBean>> getPopularityRankComic(
+            @Path("id") String id
+    );
+
+    // https://m.dmzj.com/rank/1-0-0-0.json
+    @GET("rank/1-0-{id}}.json")
+    Observable<List<ComicComplaintRankBean>> getComplaintRankComic(
+            @Path("id") String id
+    );
+
+    // https://m.dmzj.com/rank/2-0-0-0.json
+    @GET("rank/2-0-{id}}.json")
+    Observable<List<ComicSubscribeRankBean>> getSubscribeRankComic(
+            @Path("id") String id
+    );
 
 
     @Multipart
     @POST("loginV2/m_confirm")
     Observable<LoginBean> confirmAccount(
             @PartMap Map<String, RequestBody> requestBodyMap
+    );
+
+    @GET("subscribe/add")
+    Observable<ComicSubscribeBean> subscribeComic(
+//            obj_ids=59829&uid=109697332&type=mh
+            @Query("obj_ids") String id,
+            @Query("uid") String uid,
+            @Query("type") String type
+    );
+
+    @GET("subscribe/cancel")
+    Observable<ComicSubscribeBean> cancelSubscribeComic(
+            @Query("obj_ids") String id,
+            @Query("uid") String uid,
+            @Query("type") String type
     );
 
 }

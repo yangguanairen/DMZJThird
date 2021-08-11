@@ -11,12 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sena.dmzjthird.RetrofitService;
-import com.sena.dmzjthird.account.bean.ComicTopicBean;
 import com.sena.dmzjthird.comic.adapter.ComicRecommendAdapter;
 import com.sena.dmzjthird.comic.bean.ComicRecommendBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean1;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean2;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean3;
+import com.sena.dmzjthird.comic.bean.ComicTopicBean;
 import com.sena.dmzjthird.custom.AutoBanner;
 import com.sena.dmzjthird.databinding.FragmentComicRecommendBinding;
 import com.sena.dmzjthird.utils.LogUtil;
@@ -33,7 +33,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.HttpException;
 
@@ -59,10 +58,6 @@ public class ComicRecommendFragment extends Fragment {
     private ComicRecommendAdapter adapter;
     private final List<ComicRecommendBean> list = new ArrayList<>();
 
-    private Handler mHandler;
-    private boolean isTouch = false;
-
-
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,6 +65,10 @@ public class ComicRecommendFragment extends Fragment {
 
 
         binding.progress.spin();
+
+        binding.refresh.setOnRefreshListener(() -> {
+            new Handler().postDelayed(() -> binding.refresh.setRefreshing(false), 5000);
+        });
 
         initBanner();
 
@@ -149,18 +148,15 @@ public class ComicRecommendFragment extends Fragment {
         service.getComicTopic(0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ComicTopicBean>() {
-                    @Override
-                    public void accept(ComicTopicBean bean) throws Throwable {
-                        List<ComicRecommendBean.Data> tmp = new ArrayList<>();
-                        for (int i = 0; i < 4; i++) {
-                            ComicTopicBean.Data data = bean.getData().get(i);
-                            tmp.add(new ComicRecommendBean.Data(data.getSmall_cover(), data.getTitle(), null,
-                                    0, null, data.getId(), null));
-                        }
-                        setRecommendList(new ComicRecommendBean(48,
-                                "火热专题", 5, tmp));
+                .subscribe(bean -> {
+                    List<ComicRecommendBean.Data> tmp = new ArrayList<>();
+                    for (int i = 0; i < 4; i++) {
+                        ComicTopicBean.Data data = bean.getData().get(i);
+                        tmp.add(new ComicRecommendBean.Data(data.getSmall_cover(), data.getTitle(), null,
+                                0, null, data.getId(), null));
                     }
+                    setRecommendList(new ComicRecommendBean(48,
+                            "火热专题", 5, tmp));
                 });
     }
 
