@@ -20,7 +20,7 @@
         android:lines="1"
         android:ellipsize="end"
         android:layout_marginStart="20dp"
-        android:text="fsdfhshjfjk"
+        android:text="@string/default_text"
         android:textSize="18sp"
         android:textColor="@color/toolbar_text_icon"/>
 
@@ -36,7 +36,7 @@
         android:id="@+id/other"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_other"
+        android:src="@drawable/ic_download"
         android:layout_marginEnd="10dp"/>
 
 </LinearLayout>

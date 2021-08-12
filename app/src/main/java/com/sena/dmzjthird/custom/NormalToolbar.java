@@ -60,10 +60,10 @@ public class NormalToolbar extends Toolbar {
             boolean isShowOther = array.getBoolean(R.styleable.ToolbarNormal_isShowOther, false);
             otherIV.setVisibility(isShowOther ? View.VISIBLE : View.GONE);
 
-            int id = array.getInt(R.styleable.ToolbarNormal_otherSrc, 0);
-            if (!isShowOther && id  != 0) {
-                otherIV.setImageResource(id);
-            }
+//            int id = array.get(R.styleable.ToolbarNormal_otherSrc);
+//            if (!isShowOther && id != 0) {
+//                otherIV.setBackground();
+//            }
             array.recycle();
 
         }

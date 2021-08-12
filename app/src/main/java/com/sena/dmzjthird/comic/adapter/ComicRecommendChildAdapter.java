@@ -26,7 +26,7 @@ public class ComicRecommendChildAdapter extends BaseQuickAdapter<ComicRecommendB
     private final Context mContext;
 
     public ComicRecommendChildAdapter(Context context) {
-        super(R.layout.item_recommend_child);
+        super(R.layout.item_comic_recommend_child);
         this.mContext = context;
     }
 

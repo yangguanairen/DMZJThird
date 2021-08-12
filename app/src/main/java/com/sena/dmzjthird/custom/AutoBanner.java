@@ -75,7 +75,6 @@ public class AutoBanner extends ConstraintLayout {
             runnable = new Runnable() {
                 @Override
                 public void run() {
-                    LogUtil.e("mIsTouch: "  + mIsTouch);
                     if (!mIsTouch) {
                         viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                         handler.postDelayed(this, 5000);
@@ -143,9 +142,9 @@ public class AutoBanner extends ConstraintLayout {
         viewPager.setAdapter(new MyAdapter());
         viewPager.setCurrentItem(1);
 
-//        for (ComicRecommendBean.Data data: list) {
-//            LogUtil.e("title: " + data.getTitle());
-//        }
+        for (ComicRecommendBean.Data data: list) {
+            LogUtil.e("title: " + data.getTitle());
+        }
 
     }
 

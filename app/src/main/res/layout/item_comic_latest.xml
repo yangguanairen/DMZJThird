@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
@@ -76,16 +75,33 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="@dimen/dp_10"/>
 
-        <ImageView
-            android:id="@+id/subscribe"
-            android:layout_width="@dimen/dp_40"
-            android:layout_height="@dimen/dp_40"
-            android:background="@drawable/ic_subscribe_black"
+        <LinearLayout
+            android:id="@+id/linear"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="@dimen/dp_10"
-            android:contentDescription="0"/>
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/continueRead"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:background="@drawable/ic_continue_read"/>
+
+            <TextView
+                android:id="@+id/chapterName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default_text"
+                android:layout_marginTop="5dp"/>
+
+        </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -94,10 +110,5 @@
         android:layout_height="2dp"
         android:background="@color/layout_bg"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

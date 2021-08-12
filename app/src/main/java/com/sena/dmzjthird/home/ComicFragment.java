@@ -15,7 +15,7 @@ import com.sena.dmzjthird.comic.fragment.ComicClassifyFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRankFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRecommendFragment;
 import com.sena.dmzjthird.comic.fragment.ComicTopicFragment;
-import com.sena.dmzjthird.comic.fragment.ComicUpdateFragment;
+import com.sena.dmzjthird.comic.fragment.ComicLatestFragment;
 import com.sena.dmzjthird.databinding.FragmentComicBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,14 +35,14 @@ public class ComicFragment extends Fragment {
         binding = FragmentComicBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        List<Fragment> fragments = Arrays.asList(new ComicRecommendFragment(), new ComicUpdateFragment(),
+        List<Fragment> fragments = Arrays.asList(new ComicRecommendFragment(), new ComicLatestFragment(),
                 new ComicClassifyFragment(), new ComicRankFragment(), new ComicTopicFragment());
         List<String> tabTitles = Arrays.asList(getString(R.string.recommend), getString(R.string.update),
                 getString(R.string.classify), getString(R.string.rank), getString(R.string.topic));
 
-        for (String s: tabTitles) {
-            binding.tableLayout.addTab(binding.tableLayout.newTab().setText(s).setIcon(R.drawable.ic_search));
-        }
+//        for (String s: tabTitles) {
+//            binding.tableLayout.addTab(binding.tableLayout.newTab().setText(s).setIcon(R.drawable.ic_search));
+//        }
 
         binding.viewPager.setOffscreenPageLimit(4);
 
