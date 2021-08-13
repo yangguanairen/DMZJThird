@@ -3,10 +3,12 @@
 
     <string name="intent_comic_id">intent_comic_id</string>
     <string name="intent_chapter_id">intent_chapter_id</string>
+    <string name="intent_author_id">intent_author_id</string>
 
     // 数据出错处理
     <string name="no_data">没有数据</string>
     <string name="default_text">默认文字</string>
+    <string name="copyright_error">因版权、国家法规等原因，此漫画暂不提供观看，敬请谅解。</string>
 
 
     // 主题颜色名称

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.sena.dmzjthird">
+    package="com.sena.dmzjthird" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,14 +12,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoAction"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true" >
+        <activity
+            android:name=".comic.view.AuthorInfoActivity"
+            android:exported="true" />
         <activity
             android:name=".comic.view.ComicInfoActivity"
             android:exported="true" />
         <activity android:name=".account.LoginActivity" />
         <activity android:name=".account.SettingComicReadActivity" />
         <activity android:name=".account.SettingActivity" />
-        <activity android:name=".home.HomeActivity">
+        <activity android:name=".home.HomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

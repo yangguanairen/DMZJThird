@@ -1,6 +1,7 @@
 package com.sena.dmzjthird;
 
 import com.sena.dmzjthird.account.bean.LoginBean;
+import com.sena.dmzjthird.comic.bean.AuthorInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyCoverBean;
 import com.sena.dmzjthird.comic.bean.ComicComplaintRankBean;
 import com.sena.dmzjthird.comic.bean.ComicLatestBean;
@@ -8,6 +9,7 @@ import com.sena.dmzjthird.comic.bean.ComicPopularityRankBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean1;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean2;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean3;
+import com.sena.dmzjthird.comic.bean.ComicRelatedBean;
 import com.sena.dmzjthird.comic.bean.ComicSubscribeBean;
 import com.sena.dmzjthird.comic.bean.ComicSubscribeRankBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicBean;
@@ -92,6 +94,17 @@ public interface RetrofitService {
     Observable<List<ComicSubscribeRankBean>> getSubscribeRankComic(
             @Path("time") int time,
             @Path("page") int page
+    );
+
+    @GET("v3/comic/related/{id}.json")
+    Observable<ComicRelatedBean> getComicRelated(
+            @Path("id") String id
+    );
+
+    // nnv3api.muwai.com/UCenter/author/7470.json
+    @GET("/UCenter/author/{id}.json")
+    Observable<AuthorInfoBean> getAuthorInfo(
+            @Path("id") String id
     );
 
 

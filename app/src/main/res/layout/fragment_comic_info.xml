@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,9 +75,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingStart="@dimen/dp_10"
+            android:text="简介"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:background="@color/item_bg" />
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:background="@color/item_bg"
             android:padding="@dimen/dp_10"
+            android:textSize="16sp"
             android:text="@string/default_text" />
 
         <androidx.recyclerview.widget.RecyclerView

@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.fragment.ComicCommentFragment;
@@ -17,9 +19,11 @@ import com.sena.dmzjthird.databinding.ActivityComicInfoBinding;
 import java.util.Arrays;
 import java.util.List;
 
-public class ComicInfoActivity extends AppCompatActivity {
+public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFragment.Callbacks {
 
     private ActivityComicInfoBinding binding;
+
+    private String comicId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,25 @@ public class ComicInfoActivity extends AppCompatActivity {
         // 此时取消加载动画
         binding.progress.spin();
 
-        String comicId = getIntent().getStringExtra(getString(R.string.intent_comic_id));
+        comicId = getIntent().getStringExtra(getString(R.string.intent_comic_id));
+
+//        @SuppressLint("ResourceType") XmlPullParser parser = getResources().getXml(R.layout.toolbar_normal);
+//        AttributeSet attrs = Xml.asAttributeSet(parser);
+//        int type;
+//        while (true) {
+//            try {
+//                if (!((type = parser.next()) != XmlPullParser.START_TAG) && type != XmlPullParser.END_TAG) {
+//                    break;
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        NormalToolbar toolbar = new NormalToolbar(this, attrs);
+//        setSupportActionBar(toolbar);
+
+
+        binding.toolbar.setBackListener(v -> finish());
 
         List<Fragment> fragments = Arrays.asList(ComicInfoFragment.newInstance(comicId),
                 ComicCommentFragment.newInstance(comicId), ComicRelatedFragment.newInstance(comicId));
@@ -65,5 +87,25 @@ public class ComicInfoActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void loadingDataFinish(String title) {
+        binding.progress.stopSpinning();
+        binding.progress.setVisibility(View.GONE);
+        if (title == null) {
+            binding.noData.setVisibility(View.VISIBLE);
+            binding.noData.setText("漫画ID:"+comicId+"\n"+getString(R.string.copyright_error));
+        } else {
+            binding.viewPager.setVisibility(View.VISIBLE);
+            binding.tableLayout.setVisibility(View.VISIBLE);
+            binding.toolbar.setTitle(title);
+            binding.toolbar.setFavoriteIVVisibility(View.VISIBLE);
+            binding.toolbar.setOtherTVVisibility(View.VISIBLE);
+
+            binding.toolbar.setFavoriteListener(v -> {});
+            binding.toolbar.setOtherListener(v -> {});
+        }
     }
 }

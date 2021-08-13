@@ -100,7 +100,15 @@ public class NormalToolbar extends Toolbar {
         otherIV.setOnClickListener(listener);
     }
 
-    public void setToolbarBackground(int id) {
-        linear.setBackgroundColor(id);
+    public void setTitle(String title) {
+        titleTV.setText(title);
+    }
+
+    public void setFavoriteIVVisibility(int status) {
+        favoriteIV.setVisibility(status);
+    }
+
+    public void setOtherTVVisibility(int status) {
+        otherIV.setVisibility(status);
     }
 }
