@@ -4,6 +4,7 @@
     <string name="intent_comic_id">intent_comic_id</string>
     <string name="intent_chapter_id">intent_chapter_id</string>
     <string name="intent_author_id">intent_author_id</string>
+    <string name="intent_classify_id">intent_classify_id</string>
 
     // 数据出错处理
     <string name="no_data">没有数据</string>

@@ -2,7 +2,9 @@ package com.sena.dmzjthird;
 
 import com.sena.dmzjthird.account.bean.LoginBean;
 import com.sena.dmzjthird.comic.bean.AuthorInfoBean;
+import com.sena.dmzjthird.comic.bean.ComicClassifyBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyCoverBean;
+import com.sena.dmzjthird.comic.bean.ComicClassifyFilterBean;
 import com.sena.dmzjthird.comic.bean.ComicComplaintRankBean;
 import com.sena.dmzjthird.comic.bean.ComicLatestBean;
 import com.sena.dmzjthird.comic.bean.ComicPopularityRankBean;
@@ -105,6 +107,20 @@ public interface RetrofitService {
     @GET("/UCenter/author/{id}.json")
     Observable<AuthorInfoBean> getAuthorInfo(
             @Path("id") String id
+    );
+
+    // nnv3api.muwai.com//classifyWithLevel/0/0/0.json
+    @GET("classifyWithLevel/{filter}/{sort}/{page}.json")
+    Observable<List<ComicClassifyBean>> getComicClassify(
+            @Path("filter") String filter,
+            @Path("sort") String sort,
+            @Path("page") int page
+    );
+
+
+    // nnv3api.muwai.com/classify/filter.json
+    @GET("classify/filter.json")
+    Observable<List<ComicClassifyFilterBean>> getComicClassifyFilter(
     );
 
 

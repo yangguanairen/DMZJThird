@@ -1,5 +1,6 @@
 package com.sena.dmzjthird.comic.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicClassifyCoverAdapter;
 import com.sena.dmzjthird.comic.bean.ComicClassifyCoverBean;
+import com.sena.dmzjthird.comic.view.ComicClassifyActivity;
 import com.sena.dmzjthird.databinding.FragmentComicClassifyBinding;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
@@ -43,6 +46,9 @@ public class ComicClassifyFragment extends Fragment {
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
             // 跳转
+            Intent intent = new Intent(getActivity(), ComicClassifyActivity.class);
+            intent.putExtra(getString(R.string.intent_classify_id), ((ComicClassifyCoverBean.Data) adapter.getData().get(position)).getTag_id());
+            startActivity(intent);
         });
 
         binding.refresh.setOnRefreshListener(() -> {

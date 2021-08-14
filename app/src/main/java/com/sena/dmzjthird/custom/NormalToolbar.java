@@ -2,6 +2,7 @@ package com.sena.dmzjthird.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.utils.LogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -60,10 +62,10 @@ public class NormalToolbar extends Toolbar {
             boolean isShowOther = array.getBoolean(R.styleable.ToolbarNormal_isShowOther, false);
             otherIV.setVisibility(isShowOther ? View.VISIBLE : View.GONE);
 
-//            int id = array.get(R.styleable.ToolbarNormal_otherSrc);
-//            if (!isShowOther && id != 0) {
-//                otherIV.setBackground();
-//            }
+            Drawable drawable = array.getDrawable(R.styleable.ToolbarNormal_otherSrc);
+            if (isShowOther && drawable != null) {
+                otherIV.setBackground(drawable);
+            }
             array.recycle();
 
         }
