@@ -2,12 +2,10 @@ package com.sena.dmzjthird.home;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -22,8 +20,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.LoginActivity;
 import com.sena.dmzjthird.account.SettingActivity;
+import com.sena.dmzjthird.account.UserCommentActivity;
+import com.sena.dmzjthird.account.UserSubscribedActivity;
 import com.sena.dmzjthird.databinding.FragmentAccountBinding;
-import com.sena.dmzjthird.utils.AppConstants;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 
@@ -40,7 +39,7 @@ public class AccountFragment extends Fragment {
     private FragmentAccountBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentAccountBinding.inflate(inflater, container, false);
@@ -55,6 +54,28 @@ public class AccountFragment extends Fragment {
             } else {
                 // 退出登录或者进入详细页面
                 cancelLogin();
+            }
+        });
+
+        binding.accountFavorite.setOnClickListener(v -> {
+            String uid = PreferenceHelper.findStringByKey(getActivity(), PreferenceHelper.USER_UID);
+            if (uid == null) {
+                Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(getActivity(), UserSubscribedActivity.class);
+                intent.putExtra(getString(R.string.intent_user_id), uid);
+                startActivity(intent);
+            }
+        });
+
+        binding.accountMessage.setOnClickListener(v -> {
+            String uid = PreferenceHelper.findStringByKey(getActivity(), PreferenceHelper.USER_UID);
+            if (uid == null) {
+                Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(getActivity(), UserCommentActivity.class);
+                intent.putExtra(getString(R.string.intent_user_id), uid);
+                startActivity(intent);
             }
         });
 
@@ -99,5 +120,11 @@ public class AccountFragment extends Fragment {
         });
         builder.setNegativeButton("取消", null);
         builder.create().show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

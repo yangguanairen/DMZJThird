@@ -3,8 +3,10 @@
 
     <string name="intent_comic_id">intent_comic_id</string>
     <string name="intent_chapter_id">intent_chapter_id</string>
+    <string name="intent_topic_id">intent_topic_id</string>
     <string name="intent_author_id">intent_author_id</string>
     <string name="intent_classify_id">intent_classify_id</string>
+    <string name="intent_user_id">intent_user_id</string>
 
     // 数据出错处理
     <string name="no_data">没有数据</string>
@@ -76,6 +78,10 @@
     <string name="not_login">请先登录</string>
     <string name="login_success">登录成功</string>
     <string name="login_fail">登录失败</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 
 </resources>

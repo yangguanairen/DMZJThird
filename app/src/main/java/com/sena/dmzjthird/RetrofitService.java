@@ -1,6 +1,9 @@
 package com.sena.dmzjthird;
 
 import com.sena.dmzjthird.account.bean.LoginBean;
+import com.sena.dmzjthird.account.bean.UserComicCommentBean;
+import com.sena.dmzjthird.account.bean.UserNovelCommentBean;
+import com.sena.dmzjthird.account.bean.UserSubscribedBean;
 import com.sena.dmzjthird.comic.bean.AuthorInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyCoverBean;
@@ -15,6 +18,7 @@ import com.sena.dmzjthird.comic.bean.ComicRelatedBean;
 import com.sena.dmzjthird.comic.bean.ComicSubscribeBean;
 import com.sena.dmzjthird.comic.bean.ComicSubscribeRankBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicBean;
+import com.sena.dmzjthird.comic.bean.ComicTopicInfoBean;
 
 import java.util.List;
 import java.util.Map;
@@ -143,6 +147,37 @@ public interface RetrofitService {
             @Query("obj_ids") String id,
             @Query("uid") String uid,
             @Query("type") String type
+    );
+
+    // nnv3api.muwai.com/v3/subscribe/0/109697332/0.json?uid=109697332
+    // 0:Comic, 1:Novel
+    @GET("v3/subscribe/{type}/{targetUid}/{page}.json")
+    Observable<List<UserSubscribedBean>> getUserSubscribed(
+            @Path("type") int type,
+            @Path("targetUid") String targetUid,
+            @Path("page") int page,
+            @Query("uid") String uid
+
+    );
+
+    // nnv3api.muwai.com/v3/old/comment/owner/0/100021094/0.json
+    @GET("v3/old/comment/owner/0/{uid}/{page}.json")
+    Observable<List<UserComicCommentBean>> getUserComicComments(
+            @Path("uid") String uid,
+            @Path("page") int page
+    );
+
+    // nnv3api.muwai.com/comment/owner/1/100021094/0.json
+    @GET("comment/owner/1/{uid}/{page}.json")
+    Observable<List<UserNovelCommentBean>> getUserNovelComments(
+            @Path("uid") String uid,
+            @Path("page") int page
+    );
+
+    // nnv3api.muwai.com/subject_with_level/458.json
+    @GET("subject_with_level/{id}.json")
+    Observable<ComicTopicInfoBean> getTopicInfo(
+            @Path("id") String id
     );
 
 }

@@ -11,9 +11,11 @@
     </item>
 
     <item android:drawable="@drawable/ic_picture"
-        android:width="30dp" android:height="30dp"
-        android:top="45dp" android:start="30dp">
+
+        android:gravity="center">
     </item>
+<!--    android:width="30dp" android:height="30dp"-->
+<!--    android:top="45dp" android:start="30dp"-->
 
 
 </layer-list>

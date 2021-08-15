@@ -2,6 +2,8 @@ package com.sena.dmzjthird.utils;
 
 import android.util.Log;
 
+import retrofit2.HttpException;
+
 /**
  * Created by Android Studio.
  * User: Sena
@@ -53,6 +55,14 @@ public class LogUtil {
     public static void w(String s) {
         if (showLog) {
             printString(s, (a, b) -> Log.w(TAG, b));
+        }
+    }
+
+    public static void internetError(Throwable throwable) {
+        if (throwable instanceof HttpException) {
+            e("HttpError: " + ((HttpException) throwable).code());
+        } else {
+            e("OtherError: " + throwable.getMessage());
         }
     }
 
