@@ -14,6 +14,12 @@
         android:theme="@style/AppThemeNoAction"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".comic.view.ComicSearchActivity"
+            android:exported="true" />
+        <activity
+            android:name=".comic.view.ComicViewActivity"
+            android:exported="true" />
+        <activity
             android:name=".comic.view.ComicTopicInfoActivity"
             android:exported="true" />
         <activity

@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.chad.library.adapter.base.listener.OnItemLongClickListener;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicRankComplaintAdapter;
@@ -83,31 +81,22 @@ public class ComicRankFragment extends Fragment {
         }
         binding.recyclerview.setAdapter(adapter);
 
-//        adapter.setOnItemClickListener((adapter, view, position) -> {
-//            Intent intent = new Intent(getActivity(), ComicInfoActivity.class);
-//            String comicId;
-//            if (sort == 1) {
-//                comicId = ((ComicComplaintRankBean) adapter.getData().get(position)).getId();
-//            } else if (sort == 2) {
-//                comicId = ((ComicSubscribeRankBean) adapter.getData().get(position)).getId();
-//            } else {
-//                comicId = ((ComicPopularityRankBean) adapter.getData().get(position)).getId();
-//            }
-//            intent.putExtra(getString(R.string.intent_comic_id), comicId);
-//            LogUtil.e("ComicRankFragment->ComicInfoActivity");
-//            startActivity(intent);
-//        });
-//
-//        adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(@androidx.annotation.NonNull BaseQuickAdapter adapter, @androidx.annotation.NonNull View view, int position) {
-//                LogUtil.e("Long Click");
-//                return false;
-//            }
-//        });
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent(getActivity(), ComicInfoActivity.class);
+            String comicId;
+            if (sort == 1) {
+                comicId = ((ComicComplaintRankBean) this.adapter.getData().get(position)).getId();
+            } else if (sort == 2) {
+                comicId = ((ComicSubscribeRankBean) adapter.getData().get(position)).getId();
+            } else {
+                comicId = ((ComicPopularityRankBean) adapter.getData().get(position)).getId();
+            }
+            intent.putExtra(getString(R.string.intent_comic_id), comicId);
+            startActivity(intent);
+        });
 
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);
-        adapter.getLoadMoreModule().setAutoLoadMore(false);
+        adapter.getLoadMoreModule().setAutoLoadMore(true);
         adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
 
         page = 0;

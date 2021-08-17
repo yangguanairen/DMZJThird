@@ -1,5 +1,6 @@
 package com.sena.dmzjthird.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.sena.dmzjthird.comic.fragment.ComicRankFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRecommendFragment;
 import com.sena.dmzjthird.comic.fragment.ComicTopicFragment;
 import com.sena.dmzjthird.comic.fragment.ComicLatestFragment;
+import com.sena.dmzjthird.comic.view.ComicSearchActivity;
 import com.sena.dmzjthird.databinding.FragmentComicBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,14 +37,12 @@ public class ComicFragment extends Fragment {
         binding = FragmentComicBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        binding.search.setOnClickListener(v -> startActivity(new Intent(getActivity(), ComicSearchActivity.class)));
+
         List<Fragment> fragments = Arrays.asList(new ComicRecommendFragment(), new ComicLatestFragment(),
                 new ComicClassifyFragment(), new ComicRankFragment(), new ComicTopicFragment());
         List<String> tabTitles = Arrays.asList(getString(R.string.recommend), getString(R.string.update),
                 getString(R.string.classify), getString(R.string.rank), getString(R.string.topic));
-
-//        for (String s: tabTitles) {
-//            binding.tableLayout.addTab(binding.tableLayout.newTab().setText(s).setIcon(R.drawable.ic_search));
-//        }
 
         binding.viewPager.setOffscreenPageLimit(4);
 

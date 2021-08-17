@@ -54,7 +54,7 @@ public class ComicLatestFragment extends Fragment {
         });
 
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);
-        adapter.getLoadMoreModule().setAutoLoadMore(false);
+        adapter.getLoadMoreModule().setAutoLoadMore(true);
         adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
 
         getResponse();

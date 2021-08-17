@@ -173,7 +173,7 @@ public class ComicInfoFragment extends Fragment {
             binding.description.setText(description);
 
 
-            mCallbacks.loadingDataFinish( title);
+            mCallbacks.loadingDataFinish(title);
         };
 
         observable.subscribeOn(Schedulers.io())

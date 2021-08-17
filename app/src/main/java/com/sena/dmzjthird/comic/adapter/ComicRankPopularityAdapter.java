@@ -57,11 +57,6 @@ public class ComicRankPopularityAdapter extends BaseQuickAdapter<ComicPopularity
         holder.setText(R.id.tag, bean.getTypes());
         holder.setText(R.id.updateTime, TimeUtil.millConvertToDate(bean.getLast_updatetime()*1000));
 
-        holder.getView(R.id.cons).setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, ComicInfoActivity.class);
-            intent.putExtra(mContext.getString(R.string.intent_comic_id), bean.getId());
-            mContext.startActivity(intent);
-        });
 
         holder.getView(R.id.subscribe).setOnClickListener(v -> {
             if (PreferenceHelper.findStringByKey(mContext, PreferenceHelper.USER_UID) == null) {

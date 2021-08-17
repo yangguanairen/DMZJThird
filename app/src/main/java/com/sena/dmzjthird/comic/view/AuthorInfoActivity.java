@@ -3,9 +3,12 @@ package com.sena.dmzjthird.comic.view;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.AuthorInfoAdapter;
@@ -38,6 +41,11 @@ public class AuthorInfoActivity extends AppCompatActivity {
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AuthorInfoAdapter(this);
         binding.recyclerview.setAdapter(adapter);
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent(this, ComicInfoActivity.class);
+            intent.putExtra(getString(R.string.intent_comic_id), ((AuthorInfoBean.Data) adapter.getData().get(position)).getId());
+            startActivity(intent);
+        });
 
         getResponse();
 

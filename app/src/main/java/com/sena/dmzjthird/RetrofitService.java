@@ -15,10 +15,14 @@ import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean1;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean2;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean3;
 import com.sena.dmzjthird.comic.bean.ComicRelatedBean;
+import com.sena.dmzjthird.comic.bean.ComicSearchResultBean;
+import com.sena.dmzjthird.comic.bean.SearchHotBean;
 import com.sena.dmzjthird.comic.bean.ComicSubscribeBean;
 import com.sena.dmzjthird.comic.bean.ComicSubscribeRankBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicInfoBean;
+import com.sena.dmzjthird.comic.bean.ComicViewBean;
+import com.sena.dmzjthird.comic.bean.UserIsSubscribeBean;
 
 import java.util.List;
 import java.util.Map;
@@ -178,6 +182,33 @@ public interface RetrofitService {
     @GET("subject_with_level/{id}.json")
     Observable<ComicTopicInfoBean> getTopicInfo(
             @Path("id") String id
+    );
+
+    // m.dmzj.com/chapinfo/45854/113148.html
+    @GET("chapinfo/{comicId}/{chapterId}.html")
+    Observable<ComicViewBean> getChapterInfo(
+            @Path("comicId") String comicId,
+            @Path("chapterId") String chapterId
+    );
+
+    // nnv3api.muwai.com/subscribe/0/109697332/61539
+    @GET("subscribe/0/{uid}/{obj_id}")
+    Observable<UserIsSubscribeBean> isSubscribe(
+            @Path("uid") String uid,
+            @Path("obj_id") String obj_id
+    );
+
+    // nnv3api.muwai.com/search/hot/0.json
+    @GET("search/hot/{type}.json")
+    Observable<List<SearchHotBean>> getSearchHot(
+            @Path("type") int type
+    );
+
+    // nnv3api.muwai.com/search/showWithLevel/0/一/0.json
+    @GET("search/showWithLevel/0/{query}/{page}.json")
+    Observable<List<ComicSearchResultBean>> getComicSearchResult(
+            @Path("query") String query,
+            @Path("page") int page
     );
 
 }

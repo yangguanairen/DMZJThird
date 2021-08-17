@@ -22,6 +22,7 @@
     <color name="icon_color">#9e9e9e</color>   //item右上角小图标 theme
     <color name="nv_text_color">#ffffff</color> //顶部导航栏文字选中和图标 theme
     <color name="nav_text_false_color">#212121</color> //顶部导航栏文字未被选中 theme
+    <color name="view_top_bottom_color">#424242</color>
 
 
     // 日常模式

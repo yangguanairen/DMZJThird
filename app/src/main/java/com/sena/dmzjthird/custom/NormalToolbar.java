@@ -113,4 +113,8 @@ public class NormalToolbar extends Toolbar {
     public void setOtherTVVisibility(int status) {
         otherIV.setVisibility(status);
     }
+
+    public void setFavoriteBackgrounds(int resourcesId) {
+        favoriteIV.setBackgroundResource(resourcesId);
+    }
 }

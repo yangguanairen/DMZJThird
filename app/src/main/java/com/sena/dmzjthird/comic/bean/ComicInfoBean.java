@@ -1,8 +1,9 @@
 package com.sena.dmzjthird.comic.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ComicInfoBean {
+public class ComicInfoBean implements Serializable {
 
     private String title;
 
@@ -24,7 +25,7 @@ public class ComicInfoBean {
         this.title = title;
     }
 
-    public class Data {
+    public class Data implements Serializable {
 
         private String id;
         private String comic_id;

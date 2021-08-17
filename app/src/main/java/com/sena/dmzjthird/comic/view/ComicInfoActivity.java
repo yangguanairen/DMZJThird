@@ -8,16 +8,26 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.RetrofitService;
+import com.sena.dmzjthird.comic.bean.UserIsSubscribeBean;
 import com.sena.dmzjthird.comic.fragment.ComicCommentFragment;
 import com.sena.dmzjthird.comic.fragment.ComicInfoFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRelatedFragment;
 import com.sena.dmzjthird.databinding.ActivityComicInfoBinding;
+import com.sena.dmzjthird.utils.LogUtil;
+import com.sena.dmzjthird.utils.PreferenceHelper;
+import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import java.util.Arrays;
 import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFragment.Callbacks {
 
@@ -36,22 +46,6 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
         binding.progress.spin();
 
         comicId = getIntent().getStringExtra(getString(R.string.intent_comic_id));
-
-//        @SuppressLint("ResourceType") XmlPullParser parser = getResources().getXml(R.layout.toolbar_normal);
-//        AttributeSet attrs = Xml.asAttributeSet(parser);
-//        int type;
-//        while (true) {
-//            try {
-//                if (!((type = parser.next()) != XmlPullParser.START_TAG) && type != XmlPullParser.END_TAG) {
-//                    break;
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        NormalToolbar toolbar = new NormalToolbar(this, attrs);
-//        setSupportActionBar(toolbar);
-
 
         binding.toolbar.setBackListener(v -> finish());
 
@@ -81,31 +75,59 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
 
         binding.tableLayout.setupWithViewPager(binding.viewPager);
 
+        setSubscribeStatus();
+
+    }
+
+    private void setSubscribeStatus() {
+        String uid = PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_UID);
+        if (uid == null) {
+            return;
+        }
+        RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
+        service.isSubscribe(uid, comicId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bean -> {
+                    if (bean.getCode() == 0) {
+                        binding.toolbar.setFavoriteBackgrounds(R.drawable.ic_subscribed);
+                    }
+                });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LogUtil.e("onDestory");
         binding = null;
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void loadingDataFinish(String title) {
-        binding.progress.stopSpinning();
-        binding.progress.setVisibility(View.GONE);
-        if (title == null) {
-            binding.noData.setVisibility(View.VISIBLE);
-            binding.noData.setText("漫画ID:"+comicId+"\n"+getString(R.string.copyright_error));
-        } else {
-            binding.viewPager.setVisibility(View.VISIBLE);
-            binding.tableLayout.setVisibility(View.VISIBLE);
-            binding.toolbar.setTitle(title);
-            binding.toolbar.setFavoriteIVVisibility(View.VISIBLE);
-            binding.toolbar.setOtherTVVisibility(View.VISIBLE);
+        new Handler().postDelayed(() -> {
+            if (isFinishing()) {
+                LogUtil.e("activity is finish");
+                return;
+            }
+            binding.progress.stopSpinning();
+            binding.progress.setVisibility(View.GONE);
 
-            binding.toolbar.setFavoriteListener(v -> {});
-            binding.toolbar.setOtherListener(v -> {});
-        }
+            if (title == null) {
+                binding.noData.setVisibility(View.VISIBLE);
+                binding.noData.setText("漫画ID:"+comicId+"\n"+getString(R.string.copyright_error));
+            } else {
+                binding.viewPager.setVisibility(View.VISIBLE);
+                binding.tableLayout.setVisibility(View.VISIBLE);
+                binding.toolbar.setTitle(title);
+                binding.toolbar.setFavoriteIVVisibility(View.VISIBLE);
+                binding.toolbar.setOtherTVVisibility(View.VISIBLE);
+
+                binding.toolbar.setFavoriteListener(v -> {});
+                binding.toolbar.setOtherListener(v -> {});
+            }
+        }, 3000);
+
+
     }
 }

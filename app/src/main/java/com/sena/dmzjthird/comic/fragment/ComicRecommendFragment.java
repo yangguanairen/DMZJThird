@@ -78,6 +78,7 @@ public class ComicRecommendFragment extends Fragment {
         return binding.getRoot();
     }
 
+    // 集成所有请求结果，集中发送给adapter
     private void setRecommendList(ComicRecommendBean bean) {
         list.add(bean);
         if (list.size() == (PreferenceHelper.findStringByKey(getActivity(), PreferenceHelper.USER_UID)==null?8:9)) {

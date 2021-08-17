@@ -27,7 +27,7 @@
         android:id="@+id/favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_subscribed"
+        android:src="@drawable/ic_subscribe"
         android:visibility="invisible"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"/>
