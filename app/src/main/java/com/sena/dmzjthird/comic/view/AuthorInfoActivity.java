@@ -14,6 +14,7 @@ import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.AuthorInfoAdapter;
 import com.sena.dmzjthird.comic.bean.AuthorInfoBean;
 import com.sena.dmzjthird.databinding.ActivityAuthorInfoBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -41,11 +42,8 @@ public class AuthorInfoActivity extends AppCompatActivity {
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AuthorInfoAdapter(this);
         binding.recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(this, ComicInfoActivity.class);
-            intent.putExtra(getString(R.string.intent_comic_id), ((AuthorInfoBean.Data) adapter.getData().get(position)).getId());
-            startActivity(intent);
-        });
+        adapter.setOnItemClickListener((adapter, view, position) ->
+                IntentUtil.goToComicInfoActivity(this, ((AuthorInfoBean.Data) adapter.getData().get(position)).getId()));
 
         getResponse();
 
@@ -54,7 +52,7 @@ public class AuthorInfoActivity extends AppCompatActivity {
 
     private void getResponse() {
         RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
-        service.getAuthorInfo(getIntent().getStringExtra(getString(R.string.intent_author_id)))
+        service.getAuthorInfo(IntentUtil.getAuthorId(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<AuthorInfoBean>() {

@@ -17,6 +17,7 @@ import com.sena.dmzjthird.comic.adapter.ComicSearchResultAdapter;
 import com.sena.dmzjthird.comic.bean.ComicSearchResultBean;
 import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.databinding.FragmentComicSearchResultBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -63,11 +64,8 @@ public class ComicSearchResultFragment extends Fragment {
         adapter = new ComicSearchResultAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(getActivity(), ComicInfoActivity.class);
-            intent.putExtra(getString(R.string.intent_comic_id), ((ComicSearchResultBean) adapter.getData().get(position)).getId());
-            startActivity(intent);
-        });
+        adapter.setOnItemClickListener((adapter, view, position) ->
+                IntentUtil.goToComicInfoActivity(getActivity(), ((ComicSearchResultBean) adapter.getData().get(position)).getId()));
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);
         adapter.getLoadMoreModule().setAutoLoadMore(true);
         adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);

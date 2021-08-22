@@ -1,15 +1,11 @@
 package com.sena.dmzjthird.comic.adapter;
 
 import android.content.Context;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.sena.dmzjthird.R;
@@ -40,11 +36,7 @@ public class AuthorInfoAdapter extends BaseQuickAdapter<AuthorInfoBean.Data, Bas
     @Override
     protected void convert(@NonNull BaseViewHolder holder, AuthorInfoBean.Data data) {
 
-
-        Glide.with(mContext)
-                .load(GlideUtil.addCookie(data.getCover()))
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
-                .into((ImageView) holder.getView(R.id.cover));
+        GlideUtil.loadImageWithCookie(mContext, data.getCover(), holder.getView(R.id.cover));
 
         holder.setText(R.id.title, data.getName());
         holder.setText(R.id.author, data.getStatus());
@@ -53,11 +45,10 @@ public class AuthorInfoAdapter extends BaseQuickAdapter<AuthorInfoBean.Data, Bas
         holder.setVisible(R.id.updateTime, false);
 
 
-
         holder.getView(R.id.subscribe).setOnClickListener(v -> {
             if (PreferenceHelper.findStringByKey(mContext, PreferenceHelper.USER_UID) == null) {
                 Toast.makeText(mContext, mContext.getString(R.string.not_login), Toast.LENGTH_SHORT).show();
-                return ;
+                return;
             }
             RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
             if (holder.getView(R.id.subscribe).getContentDescription().equals("0")) {
@@ -90,24 +81,6 @@ public class AuthorInfoAdapter extends BaseQuickAdapter<AuthorInfoBean.Data, Bas
                 holder.getView(R.id.subscribe).setContentDescription("0");
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }

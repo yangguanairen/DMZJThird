@@ -18,6 +18,7 @@ import com.sena.dmzjthird.comic.fragment.ComicCommentFragment;
 import com.sena.dmzjthird.comic.fragment.ComicInfoFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRelatedFragment;
 import com.sena.dmzjthird.databinding.ActivityComicInfoBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
@@ -45,7 +46,8 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
         // 此时取消加载动画
         binding.progress.spin();
 
-        comicId = getIntent().getStringExtra(getString(R.string.intent_comic_id));
+
+        comicId = IntentUtil.getComicId(this);
 
         binding.toolbar.setBackListener(v -> finish());
 

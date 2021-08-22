@@ -1,6 +1,9 @@
 package com.sena.dmzjthird.home;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.account.UserSubscribedActivity;
+import com.sena.dmzjthird.comic.adapter.ComicRecommendAdapter;
 import com.sena.dmzjthird.comic.fragment.ComicClassifyFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRankFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRecommendFragment;
@@ -19,6 +24,7 @@ import com.sena.dmzjthird.comic.fragment.ComicTopicFragment;
 import com.sena.dmzjthird.comic.fragment.ComicLatestFragment;
 import com.sena.dmzjthird.comic.view.ComicSearchActivity;
 import com.sena.dmzjthird.databinding.FragmentComicBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -73,6 +79,7 @@ public class ComicFragment extends Fragment {
         binding.tableLayout.setupWithViewPager(binding.viewPager);
 
 
+        initBroadcast();
 
         return root;
     }
@@ -81,5 +88,20 @@ public class ComicFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void initBroadcast() {
+
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                binding.viewPager.setCurrentItem(4);
+            }
+        };
+
+        IntentFilter filter = new IntentFilter(ComicRecommendAdapter.BROADCAST_INTENT);
+        getActivity().registerReceiver(receiver, filter);
+
+
     }
 }

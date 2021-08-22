@@ -24,6 +24,7 @@ import com.sena.dmzjthird.comic.bean.ComicInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicViewBean;
 import com.sena.dmzjthird.databinding.ActivityComicViewBinding;
 import com.sena.dmzjthird.utils.GlideUtil;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
@@ -58,9 +59,9 @@ public class ComicViewActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         service = RetrofitHelper.getServer(RetrofitService.BASE_ORIGIN_URL);
-        comicId = getIntent().getStringExtra(getString(R.string.intent_comic_id));
-        chapterId = getIntent().getStringExtra(getString(R.string.intent_chapter_id));
-        bean = (ComicInfoBean) getIntent().getSerializableExtra(getString(R.string.intent_serial_data));
+        comicId = IntentUtil.getComicId(this);
+        chapterId = IntentUtil.getChapterId(this);
+        bean = (ComicInfoBean) IntentUtil.getSerialize(this);
 
         getWindow().setStatusBarColor(Color.BLACK);
 

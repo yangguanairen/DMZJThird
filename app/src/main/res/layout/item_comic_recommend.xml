@@ -25,8 +25,7 @@
         android:layout_height="24dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="@dimen/dp_10"
-        android:background="@drawable/ic_refresh"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"

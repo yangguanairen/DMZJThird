@@ -23,6 +23,7 @@ import com.sena.dmzjthird.account.SettingActivity;
 import com.sena.dmzjthird.account.UserCommentActivity;
 import com.sena.dmzjthird.account.UserSubscribedActivity;
 import com.sena.dmzjthird.databinding.FragmentAccountBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 
@@ -62,9 +63,7 @@ public class AccountFragment extends Fragment {
             if (uid == null) {
                 Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
             } else {
-                Intent intent = new Intent(getActivity(), UserSubscribedActivity.class);
-                intent.putExtra(getString(R.string.intent_user_id), uid);
-                startActivity(intent);
+                IntentUtil.goToActivity(getActivity(), UserSubscribedActivity.class);
             }
         });
 
@@ -73,9 +72,7 @@ public class AccountFragment extends Fragment {
             if (uid == null) {
                 Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
             } else {
-                Intent intent = new Intent(getActivity(), UserCommentActivity.class);
-                intent.putExtra(getString(R.string.intent_user_id), uid);
-                startActivity(intent);
+                IntentUtil.goToActivity(getActivity(), UserCommentActivity.class);
             }
         });
 

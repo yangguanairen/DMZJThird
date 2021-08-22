@@ -17,6 +17,7 @@ import com.sena.dmzjthird.comic.adapter.ComicClassifyCoverAdapter;
 import com.sena.dmzjthird.comic.bean.ComicClassifyCoverBean;
 import com.sena.dmzjthird.comic.view.ComicClassifyActivity;
 import com.sena.dmzjthird.databinding.FragmentComicClassifyBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -44,12 +45,8 @@ public class ComicClassifyFragment extends Fragment {
         adapter = new ComicClassifyCoverAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter, view, position) -> {
-            // 跳转
-            Intent intent = new Intent(getActivity(), ComicClassifyActivity.class);
-            intent.putExtra(getString(R.string.intent_classify_id), ((ComicClassifyCoverBean.Data) adapter.getData().get(position)).getTag_id());
-            startActivity(intent);
-        });
+        adapter.setOnItemClickListener((adapter, view, position) ->
+                IntentUtil.goToComicClassifyActivity(getActivity(), ((ComicClassifyCoverBean.Data) adapter.getData().get(position)).getTag_id()));
 
         binding.refresh.setOnRefreshListener(() -> {
             new Handler().postDelayed(() -> binding.refresh.setRefreshing(false), 5000);

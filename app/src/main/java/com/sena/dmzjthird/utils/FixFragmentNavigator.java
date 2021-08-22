@@ -78,6 +78,7 @@ public class FixFragmentNavigator extends FragmentNavigator {
             ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim);
         }
 
+
 //        ft.replace(mContainerId, frag);
         List<Fragment> fragments = mFragmentManager.getFragments();
         for (Fragment fragment : fragments) {
@@ -85,57 +86,67 @@ public class FixFragmentNavigator extends FragmentNavigator {
         }
         if (!frag.isAdded()) {
             ft.add(mContainerId, frag, className);
+
         }
+
         ft.show(frag);
         ft.setPrimaryNavigationFragment(frag);
 
-        final @IdRes int destId = destination.getId();
+        /**
+         * 下面的操作会把除bottomNavigator默认的fragment以外fragment弹出，
+         * 导致fragment里面只有一个fragment
+         * 每次点击其他还是会创建新的fragment
+         */
 
-        //通过反射获取mBackStack
-        ArrayDeque<Integer> mBackStack;
-        try {
-            Field field = FragmentNavigator.class.getDeclaredField("mBackStack");
-            field.setAccessible(true);
-            mBackStack = (ArrayDeque<Integer>) field.get(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        final boolean initialNavigation = mBackStack.isEmpty();
-        final boolean isSingleTopReplacement = navOptions != null && !initialNavigation
-                && navOptions.shouldLaunchSingleTop()
-                && mBackStack.peekLast() == destId;
-
-        boolean isAdded;
-        if (initialNavigation) {
-            isAdded = true;
-        } else if (isSingleTopReplacement) {
-            if (mBackStack.size() > 1) {
-                mFragmentManager.popBackStack(
-                        generateBackStackName(mBackStack.size(), mBackStack.peekLast()),
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                ft.addToBackStack(generateBackStackName(mBackStack.size(), destId));
-            }
-            isAdded = false;
-        } else {
-            ft.addToBackStack(generateBackStackName(mBackStack.size() + 1, destId));
-            isAdded = true;
-        }
-        if (navigatorExtras instanceof Extras) {
-            Extras extras = (Extras) navigatorExtras;
-            for (Map.Entry<View, String> sharedElement : extras.getSharedElements().entrySet()) {
-                ft.addSharedElement(sharedElement.getKey(), sharedElement.getValue());
-            }
-        }
+//        final @IdRes int destId = destination.getId();
+//
+//        //通过反射获取mBackStack
+//        ArrayDeque<Integer> mBackStack;
+//        try {
+//            Field field = FragmentNavigator.class.getDeclaredField("mBackStack");
+//            field.setAccessible(true);
+//            mBackStack = (ArrayDeque<Integer>) field.get(this);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//        final boolean initialNavigation = mBackStack.isEmpty();
+//        final boolean isSingleTopReplacement = navOptions != null && !initialNavigation
+//                && navOptions.shouldLaunchSingleTop()
+//                && mBackStack.peekLast() == destId;
+//
+//        boolean isAdded;
+//        if (initialNavigation) {
+//            isAdded = true;
+//        } else if (isSingleTopReplacement) {
+//            if (mBackStack.size() > 1) {
+//                mFragmentManager.popBackStack(
+//                        generateBackStackName(mBackStack.size(), mBackStack.peekLast()),
+//                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                ft.addToBackStack(generateBackStackName(mBackStack.size(), destId));
+//            }
+//            isAdded = false;
+//        } else {
+//            ft.addToBackStack(generateBackStackName(mBackStack.size() + 1, destId));
+//            isAdded = true;
+//        }
+//        if (navigatorExtras instanceof Extras) {
+//            Extras extras = (Extras) navigatorExtras;
+//            for (Map.Entry<View, String> sharedElement : extras.getSharedElements().entrySet()) {
+//                ft.addSharedElement(sharedElement.getKey(), sharedElement.getValue());
+//            }
+//        }
         ft.setReorderingAllowed(true);
         ft.commit();
-        if (isAdded) {
-            mBackStack.add(destId);
-            return destination;
-        } else {
-            return null;
-        }
+
+//        if (isAdded) {
+//            mBackStack.add(destId);
+//            return destination;
+//        } else {
+//            return null;
+//        }
+        return  null;
 
     }
 

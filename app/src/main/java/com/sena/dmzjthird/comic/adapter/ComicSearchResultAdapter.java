@@ -2,13 +2,9 @@ package com.sena.dmzjthird.comic.adapter;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -34,10 +30,7 @@ public class ComicSearchResultAdapter extends BaseQuickAdapter<ComicSearchResult
     @Override
     protected void convert(@NonNull BaseViewHolder holder, ComicSearchResultBean bean) {
 
-        Glide.with(mContext)
-                .load(GlideUtil.addCookie(bean.getCover()))
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
-                .into((ImageView) holder.getView(R.id.cover));
+        GlideUtil.loadImageWithCookie(mContext, bean.getCover(), holder.getView(R.id.cover));
 
         holder.setText(R.id.title, bean.getTitle());
         holder.setText(R.id.author, bean.getAuthor());

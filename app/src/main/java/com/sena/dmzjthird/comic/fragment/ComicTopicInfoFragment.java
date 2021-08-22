@@ -35,7 +35,6 @@ public class ComicTopicInfoFragment extends Fragment {
     }
 
     public static void updateInfo(String cover, String title, String description) {
-        LogUtil.e(cover);
         Glide.with(context)
                 .load(GlideUtil.addCookie(cover))
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(5)))

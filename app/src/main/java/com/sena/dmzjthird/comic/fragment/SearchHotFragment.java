@@ -22,6 +22,7 @@ import com.sena.dmzjthird.comic.adapter.SearchHotAdapter;
 import com.sena.dmzjthird.comic.bean.SearchHotBean;
 import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.databinding.FragmentSearchHotBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -72,14 +73,11 @@ public class SearchHotFragment extends Fragment {
         adapter = new SearchHotAdapter();
         binding.recyclerview.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent();
             if (mType == 0) {
-                intent.setClass(getActivity(), ComicInfoActivity.class);
-                intent.putExtra(getString(R.string.intent_comic_id), ((SearchHotBean) adapter.getData().get(position)).getId());
+                IntentUtil.goToComicInfoActivity(getActivity(), ((SearchHotBean) adapter.getData().get(position)).getId());
             } else {
 
             }
-            startActivity(intent);
         });
 
         getResponse();

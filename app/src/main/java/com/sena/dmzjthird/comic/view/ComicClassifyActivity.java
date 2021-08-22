@@ -16,6 +16,7 @@ import com.sena.dmzjthird.comic.adapter.ComicFilterAdapter;
 import com.sena.dmzjthird.comic.bean.ComicClassifyBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyFilterBean;
 import com.sena.dmzjthird.databinding.ActivityComicClassifyBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -46,7 +47,7 @@ public class ComicClassifyActivity extends AppCompatActivity implements ComicFil
         binding = ActivityComicClassifyBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        filter = getIntent().getStringExtra(getString(R.string.intent_classify_id));
+        filter = IntentUtil.getClassifyTagId(this);
         service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
 
         binding.progress.spin();
@@ -66,11 +67,7 @@ public class ComicClassifyActivity extends AppCompatActivity implements ComicFil
         binding.recyclerview.setAdapter(adapter);
 
         // 跳转ComicInfo页面
-        adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(ComicClassifyActivity.this, ComicInfoActivity.class);
-            intent.putExtra(getString(R.string.intent_comic_id), ((ComicClassifyBean) adapter.getData().get(position)).getId());
-            startActivity(intent);
-        });
+        adapter.setOnItemClickListener((adapter, view, position) -> IntentUtil.goToComicInfoActivity(this, ((ComicClassifyBean) adapter.getData().get(position)).getId()));
 
         // 设置自动加载
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);

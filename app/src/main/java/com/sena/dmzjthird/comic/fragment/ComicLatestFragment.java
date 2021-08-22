@@ -16,6 +16,7 @@ import com.sena.dmzjthird.comic.adapter.ComicLatestAdapter;
 import com.sena.dmzjthird.comic.bean.ComicLatestBean;
 import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.databinding.FragmentComicLatestBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -48,9 +49,10 @@ public class ComicLatestFragment extends Fragment {
         adapter = new ComicLatestAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(getActivity(), ComicInfoActivity.class);
-            intent.putExtra(getString(R.string.intent_comic_id), ((ComicLatestBean) adapter.getData().get(position)).getId());
-            startActivity(intent);
+//            Intent intent = new Intent(getActivity(), ComicInfoActivity.class);
+//            intent.putExtra(getString(R.string.intent_comic_id), ((ComicLatestBean) adapter.getData().get(position)).getId());
+//            startActivity(intent);
+            IntentUtil.goToComicInfoActivity(getActivity(), ((ComicLatestBean) adapter.getData().get(position)).getId());
         });
 
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);

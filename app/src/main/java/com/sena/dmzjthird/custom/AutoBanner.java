@@ -18,9 +18,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.bean.ComicRecommendBean;
 import com.sena.dmzjthird.utils.GlideUtil;
@@ -249,9 +246,8 @@ public class AutoBanner extends ConstraintLayout {
         public Object instantiateItem(@NonNull @NotNull ViewGroup container, int position) {
             ImageView imageView = new ImageView(mContext);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            Glide.with(mContext).load(GlideUtil.addCookie(dataList.get(position).getCover()))
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
-                    .into(imageView);
+            GlideUtil.loadImageWithCookie(mContext, dataList.get(position).getCover(), imageView);
+
             imageView.setOnClickListener(v -> {
                 // 跳转
                 Toast.makeText(mContext, "暂时这样" + dataList.get(position).getObj_id(), Toast.LENGTH_SHORT).show();

@@ -18,6 +18,7 @@ import com.sena.dmzjthird.comic.adapter.ComicTopicInfoAdapter;
 import com.sena.dmzjthird.comic.bean.ComicTopicInfoBean;
 import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.databinding.FragmentComicTopicInfoRelatedBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -66,11 +67,8 @@ public class ComicTopicInfoRelatedFragment extends Fragment {
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ComicTopicInfoAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(getActivity(), ComicInfoActivity.class);
-            intent.putExtra(getString(R.string.intent_comic_id), ((ComicTopicInfoBean.Comics) adapter.getData().get(position)).getId());
-            startActivity(intent);
-        });
+        adapter.setOnItemClickListener((adapter, view, position) ->
+                IntentUtil.goToComicInfoActivity(getActivity(), ((ComicTopicInfoBean.Comics) adapter.getData().get(position)).getId()));
 
         getResponse();
 

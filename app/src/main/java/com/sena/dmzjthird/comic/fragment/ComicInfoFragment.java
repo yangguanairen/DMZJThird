@@ -11,17 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicInfoAdapter;
+import com.sena.dmzjthird.comic.bean.ComicClassifyFilterBean;
 import com.sena.dmzjthird.comic.bean.ComicInfoBean;
 import com.sena.dmzjthird.databinding.FragmentComicInfoBinding;
 import com.sena.dmzjthird.utils.GlideUtil;
-import com.sena.dmzjthird.utils.LogUtil;
+import com.sena.dmzjthird.utils.IntentUtil;
+import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -33,6 +36,8 @@ import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -51,9 +56,9 @@ public class ComicInfoFragment extends Fragment {
     private String coverUrl = "";
     private String title = "";
     private String authorName = "";
-
     private String updateTime = "";
     private String description = "";
+    private List<String> tags = new ArrayList<>();
     private String jsonData = "[{\"title\": \"\", \"data\":[{}]}]";
 
 
@@ -120,14 +125,12 @@ public class ComicInfoFragment extends Fragment {
                 Elements sub_r = doc.getElementsByClass("sub_r").get(0).getElementsByClass("txtItme");
                 authorName = sub_r.get(0).getElementsByTag("a").text();
 
-                List<String> tags = new ArrayList<>();
-                List<String> hrefs = new ArrayList<>();
                 for (Element e: doc.getElementsByClass("pd")) {
+                    if (e.attr("class").equals("pd introName")) {
+                        continue;
+                    }
                     tags.add(e.text());
-                    hrefs.add(e.attr("href"));
                 }
-                LogUtil.e(tags.toString());
-                LogUtil.e(hrefs.toString());
 
                 updateTime = sub_r.get(3).getElementsByClass("date").text();
 
@@ -162,15 +165,14 @@ public class ComicInfoFragment extends Fragment {
                 return;
             }
             adapter.setList(comicInfoBeans);
-            Glide.with(getActivity())
-                    .load(GlideUtil.addCookie(coverUrl))
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
-                    .into(binding.cover);
+            GlideUtil.loadImageWithCookie(getActivity(), coverUrl, binding.cover);
 
             binding.title.setText(title);
             binding.author.setText(authorName);
             binding.updateTime.setText(updateTime);
             binding.description.setText(description);
+
+            initComicTag();
 
 
             mCallbacks.loadingDataFinish(title);
@@ -179,6 +181,60 @@ public class ComicInfoFragment extends Fragment {
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
+    }
+
+    private void initComicTag() {
+        RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
+        service.getComicClassifyFilter()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<ComicClassifyFilterBean>>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<ComicClassifyFilterBean> beans) {
+                        for (String tag: tags) {
+
+                            TextView textView = new TextView(getActivity());
+                            textView.setText(tag);
+                            textView.setBackgroundResource(R.drawable.shape_filter_tag);
+                            textView.setPadding(20, 10, 20, 10);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            params.rightMargin = 20;
+                            textView.setLayoutParams(params);
+
+                            if (tags.indexOf(tag) < 3) {
+                                binding.tag1.addView(textView);
+                            } else {
+                                binding.tag2.addView(textView);
+                            }
+
+                            for (ComicClassifyFilterBean bean: beans) {
+                                for (ComicClassifyFilterBean.Items item: bean.getItems()) {
+                                    if (item.getTag_name().contains(tag) || tag.contains(item.getTag_name())) {
+                                        textView.setOnClickListener(v ->
+                                                IntentUtil.goToComicClassifyActivity(getActivity(), item.getTag_id()));
+
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override

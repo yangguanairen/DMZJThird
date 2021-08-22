@@ -15,6 +15,7 @@ import com.sena.dmzjthird.comic.fragment.ComicCommentFragment;
 import com.sena.dmzjthird.comic.fragment.ComicTopicInfoFragment;
 import com.sena.dmzjthird.comic.fragment.ComicTopicInfoRelatedFragment;
 import com.sena.dmzjthird.databinding.ActivityComicTopicInfoBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import java.util.Arrays;
@@ -29,8 +30,7 @@ public class ComicTopicInfoActivity extends AppCompatActivity implements ComicTo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityComicTopicInfoBinding.inflate(getLayoutInflater());
-        RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
-        String topicId = getIntent().getStringExtra(getString(R.string.intent_topic_id));
+        String topicId = IntentUtil.getTopicId(this);
 
         binding.progress.spin();
         binding.toolbar.setBackListener(v -> finish());
@@ -70,6 +70,9 @@ public class ComicTopicInfoActivity extends AppCompatActivity implements ComicTo
     @Override
     public void loadDataFinish(String title) {
         new Handler().postDelayed(() -> {
+            if (isFinishing()) {
+                return ;
+            }
             binding.progress.stopSpinning();
             binding.progress.setVisibility(View.GONE);
             if (title == null) {

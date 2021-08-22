@@ -66,9 +66,7 @@ public class ComicRecommendFragment extends Fragment {
 
         binding.progress.spin();
 
-        binding.refresh.setOnRefreshListener(() -> {
-            new Handler().postDelayed(() -> binding.refresh.setRefreshing(false), 5000);
-        });
+        binding.refresh.setOnRefreshListener(() -> new Handler().postDelayed(() -> binding.refresh.setRefreshing(false), 5000));
 
         initBanner();
 
@@ -217,11 +215,15 @@ public class ComicRecommendFragment extends Fragment {
         return observer;
     }
 
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         binding = null;
     }
+
+
 
 
 }

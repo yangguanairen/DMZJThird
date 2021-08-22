@@ -34,6 +34,7 @@ public class ComicTopicAdapter extends BaseQuickAdapter<ComicTopicBean.Data, Bas
     @Override
     protected void convert(@NotNull BaseViewHolder holder, ComicTopicBean.Data data) {
 
+
         Glide.with(mContext)
                 .load(GlideUtil.addCookie(data.getSmall_cover()))
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(5)))

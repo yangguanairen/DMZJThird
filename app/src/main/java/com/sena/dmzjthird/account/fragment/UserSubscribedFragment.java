@@ -17,6 +17,7 @@ import com.sena.dmzjthird.account.adapter.UserSubscribedAdapter;
 import com.sena.dmzjthird.account.bean.UserSubscribedBean;
 import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.databinding.FragmentUserSubscribedBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -79,9 +80,7 @@ public class UserSubscribedFragment extends Fragment {
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
             if (type == 0) {
-                Intent intent = new Intent(getActivity(), ComicInfoActivity.class);
-                intent.putExtra(getString(R.string.intent_comic_id), ((UserSubscribedBean) adapter.getData().get(position)).getObj_id());
-                startActivity(intent);
+                IntentUtil.goToComicInfoActivity(getActivity(), ((UserSubscribedBean) adapter.getData().get(position)).getObj_id());
             } else {
                 Toast.makeText(getActivity(), "跳转: 小说Info页面, 没写完", Toast.LENGTH_SHORT).show();
             }

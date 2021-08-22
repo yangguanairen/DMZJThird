@@ -23,6 +23,7 @@ import com.sena.dmzjthird.comic.bean.ComicPopularityRankBean;
 import com.sena.dmzjthird.comic.bean.ComicSubscribeRankBean;
 import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.databinding.FragmentComicRankBinding;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -82,7 +83,6 @@ public class ComicRankFragment extends Fragment {
         binding.recyclerview.setAdapter(adapter);
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(getActivity(), ComicInfoActivity.class);
             String comicId;
             if (sort == 1) {
                 comicId = ((ComicComplaintRankBean) this.adapter.getData().get(position)).getId();
@@ -91,8 +91,7 @@ public class ComicRankFragment extends Fragment {
             } else {
                 comicId = ((ComicPopularityRankBean) adapter.getData().get(position)).getId();
             }
-            intent.putExtra(getString(R.string.intent_comic_id), comicId);
-            startActivity(intent);
+            IntentUtil.goToComicInfoActivity(getActivity(), comicId);
         });
 
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);

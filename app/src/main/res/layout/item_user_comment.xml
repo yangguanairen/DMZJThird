@@ -9,7 +9,6 @@
         android:id="@+id/cover"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_default_picture"
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
