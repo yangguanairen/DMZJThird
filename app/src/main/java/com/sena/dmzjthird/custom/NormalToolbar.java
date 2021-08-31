@@ -117,4 +117,12 @@ public class NormalToolbar extends Toolbar {
     public void setFavoriteBackgrounds(int resourcesId) {
         favoriteIV.setBackgroundResource(resourcesId);
     }
+
+    public void setFavoriteContentDescription(String value) {
+        favoriteIV.setContentDescription(value);
+    }
+
+    public String getFavoriteContentDescription() {
+        return favoriteIV.getContentDescription().toString();
+    }
 }

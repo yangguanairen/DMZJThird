@@ -39,7 +39,7 @@ public class ComicTopicInfoActivity extends AppCompatActivity implements ComicTo
         binding.viewPager.setOffscreenPageLimit(2);
 
         List<Fragment> fragments = Arrays.asList(new ComicTopicInfoFragment(),
-                ComicTopicInfoRelatedFragment.newInstance(topicId), new ComicCommentFragment());
+                ComicTopicInfoRelatedFragment.newInstance(topicId), ComicCommentFragment.newInstance(2, topicId));
         List<String> tabTitles = Arrays.asList("介绍", getString(R.string.icon_comic_title), "评论");
 
 

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -59,7 +60,7 @@ public class ComicViewActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         service = RetrofitHelper.getServer(RetrofitService.BASE_ORIGIN_URL);
-        comicId = IntentUtil.getComicId(this);
+        comicId = IntentUtil.getObjectId(this);
         chapterId = IntentUtil.getChapterId(this);
         bean = (ComicInfoBean) IntentUtil.getSerialize(this);
 
@@ -122,6 +123,9 @@ public class ComicViewActivity extends AppCompatActivity {
 
 
     private void initControl() {
+
+        binding.viewPager.setRotation(-90);
+
         binding.toolbar.setBackListener(v -> finish());
         binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -181,10 +185,10 @@ public class ComicViewActivity extends AppCompatActivity {
                                 Toast.makeText(this, getString(R.string.subscribe_fail), Toast.LENGTH_SHORT).show();
                             } else {
                                 binding.subscribe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_subscribed, 0, 0);
+                                binding.subscribe.setContentDescription("1");
                                 Toast.makeText(this, getString(R.string.subscribe_success), Toast.LENGTH_SHORT).show();
                             }
                         });
-                binding.subscribe.setContentDescription("1");
             } else {
                 // 取消订阅
                 service.cancelSubscribeComic(comicId, PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_UID), "mh")
@@ -195,10 +199,10 @@ public class ComicViewActivity extends AppCompatActivity {
                                 Toast.makeText(this, getString(R.string.cancel_subscribe_fail), Toast.LENGTH_SHORT).show();
                             } else {
                                 binding.subscribe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_subscribe, 0, 0);
+                                binding.subscribe.setContentDescription("0");
                                 Toast.makeText(this, getString(R.string.cancel_subscribe_success), Toast.LENGTH_SHORT).show();
                             }
                         });
-                binding.subscribe.setContentDescription("0");
             }
         });
         setSubscribeStatus();
@@ -272,8 +276,11 @@ public class ComicViewActivity extends AppCompatActivity {
             return 0;
         }
 
+
         @Override
         public boolean isViewFromObject(@androidx.annotation.NonNull View view, @androidx.annotation.NonNull Object object) {
+            view.setRotation(90);
+
             return view == object;
         }
 
@@ -297,7 +304,13 @@ public class ComicViewActivity extends AppCompatActivity {
                     binding.viewPager.setContentDescription("0");
                 }
             });
-            photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+//            WindowManag/er.LayoutParams params = new WindowManager.LayoutParams();
+//            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+//            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//            photoView.setLayoutParams(params);
+
+            //            photoView.setScaleType(ImageView.ScaleType.FIT_XY);
             Glide.with(ComicViewActivity.this)
                     .load(GlideUtil.addCookie(images.get(position)))
                     .into(photoView);

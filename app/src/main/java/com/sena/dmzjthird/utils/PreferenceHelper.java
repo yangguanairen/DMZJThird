@@ -31,6 +31,7 @@ public class PreferenceHelper {
 
 
     public static final String USER_UID = "user_uid";
+    public static final String USER_TOKEN = "user_token";
     public static final String USER_NICKNAME = "user_nickname";
     public static final String USER_AVATAR = "user_avatar";
 

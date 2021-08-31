@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">DMZJThird</string>
 
+    // 评论请求
+    // %1d: 2: 专题; 4: 漫画
+    // %2d: obj_id
+    // %3s: 1: 最新评论; 2: 最热评论
+    // %4d: 页码
+    <string name="comment_request">https://nnv3api.dmzj1.com/comment2/%1$d/%2$d/%3$s/3/%4$d.json"</string>
+
+    <string name="public_comment">https://nnv3comment.dmzj1.com/v1/%1d/new/add/app?
+        obj_id=%2$s&amp;
+        content=%3$s&amp;
+        uid=%4$s&amp;
+        dmzj_token=%5$s&amp;
+        to_uid=%6$s&amp;
+        to_comment_id=%7$s&amp;
+        sender_terminal=1</string>
+
 
     // 数据出错处理
     <string name="no_data">没有数据</string>
@@ -84,6 +100,23 @@
     <string name="catalog">目录(%d)</string>
     <string name="pre_chapter">上一话</string>
     <string name="next_chapter">下一话</string>
+
+    // Comment文字
+    <string name="comment_amount">漫画评论(%d)</string>
+    <string name="latest_comment">最新评论</string>
+    <string name="hottest_comment">最热评论</string>
+    <string name="like_amount">点赞(%d)</string>
+    <string name="fold_comment_count">点击展开%d条评论</string>
+
+    // UserInfo文字
+    <string name="comic_subscribed">漫画订阅</string>
+    <string name="comic_comment">漫画评论</string>
+    <string name="novel_subscribed">小说订阅</string>
+    <string name="novel_comment">小说评论</string>
+
+    // ReplyComment文字
+    <string name="toolbar_public_comment">发表评论</string>
+    <string name="length_counter">%d/1000</string>
 
 
 </resources>

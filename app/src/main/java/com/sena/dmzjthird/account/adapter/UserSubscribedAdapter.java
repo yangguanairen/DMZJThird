@@ -29,7 +29,7 @@ public class UserSubscribedAdapter extends BaseQuickAdapter<UserSubscribedBean, 
     @Override
     protected void convert(@NonNull BaseViewHolder holder, UserSubscribedBean bean) {
 
-        GlideUtil.loadImage(mContext, bean.getCover(), holder.getView(R.id.cover));
+        GlideUtil.loadImageWithCookie(mContext, bean.getCover(), holder.getView(R.id.cover));
 
         holder.setText(R.id.title, bean.getName());
         holder.setVisible(R.id.author, false);

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?selectableItemBackground">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/layout_bg" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10">
+
+        <ImageView
+            android:id="@+id/cover"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="0dp"
+            android:text="@string/default_text"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/cover"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/dp_10"
+            android:textColor="?colorPrimary" />
+
+       <com.sena.dmzjthird.custom.CommentTextContent
+           android:id="@+id/content"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           app:layout_constraintStart_toEndOf="@id/cover"
+           app:layout_constraintTop_toBottomOf="@id/username"
+           app:layout_constraintEnd_toEndOf="parent"
+           android:layout_marginStart="@dimen/dp_10"/>
+
+
+
+
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/default_text"
+            app:layout_constraintStart_toEndOf="@id/cover"
+            app:layout_constraintTop_toBottomOf="@+id/content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_10" />
+
+        <TextView
+            android:id="@+id/likeAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/default_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_10" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</LinearLayout>

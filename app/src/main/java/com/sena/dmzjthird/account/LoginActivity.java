@@ -72,6 +72,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                 PreferenceHelper.setStringByKey(LoginActivity.this,
                                         PreferenceHelper.USER_UID, bean.getData().getUid());
+                                PreferenceHelper.setStringByKey(LoginActivity.this,
+                                        PreferenceHelper.USER_TOKEN, bean.getData().getDmzj_token());
 
                                 PreferenceHelper.setStringByKey(LoginActivity.this,
                                         PreferenceHelper.USER_NICKNAME, bean.getData().getNickname());

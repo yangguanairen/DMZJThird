@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".comic.view.CommentReplyActivity">
+
+    <com.sena.dmzjthird.custom.NormalToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="?colorPrimary"
+        app:toolbarTitle="发表评论"
+        app:isShowOther="true"
+        app:otherSrc="@drawable/ic_send_white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/to_reply_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/to_reply_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:textColor="?colorPrimary"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="200dp"
+        android:maxLength="1000"
+        android:gravity="top|start"
+        app:layout_constraintTop_toBottomOf="@+id/to_reply_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/layout_bg"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingTop="5dp"
+        android:hint="@string/default_text"
+        android:paddingBottom="30dp" />
+
+    <TextView
+        android:id="@+id/lengthCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/content"
+        app:layout_constraintBottom_toBottomOf="@id/content"
+        android:text="@string/default_text"
+        android:paddingBottom="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10" />
+
+
+    <ImageView
+        android:id="@+id/addImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@id/content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/selector_image"
+        android:layout_margin="20dp"/>
+
+    <ImageView
+        android:id="@+id/clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layer_clear"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@+id/addImage"
+        app:layout_constraintEnd_toEndOf="@+id/addImage"
+        app:layout_constraintStart_toEndOf="@+id/addImage"
+        app:layout_constraintBottom_toTopOf="@+id/addImage" />
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

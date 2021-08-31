@@ -22,7 +22,7 @@ public class LogUtil {
 
     private static void printString(String s, Print print) {
         while (s.length() > 1024) {
-            print.print(TAG, s);
+            print.print(TAG, s.substring(0, 1024));
             s = s.substring(1024);
         }
         print.print(TAG, s);

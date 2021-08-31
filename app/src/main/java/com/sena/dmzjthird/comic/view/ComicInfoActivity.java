@@ -10,10 +10,10 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.Toast;
 
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
-import com.sena.dmzjthird.comic.bean.UserIsSubscribeBean;
 import com.sena.dmzjthird.comic.fragment.ComicCommentFragment;
 import com.sena.dmzjthird.comic.fragment.ComicInfoFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRelatedFragment;
@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFragment.Callbacks {
@@ -47,12 +46,14 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
         binding.progress.spin();
 
 
-        comicId = IntentUtil.getComicId(this);
+        comicId = IntentUtil.getObjectId(this);
 
         binding.toolbar.setBackListener(v -> finish());
 
+
+
         List<Fragment> fragments = Arrays.asList(ComicInfoFragment.newInstance(comicId),
-                ComicCommentFragment.newInstance(comicId), ComicRelatedFragment.newInstance(comicId));
+                ComicCommentFragment.newInstance(4, comicId), ComicRelatedFragment.newInstance(comicId));
         List<String> tabTitles = Arrays.asList("详情", "评论", "相关");
 
         binding.viewPager.setOffscreenPageLimit(2);
@@ -93,6 +94,9 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
                 .subscribe(bean -> {
                     if (bean.getCode() == 0) {
                         binding.toolbar.setFavoriteBackgrounds(R.drawable.ic_subscribed);
+                        binding.toolbar.setFavoriteContentDescription("1");
+                    } else {
+                        binding.toolbar.setFavoriteContentDescription("0");
                     }
                 });
     }
@@ -125,7 +129,41 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
                 binding.toolbar.setFavoriteIVVisibility(View.VISIBLE);
                 binding.toolbar.setOtherTVVisibility(View.VISIBLE);
 
-                binding.toolbar.setFavoriteListener(v -> {});
+                binding.toolbar.setFavoriteListener(v -> {
+
+                    RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
+
+                    if ("0".equals(binding.toolbar.getFavoriteContentDescription())) {
+// 订阅
+                        service.subscribeComic(comicId, PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_UID), "mh")
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(bean1 -> {
+                                    if (bean1.getCode() != 0) {
+                                        Toast.makeText(this, getString(R.string.subscribe_fail), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        binding.toolbar.setFavoriteBackgrounds(R.drawable.ic_subscribed);
+                                        binding.toolbar.setFavoriteContentDescription("1");
+                                        Toast.makeText(this, getString(R.string.subscribe_success), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                    } else {
+                        service.subscribeComic(comicId, PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_UID), "mh")
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(bean1 -> {
+                                    if (bean1.getCode() != 0) {
+                                        Toast.makeText(this, getString(R.string.subscribe_fail), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        binding.toolbar.setFavoriteBackgrounds(R.drawable.ic_subscribed);
+                                        binding.toolbar.setFavoriteContentDescription("0");
+
+                                        Toast.makeText(this, getString(R.string.subscribe_success), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                });
                 binding.toolbar.setOtherListener(v -> {});
             }
         }, 3000);

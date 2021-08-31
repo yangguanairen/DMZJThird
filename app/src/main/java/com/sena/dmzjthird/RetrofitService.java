@@ -22,6 +22,7 @@ import com.sena.dmzjthird.comic.bean.ComicSubscribeRankBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicViewBean;
+import com.sena.dmzjthird.comic.bean.UploadImageBean;
 import com.sena.dmzjthird.comic.bean.UserIsSubscribeBean;
 
 import java.util.List;
@@ -32,6 +33,7 @@ import okhttp3.RequestBody;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -46,7 +48,8 @@ public interface RetrofitService {
 
     String BASE_V3_URL = "https://nnv3api.muwai.com/";
     String BASE_USER_URL = "https://user.dmzj.com/";
-    String BASE_ORIGIN_URL = "http://m.dmzj.com/";
+    String BASE_ORIGIN_URL = "https://m.dmzj.com/";
+    String BASE_COMMENT_URL = "https://nnv3api.dmzj1.com";
 
 
     @GET("recommend/batchUpdateWithLevel")
@@ -210,5 +213,10 @@ public interface RetrofitService {
             @Path("query") String query,
             @Path("page") int page
     );
+
+
+
+
+
 
 }

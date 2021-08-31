@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relative"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/other_content"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="@string/default_text"
+        android:ellipsize="end"
+        android:background="?selectableItemBackground"
+        android:layout_below="@+id/other_content"/>
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?colorPrimary"
+        android:layout_below="@+id/other_content"/>
+
+    <TextView
+        android:id="@+id/unfold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="显示全部"
+        android:clickable="true"
+        android:textColor="?colorPrimary"
+        android:layout_below="@+id/content"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/content_image"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/unfold"/>
+
+
+
+</RelativeLayout>
