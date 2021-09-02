@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.sena.dmzjthird.databinding.ActivityLargeImageBinding;
 import com.sena.dmzjthird.utils.GlideUtil;
+import com.sena.dmzjthird.utils.IntentUtil;
 
 public class LargeImageActivity extends AppCompatActivity {
 
@@ -18,7 +19,7 @@ public class LargeImageActivity extends AppCompatActivity {
         binding = ActivityLargeImageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String url = getIntent().getStringExtra("url");
+        String url = IntentUtil.getCoverUrl(this);
 
         binding.photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 

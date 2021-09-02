@@ -21,13 +21,13 @@ public class PreferenceHelper {
 //    public static final String THEME_RED_VALUE = "red";
 //    public static final String THEME_YELLOW_VALUE = "yellow";
 
-    public static final String COMIC_READ_SETTING_LIGHT_MODE = "comic_read_setting_light_mode";
-    public static final String COMIC_READ_SETTING_LIGHT_PROGRESS = "comic_read_setting_light_progress";
-    public static final String COMIC_READ_SETTING_READ_MODE = "comic_read_setting_read_mode";
-    public static final String COMIC_READ_SETTING_COMIC_MODE = "comic_read_setting_comic_mode";
-    public static final String COMIC_READ_SETTING_KEEP_SCREEN = "comic_read_setting_keep_screen";
-    public static final String COMIC_READ_SETTING_FULLSCREEN = "comic_read_setting_fullscreen";
-    public static final String COMIC_READ_SETTING_STATE = "comic_read_setting_state";
+    public static final String IS_USE_SYSTEM_BRIGHTNESS = "is_use_system_brightness";
+    public static final String SEEKBAR_BRIGHTNESS = "seekar_brightness";
+    public static final String IS_VERTICAL_MODE = "is_vertical_mode";
+    public static final String IS_JAPANESE_COMIC_MODE = "is_japanese_comic_mode";
+    public static final String IS_KEEP_LIGHT_ALWAYS = "is_keep_light_always";
+    public static final String IS_FULL_SCREEN = "is_full_screen";
+    public static final String IS_SHOW_STATE = "is_show_state";
 
 
     public static final String USER_UID = "user_uid";

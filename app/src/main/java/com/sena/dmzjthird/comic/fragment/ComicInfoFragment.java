@@ -106,6 +106,8 @@ public class ComicInfoFragment extends Fragment {
         adapter = new ComicInfoAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
 
+        binding.cover.setOnClickListener(v -> IntentUtil.goToLargeImageActivity(getActivity(), coverUrl));
+
 
         getResponse();
 

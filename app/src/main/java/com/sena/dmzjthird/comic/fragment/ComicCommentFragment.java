@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -23,15 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicCommentAdapter;
 import com.sena.dmzjthird.comic.bean.ComicCommentBean;
 import com.sena.dmzjthird.databinding.FragmentComicCommentBinding;
-import com.sena.dmzjthird.tmp.TmpActivity;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.PreferenceHelper;
-import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -61,8 +57,8 @@ public class ComicCommentFragment extends Fragment {
 
     private int page = 1;
     private int sort = 0;
-    private RetrofitService service;
     private ComicCommentAdapter adapter;
+    private String commentCount;
 
     public static ComicCommentFragment newInstance(int classify, String id) {
 
@@ -89,7 +85,6 @@ public class ComicCommentFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentComicCommentBinding.inflate(inflater, container, false);
-        service = RetrofitHelper.getServer(RetrofitService.BASE_COMMENT_URL);
 
         initAdapter();
         initControl();
@@ -194,7 +189,7 @@ public class ComicCommentFragment extends Fragment {
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
-                String commentCount = data.substring(data.lastIndexOf(",") + 1, data.length() - 1);
+                commentCount = data.substring(data.lastIndexOf(",") + 1, data.length() - 1);
                 data = data.replace("," + commentCount, "");
 
                 List<ComicCommentBean> beans = generateData(data);
@@ -207,6 +202,9 @@ public class ComicCommentFragment extends Fragment {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(beans -> {
+
+                        binding.commentCount.setText(getString(R.string.comment_amount, Integer.valueOf(commentCount)));
+
                         if (sort == 0) {
                             if (page == 1 && beans.size() == 0) {
                                 // 无数据处理

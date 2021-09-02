@@ -28,7 +28,6 @@
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
-                android:background="@drawable/selector_default_picture"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 

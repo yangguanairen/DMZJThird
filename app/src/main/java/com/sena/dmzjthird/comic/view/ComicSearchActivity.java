@@ -35,7 +35,7 @@ public class ComicSearchActivity extends AppCompatActivity {
                 return;
             }
             ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            getSupportFragmentManager().beginTransaction().add(R.id.fragmentLayout, ComicSearchResultFragment.newInstance(query)).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLayout, ComicSearchResultFragment.newInstance(query)).commit();
         });
         binding.toolbar.setQueryETEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {

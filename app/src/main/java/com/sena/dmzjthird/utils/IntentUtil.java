@@ -11,6 +11,7 @@ import com.sena.dmzjthird.comic.view.ComicTopicInfoActivity;
 import com.sena.dmzjthird.comic.view.ComicViewActivity;
 import com.sena.dmzjthird.comic.view.CommentReplyActivity;
 import com.sena.dmzjthird.comic.view.UserInfoActivity;
+import com.sena.dmzjthird.custom.LargeImageActivity;
 
 import java.io.Serializable;
 
@@ -33,6 +34,7 @@ public class IntentUtil {
     private static final String TO_COMMENT_ID = "to_comment_id";
     private static final String USERNAME = "username";
     private static final String CONTENT = "content";
+    private static final String COVER_URL = "cover_url";
 
     private static final String SERIAL_DATA = "serial_data";
 
@@ -88,6 +90,12 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
+    public static void goToLargeImageActivity(Context context, String url) {
+        Intent intent = new Intent(context, LargeImageActivity.class);
+        intent.putExtra(COVER_URL, url);
+        context.startActivity(intent);
+    }
+
     public static void goToActivity(Context context, Class<?> target) {
         context.startActivity(new Intent(context, target));
     }
@@ -138,6 +146,10 @@ public class IntentUtil {
 
     public static int getClassifyId(Activity activity) {
         return activity.getIntent().getIntExtra(CLASSIFY_ID, -1);
+    }
+
+    public static String getCoverUrl(Activity activity) {
+        return activity.getIntent().getStringExtra(COVER_URL);
     }
 
 

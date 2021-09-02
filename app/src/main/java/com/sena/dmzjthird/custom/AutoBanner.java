@@ -1,5 +1,6 @@
 package com.sena.dmzjthird.custom;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -7,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,6 +62,7 @@ public class AutoBanner extends ConstraintLayout {
         super(context, attrs);
         this.mContext = context;
         handler = new Handler();
+
 
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -120,6 +124,8 @@ public class AutoBanner extends ConstraintLayout {
 
             LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
+
+
             addView(view, params);
         }
 

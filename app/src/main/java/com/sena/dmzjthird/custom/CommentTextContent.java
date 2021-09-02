@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.utils.GlideUtil;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 
 import java.util.List;
@@ -109,18 +110,9 @@ public class CommentTextContent extends RelativeLayout {
             params3.setMargins(0, 10, 10, 10);
             imageView.setLayoutParams(params3);
 
-            LogUtil.e("commentID: " + commentId + " imageID: " + "https://images.dmzj1.com/commentImg/" + folder + "/"
-                    + url);
 
-
-
-            imageView.setOnClickListener(v -> {
-                Intent intent = new Intent(context, LargeImageActivity.class);
-                intent.putExtra("url", "https://images.dmzj1.com/commentImg/" + folder + "/"
-                        + url);
-                context.startActivity(intent);
-
-            });
+            imageView.setOnClickListener(v -> IntentUtil.goToLargeImageActivity(
+                    context, "https://images.dmzj1.com/commentImg/" + folder + "/" + url));
 
 
 

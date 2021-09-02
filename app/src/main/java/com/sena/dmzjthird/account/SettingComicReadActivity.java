@@ -3,15 +3,10 @@ package com.sena.dmzjthird.account;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 
 import com.sena.dmzjthird.databinding.ActivitySettingComicReadBinding;
@@ -78,14 +73,14 @@ public class SettingComicReadActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //设置状态
-        Log.d("jc", "onStart: " + PreferenceHelper.findBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_LIGHT_MODE));
-        binding.lightSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_LIGHT_MODE));
-        binding.lightSeekBar.setProgress(PreferenceHelper.findIntByKey(this, PreferenceHelper.COMIC_READ_SETTING_LIGHT_PROGRESS));
-        binding.verticalSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_READ_MODE));
-        binding.modeSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_COMIC_MODE));
-        binding.keepSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_KEEP_SCREEN));
-        binding.fullSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_FULLSCREEN));
-        binding.stateSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_STATE));
+        Log.d("jc", "onStart: " + PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_USE_SYSTEM_BRIGHTNESS));
+        binding.lightSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_USE_SYSTEM_BRIGHTNESS));
+        binding.lightSeekBar.setProgress(PreferenceHelper.findIntByKey(this, PreferenceHelper.SEEKBAR_BRIGHTNESS));
+        binding.verticalSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_VERTICAL_MODE));
+        binding.modeSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_JAPANESE_COMIC_MODE));
+        binding.keepSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_KEEP_LIGHT_ALWAYS));
+        binding.fullSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_FULL_SCREEN));
+        binding.stateSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_SHOW_STATE));
     }
 
     @Override
@@ -93,13 +88,13 @@ public class SettingComicReadActivity extends AppCompatActivity {
         super.onStop();
         // 存储信息
         Log.d("jc", "onStop: " + binding.lightSwitch.isChecked());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_LIGHT_MODE, binding.lightSwitch.isChecked());
-        PreferenceHelper.setIntByKey(this, PreferenceHelper.COMIC_READ_SETTING_LIGHT_PROGRESS, binding.lightSeekBar.getProgress());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_READ_MODE, binding.verticalSwitch.isChecked());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_COMIC_MODE, binding.modeSwitch.isChecked());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_KEEP_SCREEN, binding.keepSwitch.isChecked());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_FULLSCREEN, binding.fullSwitch.isChecked());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.COMIC_READ_SETTING_STATE, binding.stateSwitch.isChecked());
+        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_USE_SYSTEM_BRIGHTNESS, binding.lightSwitch.isChecked());
+        PreferenceHelper.setIntByKey(this, PreferenceHelper.SEEKBAR_BRIGHTNESS, binding.lightSeekBar.getProgress());
+        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_VERTICAL_MODE, binding.verticalSwitch.isChecked());
+        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_JAPANESE_COMIC_MODE, binding.modeSwitch.isChecked());
+        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_KEEP_LIGHT_ALWAYS, binding.keepSwitch.isChecked());
+        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_FULL_SCREEN, binding.fullSwitch.isChecked());
+        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_SHOW_STATE, binding.stateSwitch.isChecked());
         Log.d("jc", "onStop: " + "save is done");
     }
 
