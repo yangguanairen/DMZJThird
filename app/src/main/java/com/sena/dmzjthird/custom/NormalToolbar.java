@@ -120,6 +120,7 @@ public class NormalToolbar extends Toolbar {
 
     public void setFavoriteContentDescription(String value) {
         favoriteIV.setContentDescription(value);
+        invalidate();
     }
 
     public String getFavoriteContentDescription() {

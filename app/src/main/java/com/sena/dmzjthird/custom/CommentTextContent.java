@@ -103,7 +103,7 @@ public class CommentTextContent extends RelativeLayout {
     public void setUploadImages(Context context, List<String> urls, String folder, String commentId) {
         for (String url: urls) {
             ImageView imageView = new ImageView(context);
-            GlideUtil.loadImageWithCookie(context, "https://images.dmzj1.com/commentImg/" + folder + "/"
+            GlideUtil.loadImageWithCookie(context, "https://images.muwai.com/commentImg/" + folder + "/"
                     + url, imageView);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(400, 400);
@@ -112,7 +112,7 @@ public class CommentTextContent extends RelativeLayout {
 
 
             imageView.setOnClickListener(v -> IntentUtil.goToLargeImageActivity(
-                    context, "https://images.dmzj1.com/commentImg/" + folder + "/" + url));
+                    context, "https://images.muwai.com/commentImg/" + folder + "/" + url));
 
 
 

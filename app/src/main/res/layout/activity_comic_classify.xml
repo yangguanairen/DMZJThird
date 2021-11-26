@@ -6,11 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".comic.view.ComicClassifyActivity">
-    
-    
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.sena.dmzjthird.custom.NormalToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -18,22 +19,22 @@
             android:background="?colorPrimary"
             app:isShowFavorite="false"
             app:isShowOther="true"
-            app:otherSrc="@drawable/ic_filter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:otherSrc="@drawable/ic_filter" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:padding="5dp"
             android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:padding="5dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         // 数据加载动画
 
@@ -62,32 +63,30 @@
             android:id="@+id/no_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@color/white"
             android:gravity="center"
             android:text="@string/no_data"
             android:textSize="20sp"
             android:visibility="invisible"
-            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
+    // 侧边栏
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawer_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end">
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_drawer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </com.google.android.material.navigation.NavigationView>
-
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

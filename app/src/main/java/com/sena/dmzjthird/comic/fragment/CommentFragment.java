@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.adapter.ComicCommentAdapter;
 import com.sena.dmzjthird.comic.bean.ComicCommentBean;
-import com.sena.dmzjthird.databinding.FragmentComicCommentBinding;
+import com.sena.dmzjthird.databinding.FragmentCommentBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.PreferenceHelper;
@@ -46,12 +46,12 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
-public class ComicCommentFragment extends Fragment {
+public class CommentFragment extends Fragment {
 
     private static final String CLASSIFY = "classify";
     private static final String OBJECT_ID = "comic_id";
 
-    private FragmentComicCommentBinding binding;
+    private FragmentCommentBinding binding;
     private String objectId;
     private int classify;
 
@@ -60,13 +60,13 @@ public class ComicCommentFragment extends Fragment {
     private ComicCommentAdapter adapter;
     private String commentCount;
 
-    public static ComicCommentFragment newInstance(int classify, String id) {
+    public static CommentFragment newInstance(int classify, String id) {
 
         Bundle args = new Bundle();
         args.putInt(CLASSIFY, classify);
         args.putString(OBJECT_ID, id);
 
-        ComicCommentFragment fragment = new ComicCommentFragment();
+        CommentFragment fragment = new CommentFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,7 +84,7 @@ public class ComicCommentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding = FragmentComicCommentBinding.inflate(inflater, container, false);
+        binding = FragmentCommentBinding.inflate(inflater, container, false);
 
         initAdapter();
         initControl();

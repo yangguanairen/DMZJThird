@@ -10,11 +10,13 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.sena.dmzjthird.ErrorFragment;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
-import com.sena.dmzjthird.comic.fragment.ComicCommentFragment;
+import com.sena.dmzjthird.comic.fragment.CommentFragment;
 import com.sena.dmzjthird.comic.fragment.ComicInfoFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRelatedFragment;
 import com.sena.dmzjthird.databinding.ActivityComicInfoBinding;
@@ -41,22 +43,19 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
         binding = ActivityComicInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // infoFragment请求数据，返回title和订阅状态
-        // 此时取消加载动画
         binding.progress.spin();
-
 
         comicId = IntentUtil.getObjectId(this);
 
         binding.toolbar.setBackListener(v -> finish());
 
 
-
         List<Fragment> fragments = Arrays.asList(ComicInfoFragment.newInstance(comicId),
-                ComicCommentFragment.newInstance(4, comicId), ComicRelatedFragment.newInstance(comicId));
+                CommentFragment.newInstance(4, comicId), ComicRelatedFragment.newInstance(comicId));
         List<String> tabTitles = Arrays.asList("详情", "评论", "相关");
 
-        binding.viewPager.setOffscreenPageLimit(2);
+//        binding.viewPager.setOffscreenPageLimit(2);
+        binding.viewPager.setCurrentItem(1);
         binding.viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             @NonNull
             @Override
@@ -73,6 +72,13 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
             @Override
             public CharSequence getPageTitle(int position) {
                 return tabTitles.get(position);
+            }
+
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+//                防止被销毁
+//                super.destroyItem(container, position, object);
+
             }
         });
 
@@ -104,7 +110,7 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtil.e("onDestory");
+        LogUtil.e("onDestroy");
         binding = null;
     }
 
@@ -112,19 +118,22 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
     @Override
     public void loadingDataFinish(String title) {
         new Handler().postDelayed(() -> {
-            if (isFinishing()) {
+            if (isFinishing() || binding == null) {
                 LogUtil.e("activity is finish");
                 return;
             }
             binding.progress.stopSpinning();
             binding.progress.setVisibility(View.GONE);
+            binding.getRoot().removeView(binding.progress);
 
             if (title == null) {
-                binding.noData.setVisibility(View.VISIBLE);
-                binding.noData.setText("漫画ID:"+comicId+"\n"+getString(R.string.copyright_error));
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLayout, ErrorFragment.newInstance(comicId)).commit();
+//                binding.noData.setVisibility(View.VISIBLE);
+//                binding.noData.setText("漫画ID:"+comicId+"\n"+getString(R.string.copyright_error));
             } else {
-                binding.viewPager.setVisibility(View.VISIBLE);
-                binding.tableLayout.setVisibility(View.VISIBLE);
+                binding.layoutContent.setVisibility(View.VISIBLE);
+//                binding.viewPager.setVisibility(View.VISIBLE);
+//                binding.tableLayout.setVisibility(View.VISIBLE);
                 binding.toolbar.setTitle(title);
                 binding.toolbar.setFavoriteIVVisibility(View.VISIBLE);
                 binding.toolbar.setOtherTVVisibility(View.VISIBLE);
@@ -154,12 +163,12 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(bean1 -> {
                                     if (bean1.getCode() != 0) {
-                                        Toast.makeText(this, getString(R.string.subscribe_fail), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(this, getString(R.string.cancel_subscribe_fail), Toast.LENGTH_SHORT).show();
                                     } else {
-                                        binding.toolbar.setFavoriteBackgrounds(R.drawable.ic_subscribed);
+                                        binding.toolbar.setFavoriteBackgrounds(R.drawable.ic_subscribe);
                                         binding.toolbar.setFavoriteContentDescription("0");
 
-                                        Toast.makeText(this, getString(R.string.subscribe_success), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(this, getString(R.string.cancel_subscribe_success), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     }

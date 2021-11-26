@@ -6,9 +6,9 @@
     // %2d: obj_id
     // %3s: 1: 最新评论; 2: 最热评论
     // %4d: 页码
-    <string name="comment_request">https://nnv3api.dmzj1.com/comment2/%1$d/%2$d/%3$s/3/%4$d.json"</string>
+    <string name="comment_request">https://nnv3api.muwai.com/comment2/%1$d/%2$d/%3$s/3/%4$d.json"</string>
 
-    <string name="public_comment">https://nnv3comment.dmzj1.com/v1/%1d/new/add/app?
+    <string name="public_comment">https://nnv3comment.muwai.com/v1/%1d/new/add/app?
         obj_id=%2$s&amp;
         content=%3$s&amp;
         uid=%4$s&amp;

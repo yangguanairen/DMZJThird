@@ -3,6 +3,8 @@ package com.sena.dmzjthird.comic.fragment;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicRelatedAdapter;
 import com.sena.dmzjthird.comic.bean.ComicRelatedBean;
@@ -34,6 +37,9 @@ public class ComicRelatedFragment extends Fragment {
 
     private FragmentComicRelatedBinding binding;
     private String comicId;
+    private ComicRelatedAdapter adapter;
+
+    private boolean isLoaded = false;
 
     public static ComicRelatedFragment newInstance(String id) {
 
@@ -53,6 +59,7 @@ public class ComicRelatedFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(@androidx.annotation.NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,9 +67,24 @@ public class ComicRelatedFragment extends Fragment {
         binding = FragmentComicRelatedBinding.inflate(inflater, container, false);
 
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        ComicRelatedAdapter adapter = new ComicRelatedAdapter(getActivity());
+        adapter = new ComicRelatedAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
 
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!isLoaded) {
+            lazyInit();
+            isLoaded = true;
+        }
+    }
+
+    private void lazyInit() {
+        binding.progress.spin();
         RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
         service.getComicRelated(comicId)
                 .subscribeOn(Schedulers.io())
@@ -75,6 +97,20 @@ public class ComicRelatedFragment extends Fragment {
 
                     @Override
                     public void onNext(@NonNull ComicRelatedBean bean) {
+                        binding.progress.stopSpinning();
+                        // 可能增加下拉刷新功能，不一定要去除刷新
+                        binding.getRoot().removeView(binding.progress);
+                        if (bean.getAuthor_comics() == null || bean.getAuthor_comics().size() == 0) {
+                            binding.getRoot().removeView(binding.recyclerview);
+                            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+                            binding.getRoot().addView(LayoutInflater.from(getContext()).inflate(R.layout.fragment_error, null, false), layoutParams);
+                            // ConstraintSet的获取必须在addVIew后面，不然无法约束，视图消失
+//                            constraintSet.clone(binding.getRoot());
+//                            constraintSet.connect(view.getId(), ConstraintSet.TOP, binding.getRoot().getId(), ConstraintSet.BOTTOM);
+//                            constraintSet.applyTo(binding.getRoot());
+                            return ;
+                        }
+
                         LogUtil.e("comicId" + comicId);
                         List<ComicRelatedBean.Author_Comics> data = new ArrayList<>(bean.getAuthor_comics());
                         data.add(new ComicRelatedBean.Author_Comics("同类题材", null, bean.getTheme_comics()));
@@ -95,8 +131,12 @@ public class ComicRelatedFragment extends Fragment {
 
                     }
                 });
+    }
 
-        return binding.getRoot();
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isLoaded = false;
     }
 
     @Override

@@ -40,7 +40,6 @@ import com.sena.dmzjthird.comic.adapter.ComicViewCatalogAdapter;
 import com.sena.dmzjthird.comic.bean.ComicInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicViewBean;
 import com.sena.dmzjthird.databinding.ActivityComicViewBinding;
-import com.sena.dmzjthird.tmp.TmpActivity;
 import com.sena.dmzjthird.utils.GlideUtil;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
@@ -78,6 +77,7 @@ public class ComicViewActivity extends AppCompatActivity {
     private boolean isFullScreen;
     private boolean isShowState;
     private int systemMaxBrightness;
+    private BroadcastReceiver receiver;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -375,7 +375,6 @@ public class ComicViewActivity extends AppCompatActivity {
             binding.refresh.setRefreshing(false);
         });
         binding.complaint.setOnClickListener(v -> {
-            startActivity(new Intent(this, TmpActivity.class));
 
         });
 
@@ -406,6 +405,7 @@ public class ComicViewActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
+        unregisterReceiver(receiver);
     }
 
     /**
@@ -430,7 +430,7 @@ public class ComicViewActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        BroadcastReceiver receiver = new BroadcastReceiver() {
+        receiver = new BroadcastReceiver() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onReceive(Context context, Intent intent) {

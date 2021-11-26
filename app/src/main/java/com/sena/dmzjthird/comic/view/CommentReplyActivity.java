@@ -113,7 +113,7 @@ public class CommentReplyActivity extends AppCompatActivity {
                 String imageId = null;
 
 
-                HttpPostUtil postUtil = new HttpPostUtil("https://nnv3api.dmzj1.com/comment2/uploadImg");
+                HttpPostUtil postUtil = new HttpPostUtil("https://nnv3api.muwai.com/comment2/uploadImg");
                 postUtil.addFileParameter(file);
                 String result = postUtil.send();
 

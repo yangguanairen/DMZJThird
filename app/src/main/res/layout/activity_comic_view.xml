@@ -8,6 +8,7 @@
     android:background="@color/black"
     tools:context=".comic.view.ComicViewActivity">
 
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
