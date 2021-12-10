@@ -263,6 +263,7 @@ public class AutoBanner extends ConstraintLayout {
             return imageView;
 
         }
+
     }
 
     // 减少资源消耗

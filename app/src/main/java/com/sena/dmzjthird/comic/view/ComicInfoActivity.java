@@ -149,7 +149,7 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(bean1 -> {
                                     if (bean1.getCode() != 0) {
-                                        Toast.makeText(this, getString(R.string.subscribe_fail), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(this, getString(R.string.cancel_subscribe_fail), Toast.LENGTH_SHORT).show();
                                     } else {
                                         binding.toolbar.setFavoriteBackgrounds(R.drawable.ic_subscribed);
                                         binding.toolbar.setFavoriteContentDescription("1");

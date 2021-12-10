@@ -2,14 +2,12 @@ package com.sena.dmzjthird.account;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.account.bean.LoginBean;
 import com.sena.dmzjthird.databinding.ActivityLoginBinding;
-import com.sena.dmzjthird.utils.AppConstants;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
