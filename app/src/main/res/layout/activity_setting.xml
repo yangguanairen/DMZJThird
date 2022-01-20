@@ -28,65 +28,6 @@
         android:background="?colorPrimaryDark" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setting_night"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_account_item"
-        android:clickable="true"
-        android:padding="15dp">
-
-        <ImageView
-            style="@style/accountItemImage1"
-            android:id="@+id/imageView1"
-            android:src="@drawable/ic_night"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            style="@style/accountItemTitle"
-            android:text="@string/icon_night_title"
-            app:layout_constraintStart_toEndOf="@+id/imageView1"
-            tools:ignore="MissingConstraints" />
-
-        <ImageView
-            style="@style/accountItemImage2"
-            android:src="@drawable/ic_right"
-            tools:ignore="MissingConstraints" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setting_theme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_account_item"
-        android:clickable="true"
-        android:padding="15dp">
-
-        <ImageView
-            style="@style/accountItemImage1"
-            android:id="@+id/imageView2"
-            android:src="@drawable/ic_theme"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            style="@style/accountItemTitle"
-            android:text="@string/icon_theme_title"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:id="@+id/theme_type"
-            style="@style/accountItemImage2"
-            android:text="@string/theme_blue"
-            android:textColor="?colorPrimary"
-            tools:ignore="MissingConstraints" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/setting_comic_read"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -143,63 +84,6 @@
         android:layout_width="match_parent"
         android:layout_height="10dp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setting_novel_read"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_account_item"
-        android:clickable="true"
-        android:padding="15dp">
-
-        <ImageView
-            style="@style/accountItemImage1"
-            android:id="@+id/imageView5"
-            android:src="@drawable/ic_comic_setting"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            style="@style/accountItemTitle"
-            android:text="@string/icon_novel_setting_title"
-            app:layout_constraintStart_toEndOf="@+id/imageView5"
-            tools:ignore="MissingConstraints" />
-
-        <ImageView
-            style="@style/accountItemImage2"
-            android:src="@drawable/ic_right"
-            tools:ignore="MissingConstraints" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setting_novel_download"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_account_item"
-        android:clickable="true"
-        android:padding="15dp">
-
-        <ImageView
-            style="@style/accountItemImage1"
-            android:id="@+id/imageView6"
-            android:src="@drawable/ic_save"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            style="@style/accountItemTitle"
-            android:text="@string/icon_novel_download_title"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
-            tools:ignore="MissingConstraints" />
-
-        <ImageView
-            style="@style/accountItemImage2"
-            android:src="@drawable/ic_right"
-            tools:ignore="MissingConstraints" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/setting_update"

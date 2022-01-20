@@ -29,6 +29,7 @@ import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.bean.ComicCommentBean;
 import com.sena.dmzjthird.custom.CommentTextContent;
 import com.sena.dmzjthird.utils.IntentUtil;
+import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.TimeUtil;
 
@@ -114,8 +115,8 @@ public class ComicCommentAdapter extends BaseQuickAdapter<ComicCommentBean, Base
                     // 跳转评论页面
                     TextView replyTV = view.findViewById(R.id.reply);
                     replyTV.setOnClickListener(v1 -> {
-                        if (PreferenceHelper.findStringByKey(mContext, PreferenceHelper.USER_UID) == null ||
-                                PreferenceHelper.findStringByKey(mContext, PreferenceHelper.USER_TOKEN) == null) {
+                        if ("".equals(MyDataStore.getInstance(mContext).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "")) ||
+                                "".equals(MyDataStore.getInstance(mContext).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_TOKEN, ""))) {
                             Toast.makeText(mContext, mContext.getString(R.string.not_login), Toast.LENGTH_SHORT).show();
                             return;
                         }

@@ -43,6 +43,7 @@ import com.sena.dmzjthird.databinding.ActivityComicViewBinding;
 import com.sena.dmzjthird.utils.GlideUtil;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
+import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.OnClickListenerHelper;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
@@ -385,8 +386,8 @@ public class ComicViewActivity extends AppCompatActivity {
      * 该漫画是否订阅
      */
     private void setSubscribeStatus() {
-        String uid = PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_UID);
-        if (uid == null) {
+        String uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+        if ("".equals(uid)) {
             return;
         }
         RetrofitService originService = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);

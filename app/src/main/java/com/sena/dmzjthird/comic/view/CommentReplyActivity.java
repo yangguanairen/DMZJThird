@@ -31,6 +31,7 @@ import com.sena.dmzjthird.databinding.ActivityCommentReplyBinding;
 import com.sena.dmzjthird.utils.HttpPostUtil;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
+import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -86,8 +87,8 @@ public class CommentReplyActivity extends AppCompatActivity {
         String objId = IntentUtil.getObjectId(this);
         int classify = IntentUtil.getClassifyId(this);
 
-        String uid = PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_UID);
-        String token = PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_TOKEN);
+        String uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+        String token = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_TOKEN, "");
 
 
         // reply文字提示

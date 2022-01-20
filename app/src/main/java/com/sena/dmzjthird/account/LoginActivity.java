@@ -9,7 +9,7 @@ import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.account.bean.LoginBean;
 import com.sena.dmzjthird.databinding.ActivityLoginBinding;
 import com.sena.dmzjthird.utils.LogUtil;
-import com.sena.dmzjthird.utils.PreferenceHelper;
+import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import java.util.HashMap;
@@ -68,18 +68,14 @@ public class LoginActivity extends AppCompatActivity {
                         public void onNext(@NonNull LoginBean bean) {
                             if (bean.getResult() == 1) {
 
-                                PreferenceHelper.setStringByKey(LoginActivity.this,
-                                        PreferenceHelper.USER_UID, bean.getData().getUid());
-                                PreferenceHelper.setStringByKey(LoginActivity.this,
-                                        PreferenceHelper.USER_TOKEN, bean.getData().getDmzj_token());
-
-                                PreferenceHelper.setStringByKey(LoginActivity.this,
-                                        PreferenceHelper.USER_NICKNAME, bean.getData().getNickname());
-                                PreferenceHelper.setStringByKey(LoginActivity.this,
-                                        PreferenceHelper.USER_AVATAR, bean.getData().getPhoto());
-
-
-                                setResult(RESULT_OK, null);
+                                MyDataStore.getInstance(LoginActivity.this).saveValue(MyDataStore.DATA_STORE_USER,
+                                        MyDataStore.USER_UID, bean.getData().getUid());
+                                MyDataStore.getInstance(LoginActivity.this).saveValue(MyDataStore.DATA_STORE_USER,
+                                        MyDataStore.USER_TOKEN, bean.getData().getDmzj_token());
+                                MyDataStore.getInstance(LoginActivity.this).saveValue(MyDataStore.DATA_STORE_USER,
+                                        MyDataStore.USER_NICKNAME, bean.getData().getNickname());
+                                MyDataStore.getInstance(LoginActivity.this).saveValue(MyDataStore.DATA_STORE_USER,
+                                        MyDataStore.USER_AVATAR, bean.getData().getPhoto());
 
                                 finish();
                             } else {

@@ -23,15 +23,15 @@ public class OnClickListenerHelper {
 
     public static void subscribeComic(Context context, String comicId, TextView view) {
 
-
-        if (PreferenceHelper.findStringByKey(context, PreferenceHelper.USER_UID) == null) {
+        String uid = MyDataStore.getInstance(context).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+        if ("".equals(uid)) {
             Toast.makeText(context, context.getString(R.string.not_login), Toast.LENGTH_SHORT).show();
             return;
         }
         RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
         if (view.getContentDescription().equals("0")) {
             // 订阅
-            service.subscribeComic(comicId, PreferenceHelper.findStringByKey(context, PreferenceHelper.USER_UID), "mh")
+            service.subscribeComic(comicId, uid, "mh")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(bean -> {
@@ -45,7 +45,7 @@ public class OnClickListenerHelper {
                     });
         } else {
             // 取消订阅
-            service.cancelSubscribeComic(comicId, PreferenceHelper.findStringByKey(context, PreferenceHelper.USER_UID), "mh")
+            service.cancelSubscribeComic(comicId, uid, "mh")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(bean -> {
@@ -62,14 +62,15 @@ public class OnClickListenerHelper {
 
     public static void subscribeComic(Context context, String comicId, ImageView view) {
 
-        if (PreferenceHelper.findStringByKey(context, PreferenceHelper.USER_UID) == null) {
+        String uid = MyDataStore.getInstance(context).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+        if ("".equals(uid)) {
             Toast.makeText(context, context.getString(R.string.not_login), Toast.LENGTH_SHORT).show();
             return;
         }
         RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
         if (view.getContentDescription().equals("0")) {
             // 订阅
-            service.subscribeComic(comicId, PreferenceHelper.findStringByKey(context, PreferenceHelper.USER_UID), "mh")
+            service.subscribeComic(comicId, uid, "mh")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(bean -> {
@@ -83,7 +84,7 @@ public class OnClickListenerHelper {
                     });
         } else {
             // 取消订阅
-            service.cancelSubscribeComic(comicId, PreferenceHelper.findStringByKey(context, PreferenceHelper.USER_UID), "mh")
+            service.cancelSubscribeComic(comicId, uid, "mh")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(bean -> {

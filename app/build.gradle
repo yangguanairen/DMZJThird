@@ -71,4 +71,14 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
+    // RxDataStore
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
+    implementation 'androidx.datastore:datastore-preferences-rxjava2:1.0.0'
+
+    implementation 'com.lxj:xpopup:2.2.23'
+
+    // ActivityResult API
+    implementation 'androidx.activity:activity:1.2.0-beta01'
+    implementation 'androidx.fragment:fragment:1.3.0-beta01'
+
 }

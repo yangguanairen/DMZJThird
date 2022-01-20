@@ -12,6 +12,7 @@ import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.bean.AuthorInfoBean;
 import com.sena.dmzjthird.utils.GlideUtil;
+import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -46,14 +47,15 @@ public class AuthorInfoAdapter extends BaseQuickAdapter<AuthorInfoBean.Data, Bas
 
 
         holder.getView(R.id.subscribe).setOnClickListener(v -> {
-            if (PreferenceHelper.findStringByKey(mContext, PreferenceHelper.USER_UID) == null) {
+            String uid = MyDataStore.getInstance(mContext).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+            if ("".equals(uid)) {
                 Toast.makeText(mContext, mContext.getString(R.string.not_login), Toast.LENGTH_SHORT).show();
                 return;
             }
             RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
             if (holder.getView(R.id.subscribe).getContentDescription().equals("0")) {
                 // 订阅
-                service.subscribeComic(data.getId(), PreferenceHelper.findStringByKey(mContext, PreferenceHelper.USER_UID), "mh")
+                service.subscribeComic(data.getId(), uid, "mh")
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(bean1 -> {
@@ -67,7 +69,7 @@ public class AuthorInfoAdapter extends BaseQuickAdapter<AuthorInfoBean.Data, Bas
                 holder.getView(R.id.subscribe).setContentDescription("1");
             } else {
                 // 取消订阅
-                service.cancelSubscribeComic(data.getId(), PreferenceHelper.findStringByKey(mContext, PreferenceHelper.USER_UID), "mh")
+                service.cancelSubscribeComic(data.getId(), uid, "mh")
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(bean1 -> {

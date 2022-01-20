@@ -27,6 +27,7 @@ import com.sena.dmzjthird.comic.bean.ComicCommentBean;
 import com.sena.dmzjthird.databinding.FragmentCommentBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
+import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 
 import org.json.JSONArray;
@@ -117,8 +118,8 @@ public class CommentFragment extends Fragment {
             // 跳转评论页面
             TextView replyTV = layoutView.findViewById(R.id.reply);
             replyTV.setOnClickListener(v1 -> {
-                if (PreferenceHelper.findStringByKey(getActivity(), PreferenceHelper.USER_UID) == null ||
-                        PreferenceHelper.findStringByKey(getActivity(), PreferenceHelper.USER_TOKEN) == null) {
+                if ("".equals(MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "")) ||
+                        "".equals(MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_TOKEN, ""))) {
                     Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -260,8 +261,8 @@ public class CommentFragment extends Fragment {
         });
 
         binding.publicComment.setOnClickListener(v -> {
-            if (PreferenceHelper.findStringByKey(getActivity(), PreferenceHelper.USER_UID) == null ||
-                    PreferenceHelper.findStringByKey(getActivity(), PreferenceHelper.USER_TOKEN) == null) {
+            if ("".equals(MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "")) ||
+                    "".equals(MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_TOKEN, ""))) {
                 Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
                 return;
             }

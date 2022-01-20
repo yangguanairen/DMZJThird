@@ -71,18 +71,11 @@ public class HomeActivity extends AppCompatActivity {
         navGraph.addDestination(destination2);
 
         FragmentNavigator.Destination destination3 = navigator.createDestination();
-        destination3.setId(R.id.navigation_novel);
-        destination3.setClassName(NovelFragment.class.getCanonicalName());
+        destination3.setId(R.id.navigation_account);
+        destination3.setClassName(AccountFragment.class.getCanonicalName());
         navGraph.addDestination(destination3);
 
-        FragmentNavigator.Destination destination4 = navigator.createDestination();
-        destination4.setId(R.id.navigation_account);
-        destination4.setClassName(AccountFragment.class.getCanonicalName());
-        navGraph.addDestination(destination4);
-
-
         return navGraph;
-
 
     }
 

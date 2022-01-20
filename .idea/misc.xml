@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_down.xml" value="0.3453125" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_download.xml" value="0.3453125" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_exit.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_favorite.xml" value="0.3453125" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_filter.xml" value="0.3453125" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/layer_clear.xml" value="0.3453125" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/selector_default_picture.xml" value="0.34102564102564104" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/shape_comic_info_chapter.xml" value="0.3453125" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_classify.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_info.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_search.xml" value="0.3020833333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_view.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_home.xml" value="0.3020833333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_setting.xml" value="0.2989583333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/custom_comment_text_cotent.xml" value="0.3020833333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_account.xml" value="0.21105072463768115" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comic_comment.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comic_related.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comment.xml" value="0.2515625" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_error.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_novel.xml" value="0.33967391304347827" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_topic.xml" value="0.2989583333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_comic_filter.xml" value="0.2989583333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_comic_topic.xml" value="0.2989583333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/toolbar_normal.xml" value="0.3020833333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/toolbar_serach.xml" value="0.3020833333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/view_pager_chapter.xml" value="0.2989583333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/menu/bottom_nav_menu.xml" value="0.36614583333333334" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

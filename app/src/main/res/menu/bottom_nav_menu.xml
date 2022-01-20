@@ -12,11 +12,6 @@
         android:title="@string/icon_topic_title" />
 
     <item
-        android:id="@+id/navigation_novel"
-        android:icon="@drawable/ic_novel"
-        android:title="@string/icon_novel_title" />
-
-    <item
         android:id="@+id/navigation_account"
         android:icon="@drawable/ic_account"
         android:title="@string/icon_account_title" />

@@ -12,6 +12,7 @@ import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.bean.ComicTopicInfoBean;
 import com.sena.dmzjthird.utils.GlideUtil;
+import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -47,14 +48,15 @@ public class ComicTopicInfoAdapter extends BaseQuickAdapter<ComicTopicInfoBean.C
         holder.setVisible(R.id.updateTime, false);
 
         holder.getView(R.id.subscribe).setOnClickListener(v -> {
-            if (PreferenceHelper.findStringByKey(mContext, PreferenceHelper.USER_UID) == null) {
+            String uid = MyDataStore.getInstance(mContext).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+            if ("".equals(uid)) {
                 Toast.makeText(mContext, mContext.getString(R.string.not_login), Toast.LENGTH_SHORT).show();
                 return ;
             }
             RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
             if (holder.getView(R.id.subscribe).getContentDescription().equals("0")) {
                 // 订阅
-                service.subscribeComic(comics.getId(), PreferenceHelper.findStringByKey(mContext, PreferenceHelper.USER_UID), "mh")
+                service.subscribeComic(comics.getId(), uid, "mh")
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(bean1 -> {
@@ -68,7 +70,7 @@ public class ComicTopicInfoAdapter extends BaseQuickAdapter<ComicTopicInfoBean.C
                 holder.getView(R.id.subscribe).setContentDescription("1");
             } else {
                 // 取消订阅
-                service.cancelSubscribeComic(comics.getId(), PreferenceHelper.findStringByKey(mContext, PreferenceHelper.USER_UID), "mh")
+                service.cancelSubscribeComic(comics.getId(), uid, "mh")
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(bean1 -> {

@@ -22,6 +22,7 @@ import com.sena.dmzjthird.comic.fragment.ComicRelatedFragment;
 import com.sena.dmzjthird.databinding.ActivityComicInfoBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
+import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -89,8 +90,8 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
     }
 
     private void setSubscribeStatus() {
-        String uid = PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_UID);
-        if (uid == null) {
+        String uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+        if ("".equals(uid)) {
             return;
         }
         RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
@@ -142,9 +143,11 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
 
                     RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
 
+                    String uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+
                     if ("0".equals(binding.toolbar.getFavoriteContentDescription())) {
 // 订阅
-                        service.subscribeComic(comicId, PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_UID), "mh")
+                        service.subscribeComic(comicId, uid, "mh")
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(bean1 -> {
@@ -158,7 +161,7 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
                                 });
 
                     } else {
-                        service.subscribeComic(comicId, PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_UID), "mh")
+                        service.subscribeComic(comicId, uid, "mh")
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(bean1 -> {

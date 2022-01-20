@@ -20,6 +20,7 @@ import com.sena.dmzjthird.comic.bean.ComicTopicBean;
 import com.sena.dmzjthird.custom.AutoBanner;
 import com.sena.dmzjthird.databinding.FragmentComicRecommendBinding;
 import com.sena.dmzjthird.utils.LogUtil;
+import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -79,7 +80,7 @@ public class ComicRecommendFragment extends Fragment {
     // 集成所有请求结果，集中发送给adapter
     private void setRecommendList(ComicRecommendBean bean) {
         list.add(bean);
-        if (list.size() == (PreferenceHelper.findStringByKey(getActivity(), PreferenceHelper.USER_UID)==null?8:9)) {
+        if (list.size() == ("".equals(MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "")) ? 8 : 9)) {
 //            binding.progress.stopSpinning();
 //            binding.progress.setVisibility(View.GONE);
             // 设置adapter
@@ -135,8 +136,8 @@ public class ComicRecommendFragment extends Fragment {
                 .subscribe(generateObserver(ComicRecommendChildBean2.class));
 
         // 获取我的订阅
-        String uid = PreferenceHelper.findStringByKey(getActivity(), PreferenceHelper.USER_UID);
-        if (uid != null) {
+        String uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+        if (!"".equals(uid)) {
             service.getComicRecommend3(uid, 49)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

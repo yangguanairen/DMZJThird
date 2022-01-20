@@ -11,6 +11,7 @@ import android.os.Bundle;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.fragment.UserSubscribedFragment;
 import com.sena.dmzjthird.databinding.ActivityUserSubscribedBinding;
+import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.PreferenceHelper;
 
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class UserSubscribedActivity extends AppCompatActivity {
 
         binding.toolbar.setBackListener(v -> finish());
 
-        String uid = PreferenceHelper.findStringByKey(this, PreferenceHelper.USER_UID);
+        String uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
 
         List<Fragment> fragments = Arrays.asList(UserSubscribedFragment.newInstance(0, uid),
                 UserSubscribedFragment.newInstance(1, uid));

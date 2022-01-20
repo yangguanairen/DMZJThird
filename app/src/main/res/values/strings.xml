@@ -46,7 +46,7 @@
     <string name="icon_history_title">浏览历史</string>
     <string name="icon_message_title">我的评论</string>
     <string name="icon_download_title">我的下载</string>
-    <string name="icon_night_title">夜间模式</string>
+    <string name="icon_exit_title">退出登录</string>
     <string name="icon_setting_title">设置</string>
     <string name="icon_theme_title">主题切换</string>
     <string name="icon_comic_setting_title">漫画阅读设置</string>
