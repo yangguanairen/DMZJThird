@@ -1,4 +1,4 @@
-package com.sena.dmzjthird.account;
+package com.sena.dmzjthird.account.view;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;

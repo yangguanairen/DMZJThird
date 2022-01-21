@@ -1,6 +1,7 @@
 package com.sena.dmzjthird.utils;
 
 import com.sena.dmzjthird.RetrofitService;
+import com.sena.dmzjthird.account.UserRetrofitService;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +36,24 @@ public class RetrofitHelper {
                 .build();
 
         return retrofit.create(RetrofitService.class);
+    }
+
+    public static UserRetrofitService getUserServer(String baseUrl) {
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        OkHttpClient client = builder.readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .build();
+
+        return retrofit.create(UserRetrofitService.class);
     }
 
 }

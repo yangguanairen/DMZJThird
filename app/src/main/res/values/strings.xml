@@ -61,9 +61,11 @@
 
 
     <string name="login">登录</string>
+    <string name="register">注册</string>
     <string name="username">用户名</string>
     <string name="password">密码</string>
     <string name="icon_login_title">点击登录</string>
+    <string name="icon_register_title">点击注册</string>
 
     // 漫画阅读设置item文字
     <string name="use_system_light">使用系统亮度</string>

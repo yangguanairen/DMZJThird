@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".account.view.LoginActivity">
+    tools:context=".account.view.RegisterActivity">
 
     <com.sena.dmzjthird.custom.NormalToolbar
         android:id="@+id/toolbar"
@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:toolbarTitle="@string/login" />
+        app:toolbarTitle="@string/register" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameLayout"
@@ -56,29 +56,37 @@
             android:hint="@string/password" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confirmLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:passwordToggleEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="@dimen/dp_10"
+            android:hint="@string/password" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
-        android:id="@+id/login"
+        android:id="@+id/register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@drawable/selector_login"
-        android:text="@string/login"
+        android:text="@string/register"
         android:textSize="18sp"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
-
-    <TextView
-        android:id="@+id/register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="注册"
-        android:textColor="?colorPrimary"
-        app:layout_constraintTop_toBottomOf="@id/login"
-        app:layout_constraintEnd_toEndOf="@id/login"
-        android:layout_marginTop="@dimen/dp_10" />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/confirmLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

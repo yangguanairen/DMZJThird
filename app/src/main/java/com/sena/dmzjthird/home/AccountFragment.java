@@ -1,15 +1,11 @@
 package com.sena.dmzjthird.home;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -22,10 +18,10 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.lxj.xpopup.XPopup;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.account.LoginActivity;
-import com.sena.dmzjthird.account.SettingActivity;
-import com.sena.dmzjthird.account.UserCommentActivity;
-import com.sena.dmzjthird.account.UserSubscribedActivity;
+import com.sena.dmzjthird.account.view.LoginActivity;
+import com.sena.dmzjthird.account.view.SettingActivity;
+import com.sena.dmzjthird.account.view.UserCommentActivity;
+import com.sena.dmzjthird.account.view.UserSubscribedActivity;
 import com.sena.dmzjthird.databinding.FragmentAccountBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;

@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.account.UserSubscribedActivity;
 import com.sena.dmzjthird.comic.adapter.ComicRecommendAdapter;
 import com.sena.dmzjthird.comic.fragment.ComicClassifyFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRankFragment;
@@ -24,7 +23,6 @@ import com.sena.dmzjthird.comic.fragment.ComicTopicFragment;
 import com.sena.dmzjthird.comic.fragment.ComicLatestFragment;
 import com.sena.dmzjthird.comic.view.ComicSearchActivity;
 import com.sena.dmzjthird.databinding.FragmentComicBinding;
-import com.sena.dmzjthird.utils.IntentUtil;
 
 import org.jetbrains.annotations.NotNull;
 

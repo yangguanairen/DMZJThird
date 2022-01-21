@@ -11,7 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
-import com.sena.dmzjthird.account.UserSubscribedActivity;
+import com.sena.dmzjthird.account.view.UserSubscribedActivity;
 import com.sena.dmzjthird.comic.bean.ComicRecommendBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean2;
 import com.sena.dmzjthird.utils.IntentUtil;
