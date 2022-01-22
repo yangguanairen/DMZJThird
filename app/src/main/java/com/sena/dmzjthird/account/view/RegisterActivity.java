@@ -68,12 +68,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-
-        new AlertDialog.Builder(this)
-                .setView()
-                .show();
-
-
         service.createAccount(bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -82,11 +76,6 @@ public class RegisterActivity extends AppCompatActivity {
                     if (bean.getCode() != 200) {
 
                         Toast.makeText(this, "注册失败，请重新尝试!", Toast.LENGTH_SHORT).show();
-//                        new AlertDialog.Builder(this)
-//                                .setTitle("注册失败，请重新尝试")
-//                                .setPositiveButton("确定", (dialog, which) -> {
-//                                    dialog.dismiss();
-//                                }).show();
 
                     } else {
 
