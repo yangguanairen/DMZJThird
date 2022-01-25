@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_bg_loading"
+    android:gravity="center"
+    android:paddingLeft="50dp"
+    android:paddingEnd="50dp"
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp">
+
+    <com.sena.dmzjthird.custom.ProgressWheel xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/progress"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        ProgressWheel:barColor="?colorPrimary"
+        ProgressWheel:barLength="90dp"
+        ProgressWheel:barWidth="6dp"
+        ProgressWheel:delayMillis="75"
+        ProgressWheel:layout_constraintBottom_toBottomOf="parent"
+        ProgressWheel:layout_constraintEnd_toEndOf="parent"
+        ProgressWheel:layout_constraintStart_toStartOf="parent"
+        ProgressWheel:rimColor="@color/white"
+        ProgressWheel:rimWidth="2dp"
+        ProgressWheel:spinSpeed="14dp"
+        ProgressWheel:textColor="#222222"
+        ProgressWheel:textSize="14sp" />
+
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.sena.dmzjthird.utils;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -17,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -144,6 +146,36 @@ public class UriUtil {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public static File getFileByUri(Context context, Uri uri) {
+        File file = null;
+        if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
 
+            file = new File(uri.getPath());
+
+        } else if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
+
+            ContentResolver contentResolver = context.getContentResolver();
+            Cursor cursor = contentResolver.query(uri, null, null, null);
+            if (cursor.moveToFirst()) {
+                @SuppressLint("Range")
+                String displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                try {
+                    InputStream is = contentResolver.openInputStream(uri);
+                    File cache = new File(context.getExternalCacheDir().getAbsolutePath(), Math.round((Math.random() + 1) * 1000) + displayName);
+                    FileOutputStream fos = new FileOutputStream(cache);
+                    FileUtils.copy(is, fos);
+                    file = cache;
+                    fos.close();
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        return file;
+    }
 
 }

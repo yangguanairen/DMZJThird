@@ -71,4 +71,14 @@
     </style>
 
 
+    // 四周圆角5dp，水波纹Button
+    <style name="customBlueButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/selector_login</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+
 </resources>

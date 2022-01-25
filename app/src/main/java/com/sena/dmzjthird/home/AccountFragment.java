@@ -20,6 +20,7 @@ import com.lxj.xpopup.XPopup;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.view.LoginActivity;
 import com.sena.dmzjthird.account.view.SettingActivity;
+import com.sena.dmzjthird.account.view.UpdateProfileActivity;
 import com.sena.dmzjthird.account.view.UserCommentActivity;
 import com.sena.dmzjthird.account.view.UserSubscribedActivity;
 import com.sena.dmzjthird.databinding.FragmentAccountBinding;
@@ -59,7 +60,7 @@ public class AccountFragment extends Fragment {
                 getResult.launch(new Intent(getContext(), LoginActivity.class));
             } else {
                 // Edit Profile
-
+                IntentUtil.goToActivity(getActivity(), UpdateProfileActivity.class);
             }
         });
 

@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
+import java.util.regex.Pattern;
+
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -17,10 +19,21 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+
+    private Pattern p1 = Pattern.compile("[a-zA-Z0-9]{6,16}");
+    private Pattern p2 = Pattern.compile("[a-zA-Z0-9\u4e00-\u9fa5]{4,12}");
+
     @Test
     public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.sena.dmzjthird", appContext.getPackageName());
+
+        System.out.println(p1.matcher("123abc").find());
+        System.out.println(p1.matcher("123 abc").matches());
+        System.out.println(p1.matcher("123所发生的").matches());
+        System.out.println(p2.matcher("123abc士大夫").matches());
+        System.out.println(p2.matcher("123 abc 是否是").matches());
+        System.out.println(p2.matcher("123所发生的；‘【、").matches());
+
+
+
     }
 }

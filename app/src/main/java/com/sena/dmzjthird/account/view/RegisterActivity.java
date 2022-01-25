@@ -5,19 +5,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.UserRetrofitService;
 import com.sena.dmzjthird.account.bean.UserResultBean;
+import com.sena.dmzjthird.custom.CustomLoading;
+import com.sena.dmzjthird.custom.CustomToast;
 import com.sena.dmzjthird.databinding.ActivityRegisterBinding;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Scheduler;
@@ -44,21 +51,29 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-
-
     private void register() {
-
-
 
         String nickname = Objects.requireNonNull(binding.usernameLayout.getEditText()).getText().toString();
         String password = Objects.requireNonNull(binding.passwordLayout.getEditText()).getText().toString();
         String confirm = Objects.requireNonNull(binding.confirmLayout.getEditText()).getText().toString();
 
-        if ("".equals(nickname) || "".equals(password) || "".equals(confirm)) {
-            Toast.makeText(this, "昵称或密码为空!!", Toast.LENGTH_SHORT).show();
+        if (!Pattern.matches("[a-zA-Z0-9\u4e00-\u9fa5]{4,12}", nickname)) {
+            new XPopup.Builder(this)
+                    .isDestroyOnDismiss(true)
+                    .asCustom(new CustomToast(this, R.drawable.ic_error_red, "", "昵称需要4-12中英文、数字"))
+                    .show();
             return ;
-        } else if (!password.equals(confirm)) {
-            Toast.makeText(this, "密码错误!!", Toast.LENGTH_SHORT).show();
+        } else if (!confirm.equals(password)) {
+            new XPopup.Builder(this)
+                    .isDestroyOnDismiss(true)
+                    .asCustom(new CustomToast(this, R.drawable.ic_error_red, "", "两次密码不一致"))
+                    .show();
+            return ;
+        } else if (!Pattern.matches("[a-zA-Z0-9]{5,16}", password)) {
+            new XPopup.Builder(this)
+                    .isDestroyOnDismiss(true)
+                    .asCustom(new CustomToast(this, R.drawable.ic_error_red, "", "密码需要6-16英文、数字"))
+                    .show();
             return ;
         }
 
@@ -66,23 +81,27 @@ public class RegisterActivity extends AppCompatActivity {
         bodyMap.put("nickname", RequestBody.create(nickname, MediaType.parse("multipart/form-data")));
         bodyMap.put("password", RequestBody.create(password, MediaType.parse("multipart/form-data")));
 
-
+        BasePopupView popup = new XPopup.Builder(this)
+                .dismissOnBackPressed(false)
+                .isDestroyOnDismiss(true)
+                .asCustom(new CustomLoading(this))
+                .show();
 
         service.createAccount(bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bean -> {
-
+                .subscribe(bean -> new Handler().postDelayed(() -> {
+                    popup.dismiss();
                     if (bean.getCode() != 200) {
-
-                        Toast.makeText(this, "注册失败，请重新尝试!", Toast.LENGTH_SHORT).show();
-
+                        new XPopup.Builder(this)
+                                .isDestroyOnDismiss(true)
+                                .asCustom(new CustomToast(this, R.drawable.ic_error_red, "", "注册失败，请重新尝试!!"))
+                                .show();
                     } else {
-
-                        finish();
-
+                        Toast.makeText(this, "注册成功!!", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
                     }
-                });
+                }, 500));
 
     }
 

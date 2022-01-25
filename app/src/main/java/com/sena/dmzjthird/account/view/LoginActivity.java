@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-//        service = RetrofitHelper.getServer(RetrofitService.BASE_USER_URL);
         service = RetrofitHelper.getUserServer(UserRetrofitService.MY_BASE_URL);
 
         binding.toolbar.setBackListener(v -> finish());
