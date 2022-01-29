@@ -12,6 +12,7 @@
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/selector_default_picture.xml" value="0.34102564102564104" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/selector_login.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/shape_comic_info_chapter.xml" value="0.3453125" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_clip.xml" value="0.3015625" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_classify.xml" value="0.18070652173913043" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_info.xml" value="0.18070652173913043" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_search.xml" value="0.3020833333333333" />
@@ -20,6 +21,7 @@
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_login.xml" value="0.21105072463768115" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_register.xml" value="0.33967391304347827" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_setting.xml" value="0.2989583333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_update_profile.xml" value="0.26927083333333335" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/custom_comment_text_cotent.xml" value="0.3020833333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_account.xml" value="0.21105072463768115" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comic_comment.xml" value="0.18070652173913043" />
@@ -34,21 +36,10 @@
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/toolbar_serach.xml" value="0.3020833333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/view_pager_chapter.xml" value="0.2989583333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/menu/bottom_nav_menu.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_check_green.xml" value="0.2657407407407407" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_error_red.xml" value="0.1" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res/drawable/selector_login.xml" value="0.2657407407407407" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res/drawable/shape_bg_loading.xml" value="0.1" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res/layout/activity_login.xml" value="0.10572916666666667" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res/layout/activity_register.xml" value="0.2526041666666667" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res/layout/activity_update_profile.xml" value="0.25" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res/layout/custom_loading.xml" value="0.1" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res/layout/custom_toast.xml" value="1.2598684210526316" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res/layout/fragment_account.xml" value="0.25729166666666664" />
-        <entry key="..\:/Users/98125/Desktop/DMZJThird/app/src/main/res/layout/toolbar_normal.xml" value="0.25407608695652173" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

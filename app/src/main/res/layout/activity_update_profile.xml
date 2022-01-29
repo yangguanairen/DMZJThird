@@ -26,7 +26,6 @@
             android:layout_height="180dp">
 
             <LinearLayout
-                android:id="@+id/updateAvatar"
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -66,8 +65,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:background="?selectableItemBackgroundBorderless"
-            android:padding="@dimen/dp_10">
+            android:background="?selectableItemBackground"
+            android:padding="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -98,8 +97,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:background="?selectableItemBackgroundBorderless"
-            android:padding="@dimen/dp_10">
+            android:background="?selectableItemBackground"
+            android:padding="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -129,8 +128,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:background="?selectableItemBackgroundBorderless"
-            android:padding="@dimen/dp_10">
+            android:background="?selectableItemBackground"
+            android:padding="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -160,8 +159,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:background="?selectableItemBackgroundBorderless"
-            android:padding="@dimen/dp_10">
+            android:background="?selectableItemBackground"
+            android:padding="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -185,7 +184,6 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#ffcfd8dc" />
-
 
     </LinearLayout>
 

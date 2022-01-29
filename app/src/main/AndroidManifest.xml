@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,14 +20,14 @@
         android:theme="@style/AppThemeNoAction"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".custom.clipView.ClipActivity"
+            android:exported="false" />
+        <activity
             android:name=".account.view.UpdateProfileActivity"
             android:exported="false" />
         <activity
             android:name=".account.view.RegisterActivity"
             android:exported="false" />
-        <activity
-            android:name=".tmp.TmpActivity"
-            android:exported="true" />
         <activity
             android:name=".custom.LargeImageActivity"
             android:exported="true" />
@@ -60,7 +64,8 @@
         <activity android:name=".account.view.LoginActivity" />
         <activity android:name=".account.view.SettingComicReadActivity" />
         <activity android:name=".account.view.SettingActivity" />
-        <activity android:name=".home.HomeActivity">
+        <activity android:name=".home.HomeActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sena.dmzjthird.RetrofitService;
+import com.sena.dmzjthird.account.UserRetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicRecommendAdapter;
 import com.sena.dmzjthird.comic.bean.ComicRecommendBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean1;
@@ -138,7 +139,7 @@ public class ComicRecommendFragment extends Fragment {
         // 获取我的订阅
         String uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
         if (!"".equals(uid)) {
-            service.getComicRecommend3(uid, 49)
+            service.getComicRecommend3(UserRetrofitService.DMZJ_UID, 49)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(generateObserver(ComicRecommendChildBean3.class));
