@@ -47,6 +47,12 @@ public interface UserRetrofitService {
     );
 
     @Multipart
+    @POST
+    Observable<UserResultBean> updateAccount(
+           @PartMap Map<String, RequestBody> requestBodyMap
+    );
+
+    @Multipart
     @POST("image/upload")
     Observable<ResultBean> uploadImage(
             @Part List<MultipartBody.Part> partList

@@ -15,8 +15,6 @@ import com.sena.dmzjthird.custom.CustomToast;
 public class XPopUpUtil {
 
 
-
-
     public static void showCustomToast(Context context, int imageId, String title, String content) {
         new XPopup.Builder(context)
                 .isDestroyOnDismiss(true)

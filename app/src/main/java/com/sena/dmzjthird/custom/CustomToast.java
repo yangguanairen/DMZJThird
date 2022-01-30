@@ -1,5 +1,6 @@
 package com.sena.dmzjthird.custom;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,15 +17,12 @@ import com.sena.dmzjthird.R;
  * Date: 2022/1/22
  * Time: 12:39
  */
+@SuppressLint("ViewConstructor")
 public class CustomToast extends CenterPopupView {
 
     private final int mIcon;
     private final String mTitle;
     private final String mContent;
-
-    private ImageView ivIcon;
-    private TextView tvTitle;
-    private TextView tvContent;
 
     public CustomToast(@NonNull Context context, int icon, String title, String content) {
         super(context);
@@ -42,9 +40,9 @@ public class CustomToast extends CenterPopupView {
     protected void onCreate() {
         super.onCreate();
 
-        ivIcon = findViewById(R.id.icon);
-        tvTitle = findViewById(R.id.title);
-        tvContent = findViewById(R.id.content);
+        ImageView ivIcon = findViewById(R.id.icon);
+        TextView tvTitle = findViewById(R.id.title);
+        TextView tvContent = findViewById(R.id.content);
 
         if (mIcon != 0) {
             ivIcon.setVisibility(View.VISIBLE);
