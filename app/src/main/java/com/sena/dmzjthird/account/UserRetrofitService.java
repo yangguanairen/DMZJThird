@@ -53,6 +53,12 @@ public interface UserRetrofitService {
     );
 
     @Multipart
+    @POST("/user/updatePassword")
+    Observable<ResultBean> updatePassword(
+            @PartMap Map<String, RequestBody> requestBodyMap
+    );
+
+    @Multipart
     @POST("image/upload")
     Observable<ResultBean> uploadImage(
             @Part List<MultipartBody.Part> partList

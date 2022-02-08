@@ -49,6 +49,7 @@
     <string name="icon_exit_title">退出登录</string>
     <string name="icon_setting_title">设置</string>
     <string name="icon_theme_title">主题切换</string>
+    <string name="icon_change_password">修改密码</string>
     <string name="icon_comic_setting_title">漫画阅读设置</string>
     <string name="icon_novel_setting_title">小说阅读设置</string>
     <string name="icon_comic_download_title">漫画下载设置</string>

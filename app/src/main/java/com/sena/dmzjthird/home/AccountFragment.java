@@ -40,24 +40,17 @@ public class AccountFragment extends Fragment {
 
     private FragmentAccountBinding binding;
 
-    private ActivityResultLauncher getResult;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentAccountBinding.inflate(inflater, container, false);
 
-        initActivityResult();
-
-//        setUserInfo();
-
         binding.accountSetting.setOnClickListener(v -> startActivity(new Intent(getActivity(), SettingActivity.class)));
 
         binding.accountLogin.setOnClickListener(v -> {
             long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
             if (uid == 0L) {
-//                getResult.launch(new Intent(getContext(), LoginActivity.class));
                 IntentUtil.goToActivity(getActivity(), LoginActivity.class);
             } else {
                 // Edit Profile
@@ -94,10 +87,6 @@ public class AccountFragment extends Fragment {
         super.onResume();
 
         setUserInfo();
-    }
-
-    private void initActivityResult() {
-        getResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> setUserInfo());
     }
 
     // 已登录，加载信息

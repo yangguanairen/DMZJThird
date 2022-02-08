@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/D:/Programming/Editor/AndroidStudio/sdk/icons/material/materialicons/check_circle_outline/baseline_check_circle_outline_24.xml" />
+                                      <entry key="url" value="file:/E:/Editor/AndroidStudio/SDk/icons/material/materialicons/vpn_key/baseline_vpn_key_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_check_green" />
+                            <entry key="outputName" value="ic_key" />
                             <entry key="sourceFile" value="C:\Users\18897\Desktop\DMZJThird" />
                           </map>
                         </option>

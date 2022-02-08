@@ -22,7 +22,6 @@ import com.sena.dmzjthird.custom.AutoBanner;
 import com.sena.dmzjthird.databinding.FragmentComicRecommendBinding;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
-import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import org.jetbrains.annotations.NotNull;

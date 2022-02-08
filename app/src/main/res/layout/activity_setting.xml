@@ -54,6 +54,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/setting_comic_download"
         android:layout_width="match_parent"
@@ -80,13 +82,44 @@
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/changePass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_account_item"
+        android:clickable="true"
+        android:padding="15dp">
+
+        <ImageView
+            style="@style/accountItemImage1"
+            android:id="@+id/imageView9"
+            android:src="@drawable/ic_key"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            style="@style/accountItemTitle"
+            android:text="@string/icon_change_password"
+            app:layout_constraintStart_toEndOf="@+id/imageView9"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            style="@style/accountItemImage2"
+            android:src="@drawable/ic_right"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setting_update"
+        android:id="@+id/checkUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_account_item"
@@ -113,7 +146,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setting_about"
+        android:id="@+id/about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_account_item"

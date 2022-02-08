@@ -54,7 +54,7 @@ public class AutoBanner extends ConstraintLayout {
 
 
     public AutoBanner(@NonNull @NotNull Context context) {
-        super(context);
+        this(context, null);
 
     }
 

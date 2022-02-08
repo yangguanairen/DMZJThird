@@ -5,13 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.account.UserRetrofitService;
-import com.sena.dmzjthird.account.bean.LoginBean;
-import com.sena.dmzjthird.account.bean.ResultBean;
 import com.sena.dmzjthird.databinding.ActivityLoginBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
-import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -20,14 +16,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.HttpException;
 
 public class LoginActivity extends AppCompatActivity {
 
