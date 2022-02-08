@@ -122,8 +122,8 @@ public class UriUtil {
         values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
         Uri insertUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-        @SuppressLint("Recycle") Cursor cursor = resolver.query(insertUri, null, null,null);
-        if (cursor != null && cursor.getCount() == 1) resolver.delete(insertUri, null);
+//        @SuppressLint("Recycle") Cursor cursor = resolver.query(insertUri, null, null,null);
+//        if (cursor != null && cursor.getCount() == 1) resolver.delete(insertUri, null);
         return resolver.insert(insertUri, values);
 
 

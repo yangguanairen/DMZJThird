@@ -50,14 +50,15 @@ public class AccountFragment extends Fragment {
 
         initActivityResult();
 
-        setUserInfo();
+//        setUserInfo();
 
         binding.accountSetting.setOnClickListener(v -> startActivity(new Intent(getActivity(), SettingActivity.class)));
 
         binding.accountLogin.setOnClickListener(v -> {
-            String uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
-            if ("".equals(uid)) {
-                getResult.launch(new Intent(getContext(), LoginActivity.class));
+            long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+            if (uid == 0L) {
+//                getResult.launch(new Intent(getContext(), LoginActivity.class));
+                IntentUtil.goToActivity(getActivity(), LoginActivity.class);
             } else {
                 // Edit Profile
                 IntentUtil.goToActivity(getActivity(), UpdateProfileActivity.class);
@@ -65,8 +66,8 @@ public class AccountFragment extends Fragment {
         });
 
         binding.accountFavorite.setOnClickListener(v -> {
-            String uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
-            if (!"".equals(uid)) {
+            long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+            if (uid != 0L) {
                 Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
             } else {
                 IntentUtil.goToActivity(getActivity(), UserSubscribedActivity.class);
@@ -74,8 +75,8 @@ public class AccountFragment extends Fragment {
         });
 
         binding.accountMessage.setOnClickListener(v -> {
-            String uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
-            if (!"".equals(uid)) {
+            long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+            if (uid != 0L) {
                 Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
             } else {
                 IntentUtil.goToActivity(getActivity(), UserCommentActivity.class);
@@ -88,6 +89,13 @@ public class AccountFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        setUserInfo();
+    }
+
     private void initActivityResult() {
         getResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> setUserInfo());
     }
@@ -95,8 +103,8 @@ public class AccountFragment extends Fragment {
     // 已登录，加载信息
     private void setUserInfo() {
 
-        String uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
-        if (!"".equals(uid)) {
+        long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+        if (uid != 0L) {
             LogUtil.e(MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_AVATAR, ""));
             Glide.with(getActivity())
                     .load(MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_AVATAR, ""))
@@ -109,8 +117,8 @@ public class AccountFragment extends Fragment {
 
     private void cancelLogin() {
 
-        String uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
-        if ("".equals(uid)) {
+        long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+        if (uid == 0L) {
             Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
             return ;
         }
@@ -121,7 +129,7 @@ public class AccountFragment extends Fragment {
                 .asConfirm("", "确定退出登录吗？", () -> {
                     binding.nickname.setText(getString(R.string.icon_login_title));
                     binding.avatar.setImageResource(R.drawable.layer_avatar);
-                    MyDataStore.getInstance(getContext()).saveValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+                    MyDataStore.getInstance(getContext()).removeEntry(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID);
                 })
                 .setConfirmText("确定")
                 .setCancelText("取消")

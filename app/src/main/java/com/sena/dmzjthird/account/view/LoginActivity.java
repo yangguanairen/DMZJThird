@@ -72,13 +72,12 @@ public class LoginActivity extends AppCompatActivity {
                 .subscribe(bean -> {
                     if (bean.getCode() == 200) {
                         MyDataStore.getInstance(LoginActivity.this).saveValue(MyDataStore.DATA_STORE_USER,
-                                MyDataStore.USER_UID, bean.getUser().getUid()+"");
-//                            MyDataStore.getInstance(LoginActivity.this).saveValue(MyDataStore.DATA_STORE_USER,
-//                                    MyDataStore.USER_TOKEN, "ad1c752a57819508ddf6f335491bb126");
+                                MyDataStore.USER_UID, bean.getUser().getUid());
                         MyDataStore.getInstance(LoginActivity.this).saveValue(MyDataStore.DATA_STORE_USER,
                                 MyDataStore.USER_NICKNAME, bean.getUser().getNickname());
+                        // "http://avatar.dmzj.com/78/12/7812c2f9fff43511dc2fec3fa1219948.png"
                         MyDataStore.getInstance(LoginActivity.this).saveValue(MyDataStore.DATA_STORE_USER,
-                                MyDataStore.USER_AVATAR, "http://avatar.dmzj.com/78/12/7812c2f9fff43511dc2fec3fa1219948.png");
+                                MyDataStore.USER_AVATAR, bean.getUser().getAvatar());
 
                         finish();
                     } else {

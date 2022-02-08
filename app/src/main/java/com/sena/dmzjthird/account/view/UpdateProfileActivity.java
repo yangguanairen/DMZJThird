@@ -8,10 +8,8 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
@@ -21,10 +19,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.UserRetrofitService;
 import com.sena.dmzjthird.account.bean.UserResultBean;
-import com.sena.dmzjthird.custom.CustomToast;
 import com.sena.dmzjthird.custom.DatePickerDialog;
 import com.sena.dmzjthird.custom.clipView.ClipActivity;
 import com.sena.dmzjthird.databinding.ActivityUpdateProfileBinding;
@@ -73,19 +71,19 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         service = RetrofitHelper.getUserServer(UserRetrofitService.MY_BASE_URL);
 
-        targetUri = UriUtil.createFileInPhoto(this, "cameraResult.jpg", "image/jpeg");
+        targetUri = UriUtil.createFileInDownload(this, "cameraResult.jpg", "image/jpeg");
         ViewUtil.addWaterRipple(binding.save);
 
         initActivityResult();
         initClick();
 
-//        initProfile();
+        initProfile();
 
     }
 
     // 根据现有信息初始化
     private void initProfile() {
-        service.queryAccount(MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0))
+        service.queryAccount(MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bean -> {
@@ -170,6 +168,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     // 控件添加事件监听
     private void initClick() {
+
+        binding.toolbar.setBackListener(v -> finish());
+
         binding.avatar.setOnClickListener(v -> new XPopup.Builder(this)
                 .asCenterList("请选择来源", new String[]{"相机", "相册"}, new int[]{}, (position, text) -> {
                     if (position == 0) {
@@ -179,26 +180,16 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     }
                 }).show());
 
-        binding.updateBirthday.setOnClickListener(v -> {
-            new XPopup.Builder(this)
-                    .asCustom(new DatePickerDialog(this, binding.birthday))
-                    .show();
-        });
-        binding.updateSex.setOnClickListener(v -> {
-            new XPopup.Builder(this)
-                    .asCenterList("请选择性别: ", new String[]{"男", "女", "保密"}, new int[]{}, (position, text) -> {
-                        binding.sex.setText(text);
-                    }).show();
-        });
-        binding.updateEmail.setOnClickListener(v -> {
-            new XPopup.Builder(this)
-                    .asInputConfirm("请输入邮箱", "", "", "邮箱", text -> {
-                        if (!TextUtils.isEmpty(text)) binding.email.setText(text);
-                    }).show();
-        });
-        binding.save.setOnClickListener(v -> {
-            service.
-        });
+        binding.updateBirthday.setOnClickListener(v -> new XPopup.Builder(this)
+                .asCustom(new DatePickerDialog(this, binding.birthday))
+                .show());
+        binding.updateSex.setOnClickListener(v -> new XPopup.Builder(this)
+                .asCenterList("请选择性别: ", new String[]{"男", "女", "保密"}, new int[]{}, (position, text) -> binding.sex.setText(text)).show());
+        binding.updateEmail.setOnClickListener(v -> new XPopup.Builder(this)
+                .asInputConfirm("请输入邮箱", "", "", "邮箱", text -> {
+                    if (!TextUtils.isEmpty(text)) binding.email.setText(text);
+                }).show());
+        binding.save.setOnClickListener(v -> uploadProfile());
     }
 
     private void checkCameraPermission() {
@@ -224,6 +215,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
         // 直接加载本地
 //        Glide.with(this).load(uri).apply(RequestOptions.bitmapTransform(new RoundedCorners(180))).into(binding.avatar);
 
+        BasePopupView popupView = XPopUpUtil.showLoadingView(this);
+
         File file = UriUtil.getFileByUri(this, uri);
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         RequestBody body = RequestBody.create(file, MediaType.parse("multipart/form-data"));
@@ -237,9 +230,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     if (bean.getCode() != 200) {
                         XPopUpUtil.showCustomToast(this, R.drawable.ic_error_red, "上传失败，请重新尝试");
                     } else {
-                        XPopUpUtil.showCustomToast(this, R.drawable.ic_error_red, "上传成功");
+                        popupView.dismiss();
+                        XPopUpUtil.showCustomToast(this, R.drawable.ic_check_green, "上传成功");
 
                         uploadImageUrl = bean.getContent();
+                        MyDataStore.getInstance(this).saveValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_AVATAR, uploadImageUrl);
                         // 加载云端图片
                         Glide.with(this).load(uploadImageUrl)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(180)))
@@ -251,13 +246,39 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     private void uploadProfile() {
         Map<String, RequestBody> bodyMap = new HashMap<>();
-        bodyMap.put("uid", RequestBody.create(MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, ""),
+        long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+        bodyMap.put("uidStr", RequestBody.create(uid + "",
                 MediaType.parse("multipart/form-data")));
-        if (!"".equals(binding.))
-        bodyMap.put("password", RequestBody.create(password,
-                MediaType.parse("multipart/form-data")));
-        bodyMap.put("nickname", RequestBody.create(nickname,
-                MediaType.parse("multipart/form-data")));
+
+        String avatar = uploadImageUrl;
+        if (!"".equals(avatar) && avatar != null) {
+            bodyMap.put("avatar", RequestBody.create(uploadImageUrl, MediaType.parse("multipart/form-data")));
+        }
+
+        String email = binding.email.getText().toString();
+        if (!"".equals(email)) {
+            bodyMap.put("email", RequestBody.create(email, MediaType.parse("multipart/form-data")));
+        }
+
+        String sex = binding.sex.getText().toString();
+        if (!"".equals(avatar)) {
+            bodyMap.put("sex", RequestBody.create(sex, MediaType.parse("multipart/form-data")));
+        }
+
+        String birthday = binding.birthday.getText().toString();
+        if (!"".equals(birthday)) {
+            bodyMap.put("birthday", RequestBody.create(birthday, MediaType.parse("multipart/form-data")));
+        }
+
+        BasePopupView popupView = XPopUpUtil.showLoadingView(this);
+        service.updateAccount(bodyMap)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bean -> {
+                    popupView.dismiss();
+                    if (bean == null || bean.getCode() != 200) XPopUpUtil.showCustomToast(UpdateProfileActivity.this, R.drawable.ic_error_red, "更新资料失败");
+                    else XPopUpUtil.showCustomToast(UpdateProfileActivity.this, R.drawable.ic_check_green, "更新资料成功");
+                });
 
     }
 

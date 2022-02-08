@@ -99,6 +99,16 @@ public class MyDataStore {
 
     }
 
+    public void removeEntry(String dataStoreName, String keyStr) {
+        getDataStore(dataStoreName).updateDataAsync(preferences -> {
+            Preferences.Key<String> key = PreferencesKeys.stringKey(keyStr);
+            MutablePreferences mutablePreferences = preferences.toMutablePreferences();
+            mutablePreferences.remove(key);
+
+            return Single.just(mutablePreferences);
+        });
+    }
+
     private <T> Preferences.Key<T> convertKey(T t, String keyStr) {
 
         if (t == null) {

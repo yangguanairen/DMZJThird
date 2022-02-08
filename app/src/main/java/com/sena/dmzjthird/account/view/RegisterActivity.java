@@ -19,6 +19,7 @@ import com.sena.dmzjthird.custom.CustomLoading;
 import com.sena.dmzjthird.custom.CustomToast;
 import com.sena.dmzjthird.databinding.ActivityRegisterBinding;
 import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.XPopUpUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -81,22 +82,15 @@ public class RegisterActivity extends AppCompatActivity {
         bodyMap.put("nickname", RequestBody.create(nickname, MediaType.parse("multipart/form-data")));
         bodyMap.put("password", RequestBody.create(password, MediaType.parse("multipart/form-data")));
 
-        BasePopupView popup = new XPopup.Builder(this)
-                .dismissOnBackPressed(false)
-                .isDestroyOnDismiss(true)
-                .asCustom(new CustomLoading(this))
-                .show();
+        BasePopupView popup = XPopUpUtil.showLoadingView(this);
 
         service.createAccount(bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bean -> new Handler().postDelayed(() -> {
+                .subscribe(bean -> new Handler(getMainLooper()).postDelayed(() -> {
                     popup.dismiss();
                     if (bean.getCode() != 200) {
-                        new XPopup.Builder(this)
-                                .isDestroyOnDismiss(true)
-                                .asCustom(new CustomToast(this, R.drawable.ic_error_red, "", "注册失败，请重新尝试!!"))
-                                .show();
+                        XPopUpUtil.showCustomToast(this, R.drawable.ic_error_red, "注册失败，请重新尝试!!");
                     } else {
                         Toast.makeText(this, "注册成功!!", Toast.LENGTH_SHORT).show();
                         onBackPressed();

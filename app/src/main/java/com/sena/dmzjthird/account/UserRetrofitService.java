@@ -47,7 +47,7 @@ public interface UserRetrofitService {
     );
 
     @Multipart
-    @POST
+    @POST("/user/updateProfile")
     Observable<UserResultBean> updateAccount(
            @PartMap Map<String, RequestBody> requestBodyMap
     );

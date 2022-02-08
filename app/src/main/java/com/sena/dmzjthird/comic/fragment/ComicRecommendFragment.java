@@ -81,7 +81,8 @@ public class ComicRecommendFragment extends Fragment {
     // 集成所有请求结果，集中发送给adapter
     private void setRecommendList(ComicRecommendBean bean) {
         list.add(bean);
-        if (list.size() == ("".equals(MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "")) ? 8 : 9)) {
+        boolean isLogin = 0L == MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+        if (list.size() == (isLogin ? 8 : 9)) {
 //            binding.progress.stopSpinning();
 //            binding.progress.setVisibility(View.GONE);
             // 设置adapter
@@ -137,8 +138,8 @@ public class ComicRecommendFragment extends Fragment {
                 .subscribe(generateObserver(ComicRecommendChildBean2.class));
 
         // 获取我的订阅
-        String uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
-        if (!"".equals(uid)) {
+        long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+        if (uid != 0L) {
             service.getComicRecommend3(UserRetrofitService.DMZJ_UID, 49)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
