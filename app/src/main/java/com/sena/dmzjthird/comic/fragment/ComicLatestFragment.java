@@ -1,6 +1,5 @@
 package com.sena.dmzjthird.comic.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,11 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicLatestAdapter;
 import com.sena.dmzjthird.comic.bean.ComicLatestBean;
-import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.databinding.FragmentComicLatestBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
@@ -31,12 +28,13 @@ import retrofit2.HttpException;
 
 public class ComicLatestFragment extends Fragment {
 
-
     private FragmentComicLatestBinding binding;
     private ComicLatestAdapter adapter;
     private RetrofitService service;
 
     private int page = 0;
+
+    private boolean isLoaded = false;
 
     @Override
     public View onCreateView(@androidx.annotation.NonNull LayoutInflater inflater, ViewGroup container,
@@ -45,6 +43,25 @@ public class ComicLatestFragment extends Fragment {
         binding = FragmentComicLatestBinding.inflate(inflater, container, false);
         service = RetrofitHelper.getServer(RetrofitService.BASE_ORIGIN_URL);
 
+        initRecyclerView();
+        initRefreshLayout();
+
+        getResponse();
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!isLoaded) {
+            isLoaded = true;
+            binding.refreshLayout.setRefreshing(true);
+            getResponse();
+        }
+    }
+
+    private void initRecyclerView() {
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ComicLatestAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
@@ -58,10 +75,13 @@ public class ComicLatestFragment extends Fragment {
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);
         adapter.getLoadMoreModule().setAutoLoadMore(true);
         adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
+    }
 
-        getResponse();
-
-        return binding.getRoot();
+    private void initRefreshLayout() {
+        binding.refreshLayout.setOnRefreshListener(() -> {
+            page = 0;
+            getResponse();
+        });
     }
 
     private void getResponse() {
@@ -91,6 +111,10 @@ public class ComicLatestFragment extends Fragment {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        if (binding.refreshLayout.isRefreshing()) {
+                            binding.refreshLayout.setRefreshing(false);
+                        }
+
                         if (e instanceof HttpException) {
                             LogUtil.e("HttpError: " + ((HttpException) e).code());
                         } else {
@@ -100,7 +124,9 @@ public class ComicLatestFragment extends Fragment {
 
                     @Override
                     public void onComplete() {
-
+                        if (binding.refreshLayout.isRefreshing()) {
+                            binding.refreshLayout.setRefreshing(false);
+                        }
                     }
                 });
     }
@@ -111,5 +137,11 @@ public class ComicLatestFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isLoaded = false;
     }
 }

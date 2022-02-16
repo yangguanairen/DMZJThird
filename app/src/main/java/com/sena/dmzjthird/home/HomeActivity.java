@@ -1,81 +1,98 @@
 package com.sena.dmzjthird.home;
 
-import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavGraph;
-import androidx.navigation.NavGraphNavigator;
-import androidx.navigation.NavigatorProvider;
-import androidx.navigation.fragment.FragmentNavigator;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.bottomnavigation.LabelVisibilityMode;
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.databinding.ActivityHomeBinding;
-import com.sena.dmzjthird.utils.FixFragmentNavigator;
 
 public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
 
-    @SuppressLint("WrongConstant")
+    private FragmentManager fragmentManager;
+    private ComicFragment comicFragment;
+    private TopicFragment topicFragment;
+    private AccountFragment accountFragment;
+    private Fragment currentFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
+
         setContentView(binding.getRoot());
 
-        binding.navView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
 
+        fragmentManager = getSupportFragmentManager();
 
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_home);
-        final NavController navController = NavHostFragment.findNavController(fragment);
+        initView();
 
-
-        FixFragmentNavigator fixFragmentNavigator = new FixFragmentNavigator(this, fragment.getChildFragmentManager(), fragment.getId());
-        navController.getNavigatorProvider().addNavigator(fixFragmentNavigator);
-
-        NavGraph navGraph = initNavGraph(navController.getNavigatorProvider(), fixFragmentNavigator);
-        navController.setGraph(navGraph);
-
-        binding.navView.setOnNavigationItemSelectedListener(item -> {
-                    navController.navigate(item.getItemId());
-                    return true;
-                });
-
-
-
-        NavigationUI.setupWithNavController(binding.navView, navController);
-
+        initClick();
 
     }
 
-    private NavGraph initNavGraph(NavigatorProvider provider, FixFragmentNavigator navigator) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ImmersionBar.with(this)
+                .statusBarColor(R.color.theme_blue)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .init();
+    }
 
-        NavGraph navGraph = new NavGraph(new NavGraphNavigator(provider));
+    private void initView() {
 
-        FragmentNavigator.Destination destination1 = navigator.createDestination();
-        destination1.setId(R.id.navigation_comic);
-        destination1.setClassName(ComicFragment.class.getCanonicalName());
-        navGraph.addDestination(destination1);
 
-        navGraph.setStartDestination(R.id.navigation_comic);
 
-        FragmentNavigator.Destination destination2 = navigator.createDestination();
-        destination2.setId(R.id.navigation_topic);
-        destination2.setClassName(TopicFragment.class.getCanonicalName());
-        navGraph.addDestination(destination2);
+        comicFragment = ComicFragment.newInstance();
+        topicFragment = TopicFragment.newInstance();
+        accountFragment = AccountFragment.newInstance();
 
-        FragmentNavigator.Destination destination3 = navigator.createDestination();
-        destination3.setId(R.id.navigation_account);
-        destination3.setClassName(AccountFragment.class.getCanonicalName());
-        navGraph.addDestination(destination3);
+        navigateFragment(comicFragment, "comicFragment");
+    }
 
-        return navGraph;
+    private void initClick() {
+        binding.comicLayout.setOnClickListener(v -> navigateFragment(comicFragment, "comicFragment"));
+
+        binding.topicLayout.setOnClickListener(v -> navigateFragment(topicFragment, "topicFragment"));
+
+        binding.accountLayout.setOnClickListener(v -> navigateFragment(accountFragment, "accountFragment"));
+    }
+
+    private void navigateFragment(Fragment fragment, String tag) {
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (currentFragment == fragment) return ;
+        for (Fragment f: fragmentManager.getFragments()) {
+            transaction.hide(f);
+        }
+        if (!fragment.isAdded()) transaction.add(R.id.contentView, fragment, tag);
+        transaction.show(fragment);
+        transaction.setReorderingAllowed(true);
+        transaction.commit();
+
+        currentFragment = fragment;
+        changeColor();
+    }
+
+    private void changeColor() {
+
+        binding.comicTitle.setTextColor(currentFragment == comicFragment ? getColor(R.color.theme_blue) : Color.GRAY);
+        binding.topicTitle.setTextColor(currentFragment == topicFragment ? getColor(R.color.theme_blue) : Color.GRAY);
+        binding.accountTitle.setTextColor(currentFragment == accountFragment ? getColor(R.color.theme_blue) : Color.GRAY);
+
+        binding.comicIcon.setImageResource(currentFragment == comicFragment ? R.drawable.ic_comic_blue : R.drawable.ic_comic);
+        binding.topicIcon.setImageResource(currentFragment == topicFragment ? R.drawable.ic_topic_blue : R.drawable.ic_topic);
+        binding.accountIcon.setImageResource(currentFragment == accountFragment ? R.drawable.ic_account_blue : R.drawable.ic_account);
 
     }
 

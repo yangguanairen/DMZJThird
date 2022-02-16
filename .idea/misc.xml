@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_account_blue.xml" value="0.262" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_comic_blue.xml" value="0.262" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_down.xml" value="0.3453125" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_download.xml" value="0.3453125" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_exit.xml" value="0.38229166666666664" />
@@ -10,28 +12,41 @@
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_filter.xml" value="0.3453125" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_history.xml" value="0.262" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_key.xml" value="0.262" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res-yellow/drawable/ic_topic_blue.xml" value="0.262" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/ic_account.xml" value="0.262" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/ic_comic.xml" value="0.262" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/ic_save.xml" value="0.262" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/layer_clear.xml" value="0.3453125" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/selector_default_picture.xml" value="0.34102564102564104" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/selector_login.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/shape_button.xml" value="0.253" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/shape_comic_info_chapter.xml" value="0.3453125" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_account_home.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_change_password.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_clip.xml" value="0.3015625" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_classify.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_home.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_info.xml" value="0.18070652173913043" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_search.xml" value="0.3020833333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_comic_view.xml" value="0.18070652173913043" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_home.xml" value="0.3020833333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_home_comic.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_login.xml" value="0.21105072463768115" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_main.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_register.xml" value="0.33967391304347827" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_setting.xml" value="0.2989583333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_update_profile.xml" value="0.26927083333333335" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/custom_bottom_view.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/custom_comment_text_cotent.xml" value="0.3020833333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/custom_date_picker_dialog.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_account.xml" value="0.21105072463768115" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comic.xml" value="0.3342391304347826" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comic_classify.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comic_comment.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comic_latest.xml" value="0.3342391304347826" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comic_rank.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comic_related.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comic_topic.xml" value="0.309375" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_comment.xml" value="0.2515625" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_error.xml" value="0.18070652173913043" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_novel.xml" value="0.33967391304347827" />

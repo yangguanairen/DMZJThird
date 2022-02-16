@@ -18,6 +18,12 @@ public class TopicFragment extends Fragment {
 
     private FragmentTopicBinding binding;
 
+    public static TopicFragment newInstance() {
+
+        TopicFragment fragment = new TopicFragment();
+        return fragment;
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 

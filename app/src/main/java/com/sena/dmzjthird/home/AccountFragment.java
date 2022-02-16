@@ -1,10 +1,9 @@
 package com.sena.dmzjthird.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -24,7 +23,6 @@ import com.sena.dmzjthird.account.view.UpdateProfileActivity;
 import com.sena.dmzjthird.account.view.UserCommentActivity;
 import com.sena.dmzjthird.account.view.UserSubscribedActivity;
 import com.sena.dmzjthird.databinding.FragmentAccountBinding;
-import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
 
@@ -40,6 +38,10 @@ public class AccountFragment extends Fragment {
 
     private FragmentAccountBinding binding;
 
+    public static AccountFragment newInstance() {
+        return new AccountFragment();
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,10 +53,10 @@ public class AccountFragment extends Fragment {
         binding.accountLogin.setOnClickListener(v -> {
             long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
             if (uid == 0L) {
-                IntentUtil.goToActivity(getActivity(), LoginActivity.class);
+                startActivity(new Intent(getContext(), LoginActivity.class));
             } else {
                 // Edit Profile
-                IntentUtil.goToActivity(getActivity(), UpdateProfileActivity.class);
+                startActivity(new Intent(getContext(), UpdateProfileActivity.class));
             }
         });
 
@@ -63,7 +65,7 @@ public class AccountFragment extends Fragment {
             if (uid != 0L) {
                 Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
             } else {
-                IntentUtil.goToActivity(getActivity(), UserSubscribedActivity.class);
+                startActivity(new Intent(getContext(), UserSubscribedActivity.class));
             }
         });
 
@@ -72,7 +74,7 @@ public class AccountFragment extends Fragment {
             if (uid != 0L) {
                 Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
             } else {
-                IntentUtil.goToActivity(getActivity(), UserCommentActivity.class);
+                startActivity(new Intent(getContext(), UserCommentActivity.class));
             }
         });
 
@@ -95,7 +97,9 @@ public class AccountFragment extends Fragment {
         long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
         if (uid != 0L) {
             LogUtil.e(MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_AVATAR, ""));
-            Glide.with(getActivity())
+            Context context = getContext();
+            if (context == null) return ;
+            Glide.with(context)
                     .load(MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_AVATAR, ""))
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(180)))
                     .into(binding.avatar);

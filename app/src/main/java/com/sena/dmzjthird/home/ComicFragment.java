@@ -34,6 +34,10 @@ public class ComicFragment extends Fragment {
 
     private FragmentComicBinding binding;
 
+    public static ComicFragment newInstance() {
+        return new ComicFragment();
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -50,7 +54,7 @@ public class ComicFragment extends Fragment {
 
         binding.viewPager.setOffscreenPageLimit(4);
 
-        binding.viewPager.setAdapter(new FragmentPagerAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        binding.viewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             @NonNull
             @NotNull
             @Override
@@ -98,8 +102,7 @@ public class ComicFragment extends Fragment {
         };
 
         IntentFilter filter = new IntentFilter(ComicRecommendAdapter.BROADCAST_INTENT);
-        getActivity().registerReceiver(receiver, filter);
-
+        getContext().registerReceiver(receiver, filter);
 
     }
 }

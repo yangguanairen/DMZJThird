@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicRankComplaintAdapter;
@@ -50,6 +52,8 @@ public class ComicRankFragment extends Fragment {
     private int time = 0;
     private int page = 0;
 
+    private boolean isLoaded;
+
     private CompositeDisposable disposable;
 
     @Override
@@ -65,10 +69,19 @@ public class ComicRankFragment extends Fragment {
 
         initDialog();
 
-        initRefresh();
-
+        initRefreshLayout();
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!isLoaded) {
+            isLoaded = true;
+            binding.refreshLayout.setRefreshing(true);
+            getResponse();
+        }
     }
 
     private void initAdapter() {
@@ -141,6 +154,10 @@ public class ComicRankFragment extends Fragment {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        if (binding.refreshLayout.isRefreshing()) {
+                            binding.refreshLayout.setRefreshing(false);
+                        }
+
                         if (e instanceof HttpException) {
                             LogUtil.e("HttpError: " + ((HttpException) e).code());
                         } else {
@@ -152,6 +169,9 @@ public class ComicRankFragment extends Fragment {
                     @Override
                     public void onComplete() {
                         disposable.clear();
+                        if (binding.refreshLayout.isRefreshing()) {
+                            binding.refreshLayout.setRefreshing(false);
+                        }
                     }
                 });
     }
@@ -160,9 +180,35 @@ public class ComicRankFragment extends Fragment {
         String[] classifyName = {"全部分类"};
         String[] sortName = {"人气排行", "吐槽排行", "订阅排行"};
         String[] timeName = {"日排行", "周排行", "月排行", "总排行"};
-        binding.rankSort.setOnClickListener(v -> createDialog(sortName, 0));
-        binding.rankTime.setOnClickListener(v -> createDialog(timeName, 1));
-        binding.rankClassify.setOnClickListener(v -> createDialog(classifyName, 2));
+        binding.rankClassify.setOnClickListener(v -> showDialog(classifyName, classify, 1));
+        binding.rankSort.setOnClickListener(v -> showDialog(sortName, sort, 2));
+        binding.rankTime.setOnClickListener(v -> showDialog(timeName, time, 3));
+    }
+
+    private void showDialog(String[] data, int currentPosition, int flag) {
+        new XPopup.Builder(getContext())
+                .borderRadius(10)
+                .asCenterList("", data, new int[]{}, currentPosition, (position, text) -> {
+
+                    switch (flag) {
+                        case 1:
+                            classify = position;
+                            binding.rankClassify.setText(text);
+                            break;
+                        case 2:
+                            sort = position;
+                            binding.rankSort.setText(text);
+                            break;
+                        case 3:
+                            time = position;
+                            binding.rankTime.setText(text);
+                            break;
+                    }
+
+                    initAdapter();
+
+                })
+                .show();
     }
 
     private void createDialog(String[] data, int flag) {
@@ -195,10 +241,10 @@ public class ComicRankFragment extends Fragment {
 
     }
 
-    private void initRefresh() {
-        binding.refresh.setOnRefreshListener(() -> {
-            initAdapter();
-            new Handler().postDelayed(() -> binding.refresh.setRefreshing(false), 3000);
+    private void initRefreshLayout() {
+        binding.refreshLayout.setOnRefreshListener(() -> {
+            page = 0;
+            getResponse();
         });
     }
 
@@ -208,5 +254,12 @@ public class ComicRankFragment extends Fragment {
         disposable.dispose();
         disposable = null;
         binding = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isLoaded = false;
+
     }
 }

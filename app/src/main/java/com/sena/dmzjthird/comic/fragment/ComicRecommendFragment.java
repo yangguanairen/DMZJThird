@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean1;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean2;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean3;
 import com.sena.dmzjthird.comic.bean.ComicTopicBean;
-import com.sena.dmzjthird.custom.AutoBanner;
 import com.sena.dmzjthird.databinding.FragmentComicRecommendBinding;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
@@ -64,15 +62,13 @@ public class ComicRecommendFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentComicRecommendBinding.inflate(inflater, container, false);
 
-
         binding.progress.spin();
 
-        binding.refresh.setOnRefreshListener(() -> new Handler().postDelayed(() -> binding.refresh.setRefreshing(false), 5000));
+//        binding.refresh.setOnRefreshListener(() -> new Handler().postDelayed(() -> binding.refresh.setRefreshing(false), 5000));
 
         initBanner();
 
         initAdapter();
-
 
         return binding.getRoot();
     }
@@ -91,18 +87,16 @@ public class ComicRecommendFragment extends Fragment {
                 return i1.compareTo(i2);
             });
             adapter.setList(list);
-            new Handler().postDelayed(() -> {
+//            new Handler().postDelayed(() -> {
                 binding.banner.setVisibility(View.VISIBLE);
                 binding.progress.stopSpinning();
                 binding.progress.setVisibility(View.GONE);
-            }, 2000);
+//            }, 2000);
         }
     }
 
 
     private void initBanner() {
-
-        AutoBanner banner = new AutoBanner(getActivity());
 
         RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
 
@@ -162,17 +156,17 @@ public class ComicRecommendFragment extends Fragment {
     }
 
     private <T> Observer<T> generateObserver(T t) {
-        Observer<T> observer = new Observer<T>() {
+        return new Observer<T>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
             }
 
             @Override
-            public void onNext(@NonNull T t) {
-                if (t.getClass().equals(ComicRecommendChildBean2.class)) {
+            public void onNext(@NonNull T t1) {
+                if (t1.getClass().equals(ComicRecommendChildBean2.class)) {
 
-                    ComicRecommendChildBean2.Data1 bean = ((ComicRecommendChildBean2) t).getData();
+                    ComicRecommendChildBean2.Data1 bean = ((ComicRecommendChildBean2) t1).getData();
                     List<ComicRecommendBean.Data> tmp = new ArrayList<>();
                     for (ComicRecommendChildBean2.Data1.Data data : bean.getData()) {
                         tmp.add(new ComicRecommendBean.Data(data.getCover(), data.getTitle(), data.getAuthors(),
@@ -182,9 +176,9 @@ public class ComicRecommendFragment extends Fragment {
                     setRecommendList(new ComicRecommendBean(bean.getCategory_id(),
                             bean.getTitle(), bean.getSort(), tmp));
 
-                } else if(t.getClass().equals(ComicRecommendChildBean3.class)) {
+                } else if(t1.getClass().equals(ComicRecommendChildBean3.class)) {
 
-                    ComicRecommendChildBean3.Data1 bean = ((ComicRecommendChildBean3) t).getData();
+                    ComicRecommendChildBean3.Data1 bean = ((ComicRecommendChildBean3) t1).getData();
                     List<ComicRecommendBean.Data> tmp = new ArrayList<>();
                     for (ComicRecommendChildBean3.Data1.Data data: bean.getData()) {
                         tmp.add( new ComicRecommendBean.Data(data.getCover(), data.getTitle(), data.getAuthors(),
@@ -195,7 +189,7 @@ public class ComicRecommendFragment extends Fragment {
                             bean.getSort(), tmp));
 
                 } else {
-                    setRecommendList(((ComicRecommendChildBean1) t).getData());
+                    setRecommendList(((ComicRecommendChildBean1) t1).getData());
                 }
 
             }
@@ -214,7 +208,6 @@ public class ComicRecommendFragment extends Fragment {
 
             }
         };
-        return observer;
     }
 
 
