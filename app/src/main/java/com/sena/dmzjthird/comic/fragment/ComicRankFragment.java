@@ -1,21 +1,16 @@
 package com.sena.dmzjthird.comic.fragment;
 
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.OnSelectListener;
-import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicRankComplaintAdapter;
 import com.sena.dmzjthird.comic.adapter.ComicRankPopularityAdapter;
@@ -23,7 +18,6 @@ import com.sena.dmzjthird.comic.adapter.ComicRankSubscribeAdapter;
 import com.sena.dmzjthird.comic.bean.ComicComplaintRankBean;
 import com.sena.dmzjthird.comic.bean.ComicPopularityRankBean;
 import com.sena.dmzjthird.comic.bean.ComicSubscribeRankBean;
-import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.databinding.FragmentComicRankBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
@@ -66,10 +60,9 @@ public class ComicRankFragment extends Fragment {
         disposable = new CompositeDisposable();
 
         initAdapter();
+        initRefreshLayout();
 
         initDialog();
-
-        initRefreshLayout();
 
         return binding.getRoot();
     }
@@ -209,36 +202,6 @@ public class ComicRankFragment extends Fragment {
 
                 })
                 .show();
-    }
-
-    private void createDialog(String[] data, int flag) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        int checkedItem;
-        if (flag == 0) {
-            checkedItem = sort;
-        } else if (flag == 1) {
-            checkedItem = time;
-        } else {
-            checkedItem = classify;
-        }
-
-        builder.setSingleChoiceItems(data, checkedItem, (dialog, which) -> {
-            if (flag == 0) {
-                sort = which;
-                binding.rankSort.setText(data[which]);
-            } else if (flag == 1) {
-                time = which;
-                binding.rankTime.setText(data[which]);
-            } else {
-
-            }
-            initAdapter();
-            dialog.dismiss();
-            System.gc();
-        });
-        builder.create().show();
-
     }
 
     private void initRefreshLayout() {

@@ -40,18 +40,14 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void initView() {
+
+        // 隐藏底部手势导航栏
         ImmersionBar.with(this)
                 .statusBarColor(R.color.theme_blue)
                 .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .titleBarMarginTop(binding.container)
                 .init();
-    }
-
-    private void initView() {
-
-
 
         comicFragment = ComicFragment.newInstance();
         topicFragment = TopicFragment.newInstance();

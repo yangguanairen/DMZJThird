@@ -154,6 +154,6 @@
     <orderEntry type="library" name="Gradle: jp.wasabeef:glide-transformations:4.3.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.chrisbanes:PhotoView:2.3.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.lxj:xpopup:2.2.23@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.gyf.immersionbar:immersionbar:3.0.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.geyifeng.immersionbar:immersionbar:3.2.1@aar" level="project" />
   </component>
 </module>
