@@ -11,11 +11,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.sena.dmzjthird.ErrorFragment;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.RetrofitService;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.comic.fragment.CommentFragment;
 import com.sena.dmzjthird.comic.fragment.ComicInfoFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRelatedFragment;
@@ -23,8 +22,8 @@ import com.sena.dmzjthird.databinding.ActivityComicInfoBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
-import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.XPopUpUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -90,21 +89,21 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
     }
 
     private void setSubscribeStatus() {
-        String uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
-        if ("".equals(uid)) {
-            return;
-        }
-        RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
-        service.isSubscribe(uid, comicId)
+        long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+//        if ("".equals(uid)) {
+//            return;
+//        }
+        MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
+        service.querySubscribe(uid, comicId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bean -> {
-                    if (bean.getCode() == 0) {
-                        binding.toolbar.setFavoriteBackgrounds(R.drawable.ic_subscribed);
-                        binding.toolbar.setFavoriteContentDescription("1");
-                    } else {
-                        binding.toolbar.setFavoriteContentDescription("0");
+                .subscribe(resultBean -> {
+                    if (resultBean == null || resultBean.getCode() == 100) {
+                        return ;
                     }
+                    binding.toolbar.setFavoriteBackgrounds(
+                            "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed : R.drawable.ic_subscribe
+                    );
                 });
     }
 
@@ -117,7 +116,7 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void loadingDataFinish(String title) {
+    public void loadingDataFinish(String title, String cover, String author) {
         new Handler().postDelayed(() -> {
             if (isFinishing() || binding == null) {
                 LogUtil.e("activity is finish");
@@ -141,40 +140,27 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
 
                 binding.toolbar.setFavoriteListener(v -> {
 
-                    RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
+                    MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
 
-                    String uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+                    long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+                    service.controlSubscribe(uid, comicId, cover, title, author)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(resultBean -> {
+                                if (resultBean == null) {
+                                    XPopUpUtil.showCustomErrorToast(this, "请求失败，请稍后重试");
+                                    return ;
+                                }
+                                if (resultBean.getCode() == 100) {
+                                    XPopUpUtil.showCustomErrorToast(this, getString(R.string.not_login));
+                                    return ;
+                                }
+                                binding.toolbar.setFavoriteBackgrounds(
+                                        "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed : R.drawable.ic_subscribe
+                                );
 
-                    if ("0".equals(binding.toolbar.getFavoriteContentDescription())) {
-// 订阅
-                        service.subscribeComic(comicId, uid, "mh")
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(bean1 -> {
-                                    if (bean1.getCode() != 0) {
-                                        Toast.makeText(this, getString(R.string.cancel_subscribe_fail), Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        binding.toolbar.setFavoriteBackgrounds(R.drawable.ic_subscribed);
-                                        binding.toolbar.setFavoriteContentDescription("1");
-                                        Toast.makeText(this, getString(R.string.subscribe_success), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                            });
 
-                    } else {
-                        service.subscribeComic(comicId, uid, "mh")
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(bean1 -> {
-                                    if (bean1.getCode() != 0) {
-                                        Toast.makeText(this, getString(R.string.cancel_subscribe_fail), Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        binding.toolbar.setFavoriteBackgrounds(R.drawable.ic_subscribe);
-                                        binding.toolbar.setFavoriteContentDescription("0");
-
-                                        Toast.makeText(this, getString(R.string.cancel_subscribe_success), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
                 });
                 binding.toolbar.setOtherListener(v -> {});
             }

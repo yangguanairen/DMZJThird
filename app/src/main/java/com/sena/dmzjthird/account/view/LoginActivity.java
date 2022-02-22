@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.sena.dmzjthird.account.UserRetrofitService;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.databinding.ActivityLoginBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
@@ -23,7 +23,7 @@ import okhttp3.RequestBody;
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
-    private UserRetrofitService service;
+    private MyRetrofitService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        service = RetrofitHelper.getUserServer(UserRetrofitService.MY_BASE_URL);
+        service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
 
         binding.toolbar.setBackListener(v -> finish());
 

@@ -21,9 +21,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.account.UserRetrofitService;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.account.bean.UserResultBean;
-import com.sena.dmzjthird.custom.DatePickerDialog;
+import com.sena.dmzjthird.custom.popup.DatePickerDialog;
 import com.sena.dmzjthird.custom.clipView.ClipActivity;
 import com.sena.dmzjthird.databinding.ActivityUpdateProfileBinding;
 import com.sena.dmzjthird.utils.ImageUtil;
@@ -49,7 +49,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     private ActivityUpdateProfileBinding binding;
 
-    private UserRetrofitService service;
+    private MyRetrofitService service;
     private ActivityResultLauncher<String> requestCameraPermission;
     private ActivityResultLauncher<Uri> getTakePicture;
     private ActivityResultLauncher<Intent> getClipResult;
@@ -69,7 +69,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
-        service = RetrofitHelper.getUserServer(UserRetrofitService.MY_BASE_URL);
+        service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
 
         targetUri = UriUtil.createFileInDownload(this, "cameraResult.jpg", "image/jpeg");
         ViewUtil.addWaterRipple(binding.save);

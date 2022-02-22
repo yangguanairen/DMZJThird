@@ -5,16 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.SeekBar;
 
 import com.sena.dmzjthird.databinding.ActivitySettingComicReadBinding;
-import com.sena.dmzjthird.utils.PreferenceHelper;
+import com.sena.dmzjthird.utils.MyDataStore;
 
 public class SettingComicReadActivity extends AppCompatActivity {
 
     private ActivitySettingComicReadBinding binding;
+
+    private MyDataStore dataStore;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -23,91 +23,62 @@ public class SettingComicReadActivity extends AppCompatActivity {
         binding = ActivitySettingComicReadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        dataStore = MyDataStore.getInstance(this);
+
         binding.normalToolbar.setBackListener(v -> finish());
 
+        initClick();
 
-        binding.lightSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                binding.lightCons.setVisibility(View.GONE);
-                // 使用系统亮度
-                // 修改当前窗口亮度为系统亮度
-            } else {
-                binding.lightCons.setVisibility(View.VISIBLE);
-                // 自己调节亮度
-            }
-        });
-
-        binding.lightSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // 修改当前屏幕亮度为seekbar刻度亮度
-                // 屏幕亮度为0~1，设置(double) progress/10， 默认progress值2
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        binding.verticalSwitch.setOnCheckedChangeListener(((buttonView, isChecked) -> {
-            if (isChecked) {
-                binding.modeCons.setVisibility(View.GONE);
-                binding.modeSwitch.setChecked(false);
-                // 漫画阅读模式改为垂直阅读，关闭日漫模式
-            } else {
-                binding.modeCons.setVisibility(View.VISIBLE);
-                // 漫画阅读模式改为翻页
-            }
-        }));
+        initState();
 
     }
 
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //设置状态
-        Log.d("jc", "onStart: " + PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_USE_SYSTEM_BRIGHTNESS));
-        binding.lightSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_USE_SYSTEM_BRIGHTNESS));
-        binding.lightSeekBar.setProgress(PreferenceHelper.findIntByKey(this, PreferenceHelper.SEEKBAR_BRIGHTNESS));
-        binding.verticalSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_VERTICAL_MODE));
-        binding.modeSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_JAPANESE_COMIC_MODE));
-        binding.keepSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_KEEP_LIGHT_ALWAYS));
-        binding.fullSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_FULL_SCREEN));
-        binding.stateSwitch.setChecked(PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_SHOW_STATE));
+    private void initState() {
+
+        binding.content.lightSwitch.setChecked(dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_SYSTEM_BRIGHTNESS, false));
+        binding.content.lightSeekBar.setMax(getResources().getInteger(
+                getResources().getIdentifier("config_screenBrightnessSettingMaximum", "integer", "android")
+        ));
+        binding.content.lightSeekBar.setProgress(dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_BRIGHTNESS, 0));
+        binding.content.verticalSwitch.setChecked(dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_VERTICAL_MODE, false));
+        binding.content.modeSwitch.setChecked(dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_COMIC_MODE, false));
+        binding.content.keepSwitch.setChecked(dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_KEEP_LIGHT, false));
+        binding.content.fullSwitch.setChecked(dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_FULL_SCREEN, false));
+        binding.content.stateSwitch.setChecked(dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_SHOW_STATE, false));
+
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // 存储信息
-        Log.d("jc", "onStop: " + binding.lightSwitch.isChecked());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_USE_SYSTEM_BRIGHTNESS, binding.lightSwitch.isChecked());
-        PreferenceHelper.setIntByKey(this, PreferenceHelper.SEEKBAR_BRIGHTNESS, binding.lightSeekBar.getProgress());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_VERTICAL_MODE, binding.verticalSwitch.isChecked());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_JAPANESE_COMIC_MODE, binding.modeSwitch.isChecked());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_KEEP_LIGHT_ALWAYS, binding.keepSwitch.isChecked());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_FULL_SCREEN, binding.fullSwitch.isChecked());
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_SHOW_STATE, binding.stateSwitch.isChecked());
-        Log.d("jc", "onStop: " + "save is done");
+    private void initClick() {
+
+        binding.content.lightSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                binding.content.lightCons.setVisibility(isChecked ? View.GONE : View.VISIBLE));
+
+
+
+        binding.content.verticalSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.content.modeSwitch.setChecked(false);
+            binding.content.modeCons.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+        });
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        saveState();
         binding = null;
 
+    }
 
-
-
-
-
+    private void saveState() {
+        dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_SYSTEM_BRIGHTNESS, binding.content.lightSwitch.isChecked());
+        dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_BRIGHTNESS, binding.content.lightSeekBar.getProgress());
+        dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_VERTICAL_MODE, binding.content.verticalSwitch.isChecked());
+        dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_COMIC_MODE, binding.content.modeSwitch.isChecked());
+        dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_KEEP_LIGHT, binding.content.keepSwitch.isChecked());
+        dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_FULL_SCREEN, binding.content.fullSwitch.isChecked());
+        dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_SHOW_STATE, binding.content.stateSwitch.isChecked());
 
     }
 }

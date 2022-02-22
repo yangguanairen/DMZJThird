@@ -1,13 +1,11 @@
 package com.sena.dmzjthird.comic.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,38 +13,34 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicViewAdapter;
 import com.sena.dmzjthird.comic.adapter.ComicViewCatalogAdapter;
 import com.sena.dmzjthird.comic.bean.ComicInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicViewBean;
+import com.sena.dmzjthird.custom.popup.CustomBottomPopup;
 import com.sena.dmzjthird.databinding.ActivityComicViewBinding;
 import com.sena.dmzjthird.utils.GlideUtil;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
-import com.sena.dmzjthird.utils.OnClickListenerHelper;
-import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.XPopUpUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +51,7 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class ComicViewActivity extends AppCompatActivity {
+public class ComicViewActivity extends AppCompatActivity implements CustomBottomPopup.Callbacks {
 
     private ActivityComicViewBinding binding;
     private RetrofitService service;
@@ -68,17 +62,13 @@ public class ComicViewActivity extends AppCompatActivity {
     private boolean preChapterClick = false;
     private ComicViewAdapter adapter;
 
-    private List<String> images = new ArrayList<>();  // 漫画图片url集合
+    private final List<String> images = new ArrayList<>();  // 漫画图片url集合
 
-    private boolean isUesSystemBrightness;
-    private int seekbarBrightness;
-    private boolean isVerticalMode;   // 控制该展现的视图，true: RecyclerView; false: ViewPager
-    private boolean isJapaneseComicMode;
-    private boolean isKeepLight;
-    private boolean isFullScreen;
-    private boolean isShowState;
+    private boolean mIsVerticalMode = false;
     private int systemMaxBrightness;
     private BroadcastReceiver receiver;
+
+    private BasePopupView popup;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -88,22 +78,9 @@ public class ComicViewActivity extends AppCompatActivity {
         binding = ActivityComicViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        systemMaxBrightness = getResources().getInteger(
-                getResources().getIdentifier("config_screenBrightnessSettingMaximum", "integer", "android")
-        );
-        isUesSystemBrightness = PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_USE_SYSTEM_BRIGHTNESS);
-        seekbarBrightness = PreferenceHelper.findIntByKey(this, PreferenceHelper.SEEKBAR_BRIGHTNESS);
-        isVerticalMode = PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_VERTICAL_MODE);
-        isJapaneseComicMode = PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_JAPANESE_COMIC_MODE);
-        isKeepLight = PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_KEEP_LIGHT_ALWAYS);
-        isFullScreen = PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_FULL_SCREEN);
-        isShowState = PreferenceHelper.findBooleanByKey(this, PreferenceHelper.IS_SHOW_STATE);
+
 
         getWindow().setStatusBarColor(Color.BLACK);
-        isUseSystemBrightness();
-        isKeepLightAlways();
-        isFullScreen();
-        isShowState();
 
         service = RetrofitHelper.getServer(RetrofitService.BASE_ORIGIN_URL);
         comicId = IntentUtil.getObjectId(this);
@@ -111,7 +88,9 @@ public class ComicViewActivity extends AppCompatActivity {
         bean = (ComicInfoBean) IntentUtil.getSerialize(this);
 
 
-        initControl();
+        initView();
+
+        initClick();
 
         initBroadcast();
 
@@ -119,46 +98,110 @@ public class ComicViewActivity extends AppCompatActivity {
 
     }
 
+    private void initView() {
 
-    private void isShowState() {
-        binding.state.setVisibility(isShowState?View.VISIBLE:View.INVISIBLE);
-    }
+        systemMaxBrightness = getResources().getInteger(
+                getResources().getIdentifier("config_screenBrightnessSettingMaximum", "integer", "android")
+        );
 
-    private void isFullScreen() {
-        if (isFullScreen) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-    }
+        popup = new XPopup.Builder(this)
+                .asCustom(new CustomBottomPopup(this, systemMaxBrightness));
 
-    private void isKeepLightAlways() {
-        if (isKeepLight) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-    }
+        setSubscribeStatus();
 
-    private void isUseSystemBrightness() {
-        if (isUesSystemBrightness) {
-            WindowManager.LayoutParams params = getWindow().getAttributes();
-            params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-            getWindow().setAttributes(params);
-        } else {
-            try {
-                seekbarBrightness = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
-            } catch (Exception e) {
-                e.printStackTrace();
-                seekbarBrightness = 0;
+        // 侧边栏
+        binding.catalogCount.setText(getString(R.string.catalog, bean.getData().size()));
+        binding.catalogRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        ComicViewCatalogAdapter adapter = new ComicViewCatalogAdapter(this);
+        binding.catalogRecyclerview.setAdapter(adapter);
+        adapter.setCurrentChapterId(chapterId);
+        adapter.setList(bean.getData());
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+            String clickChapterId = ((ComicInfoBean.Data) adapter1.getData().get(position)).getId();
+            if (chapterId.equals(clickChapterId)) {
+                return;
             }
-        }
+            chapterId = clickChapterId;
+            getResponse();
+            binding.drawerLayout.closeDrawer(binding.catalog);
+            adapter.setCurrentChapterId(chapterId);
+            adapter.setList(adapter.getData());
+        });
     }
 
-    private void changeSystemBrightness() {
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.screenBrightness = seekbarBrightness / (float) systemMaxBrightness;
-        getWindow().setAttributes(params);
+    private void initClick() {
+
+
+        binding.toolbar.setBackListener(v -> finish());
+        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+            @Override
+            public void onPageSelected(int position) {
+                binding.seekBar.setProgress(position - 1);
+                if (position == 0) {
+                    // 前往上一章
+                    binding.preChapter.callOnClick();
+                }
+                if (position == images.size() - 1) {
+                    // 前往下一章
+                    binding.nextChapter.callOnClick();
+                }
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) { }
+        });
+        binding.chapterList.setOnClickListener(v -> binding.drawerLayout.openDrawer(binding.catalog));
+        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                if (mIsVerticalMode) {
+//                    if (seekBar.isPressed()) {
+//                        binding.recyclerview.scrollToPosition(progress);
+//                        binding.pageNum.setText((progress + 1) + "/" + images.size());
+//                    }
+                } else {
+                    binding.viewPager.setCurrentItem(progress + 1);
+                    binding.pageNum.setText((progress + 1) + "/" + images.size());
+                }
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+
+        binding.setting.setOnClickListener(v -> popup.show());
+
+        binding.subscribe.setOnClickListener(v -> controlSubscribe());
+
+        // 设置上一话/下一话监听器
+        binding.preChapter.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(mBean.getPrev_chap_id())) {
+                Toast.makeText(this, "已经没有哦", Toast.LENGTH_SHORT).show();
+            }
+            chapterId = mBean.getPrev_chap_id();
+            preChapterClick = true;
+            getResponse();
+        });
+        binding.nextChapter.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(mBean.getNext_chap_id())) {
+                Toast.makeText(this, "已经没有哦", Toast.LENGTH_SHORT).show();
+            }
+            chapterId = mBean.getNext_chap_id();
+            getResponse();
+        });
+
+//         下拉前往上一章，只有竖屏阅读模式生效
+        binding.refresh.setOnRefreshListener(() -> {
+            binding.preChapter.callOnClick();
+            binding.refresh.setRefreshing(false);
+        });
+        binding.complaint.setOnClickListener(v -> {
+
+        });
     }
 
 
@@ -185,7 +228,7 @@ public class ComicViewActivity extends AppCompatActivity {
                         images.addAll(bean.getPage_url());
                         images.add("1");
 
-                        if (isVerticalMode) {
+                        if (mIsVerticalMode) {
                             setRecyclerViewData();
                         } else {
                             setViewPagerData(bean.getSum_pages());
@@ -205,200 +248,48 @@ public class ComicViewActivity extends AppCompatActivity {
                 });
     }
 
-
-    @SuppressLint({"ResourceAsColor", "UseSwitchCompatOrMaterialCode"})
-    private void initControl() {
-
-        binding.toolbar.setBackListener(v -> finish());
-        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
-            @Override
-            public void onPageSelected(int position) {
-                binding.seekBar.setProgress(position - 1);
-                if (position == 0) {
-                    // 前往上一章
-                    binding.preChapter.callOnClick();
-                }
-                if (position == images.size() - 1) {
-                    // 前往下一章
-                    binding.nextChapter.callOnClick();
-                }
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) { }
-        });
-        binding.chapterList.setOnClickListener(v -> binding.drawerLayout.openDrawer(binding.catalog));
-        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                if (isVerticalMode) {
-//                    if (seekBar.isPressed()) {
-//                        binding.recyclerview.scrollToPosition(progress);
-//                        binding.pageNum.setText((progress + 1) + "/" + images.size());
-//                    }
-                } else {
-                    binding.viewPager.setCurrentItem(progress + 1);
-                    binding.pageNum.setText((progress + 1) + "/" + images.size());
-                }
-            }
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
-        });
-
-        // subscribe设置初始值
-        binding.subscribe.setOnClickListener(v -> OnClickListenerHelper.subscribeComic(this, comicId, binding.subscribe));
-        setSubscribeStatus();
-
-        // 设置上一话/下一话监听器
-        binding.preChapter.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(mBean.getPrev_chap_id())) {
-                Toast.makeText(this, "已经没有哦", Toast.LENGTH_SHORT).show();
-            }
-            chapterId = mBean.getPrev_chap_id();
-            preChapterClick = true;
-            getResponse();
-        });
-        binding.nextChapter.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(mBean.getNext_chap_id())) {
-                Toast.makeText(this, "已经没有哦", Toast.LENGTH_SHORT).show();
-            }
-            chapterId = mBean.getNext_chap_id();
-            getResponse();
-        });
-
-        // 侧边栏
-        binding.catalogCount.setText(getString(R.string.catalog, bean.getData().size()));
-        binding.catalogRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        ComicViewCatalogAdapter adapter = new ComicViewCatalogAdapter(this);
-        binding.catalogRecyclerview.setAdapter(adapter);
-        adapter.setCurrentChapterId(chapterId);
-        adapter.setList(bean.getData());
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
-            String clickChapterId = ((ComicInfoBean.Data) adapter1.getData().get(position)).getId();
-            if (chapterId.equals(clickChapterId)) {
-                return;
-            }
-            chapterId = clickChapterId;
-            getResponse();
-            binding.drawerLayout.closeDrawer(binding.catalog);
-            adapter.setCurrentChapterId(chapterId);
-            adapter.setList(adapter.getData());
-        });
-
-        // 点击设置弹出底部弹窗
-        binding.setting.setOnClickListener(v -> {
-
-            View view = LayoutInflater.from(this).inflate(R.layout.dialog_view_setting, null, false);
-            Switch lightSwitch = view.findViewById(R.id.lightSwitch);
-            SeekBar lightSeekBar = view.findViewById(R.id.lightSeekBar);
-            ConstraintLayout lightCons = view.findViewById(R.id.lightCons);
-            Switch verticalSwitch = view.findViewById(R.id.verticalSwitch);
-            ConstraintLayout modeCons = view.findViewById(R.id.modeCons);
-            Switch modeSwitch = view.findViewById(R.id.modeSwitch);
-            Switch keepSwitch = view.findViewById(R.id.keepSwitch);
-            Switch fullSwitch = view.findViewById(R.id.fullSwitch);
-            Switch stateSwitch = view.findViewById(R.id.stateSwitch);
-
-            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-
-            lightSwitch.setChecked(isUesSystemBrightness);
-            lightCons.setVisibility(isUesSystemBrightness?View.VISIBLE:View.GONE);
-            lightSeekBar.setMax(systemMaxBrightness);
-            lightSeekBar.setProgress(seekbarBrightness);
-            verticalSwitch.setChecked(isVerticalMode);
-            modeCons.setVisibility(isVerticalMode?View.VISIBLE:View.GONE);
-            modeSwitch.setChecked(isJapaneseComicMode);
-            keepSwitch.setChecked(isKeepLight);
-            fullSwitch.setChecked(isFullScreen);
-            stateSwitch.setChecked(isShowState);
-
-
-            // 添加监听器
-            lightSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                isUesSystemBrightness = isChecked;
-                lightCons.setVisibility(isChecked?View.VISIBLE:View.GONE);
-            });
-            lightSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    seekbarBrightness = progress;
-                    changeSystemBrightness(); }
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) { }
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) { }
-            });
-            verticalSwitch.setOnCheckedChangeListener(((buttonView, isChecked) -> {
-                isVerticalMode = isChecked;
-                if (isChecked) {
-                    modeCons.setVisibility(View.GONE);
-                    modeSwitch.setChecked(false);
-                    setRecyclerViewData();
-                } else {
-                    modeCons.setVisibility(View.VISIBLE);
-                    setViewPagerData(images.size());
-                }
-
-            }));
-            fullSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                isFullScreen = isChecked;
-                isFullScreen();
-            });
-            keepSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                isKeepLight = isChecked;
-                isKeepLightAlways();
-            });
-            stateSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                isShowState = isChecked;
-                isShowState();
-            });
-
-            // 修改AlertDialog横向铺满整个屏幕
-            WindowManager.LayoutParams params = alertDialog.getWindow().getAttributes();
-            alertDialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
-            alertDialog.getWindow().getDecorView().setBackgroundColor(R.color.view_top_bottom_color);
-            alertDialog.getWindow().setGravity(Gravity.BOTTOM);
-            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            alertDialog.getWindow().setAttributes(params);
-
-            alertDialog.setView(view);
-            alertDialog.show();
-        });
-
-//         下拉前往上一章，只有竖屏阅读模式生效
-        binding.refresh.setOnRefreshListener(() -> {
-            binding.preChapter.callOnClick();
-            binding.refresh.setRefreshing(false);
-        });
-        binding.complaint.setOnClickListener(v -> {
-
-        });
-
-    }
-
     /**
      * 发送请求询问服务器
      * 该漫画是否订阅
      */
     private void setSubscribeStatus() {
-        String uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
-        if ("".equals(uid)) {
-            return;
-        }
-        RetrofitService originService = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
-        originService.isSubscribe(uid, comicId)
+        long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+//        if ("".equals(uid)) {
+//            return;
+//        }
+        MyRetrofitService myService = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
+        myService.querySubscribe(uid, comicId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bean -> {
-                    if (bean.getCode() == 0) {
-                        binding.subscribe.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_subscribed, 0, 0);
-                        binding.subscribe.setContentDescription("1");
+                .subscribe(resultBean -> {
+                    if (resultBean == null || resultBean.getCode() == 100) {
+                        return ;
                     }
+                    binding.subscribe.setCompoundDrawablesWithIntrinsicBounds(
+                            0, "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed : R.drawable.ic_subscribe, 0, 0
+                    );
+                });
+    }
+
+    // 订阅按钮的点击事件
+    private void controlSubscribe() {
+        long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+        MyRetrofitService myService = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
+        myService.controlSubscribe(uid, comicId, "cover", "title", "author")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultBean -> {
+                    if (resultBean == null) {
+                        XPopUpUtil.showCustomErrorToast(this, "请求失败，请稍后重试");
+                        return ;
+                    }
+                    if (resultBean.getCode() == 100) {
+                        XPopUpUtil.showCustomErrorToast(this, getString(R.string.not_login));
+                        return ;
+                    }
+                    binding.subscribe.setCompoundDrawablesWithIntrinsicBounds(
+                            0, "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed : R.drawable.ic_subscribe, 0, 0
+                    );
                 });
     }
 
@@ -406,23 +297,10 @@ public class ComicViewActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
+        popup.destroy();
         unregisterReceiver(receiver);
     }
 
-    /**
-     * 保存AlertDialog内控件的状态
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_USE_SYSTEM_BRIGHTNESS, isUesSystemBrightness);
-        PreferenceHelper.setIntByKey(this, PreferenceHelper.SEEKBAR_BRIGHTNESS, seekbarBrightness);
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_VERTICAL_MODE, isVerticalMode);
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_JAPANESE_COMIC_MODE, isJapaneseComicMode);
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_KEEP_LIGHT_ALWAYS, isKeepLight);
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_FULL_SCREEN, isFullScreen);
-        PreferenceHelper.setBooleanByKey(this, PreferenceHelper.IS_SHOW_STATE, isShowState);
-    }
 
     /**
      * 用于监听电池电量和网络状态变化
@@ -511,7 +389,7 @@ public class ComicViewActivity extends AppCompatActivity {
     }
 
     private void isShowTopBottom(View view) {
-        if ("0".equals(view.getContentDescription())) {
+        if (view.getContentDescription() == null || "0".contentEquals(view.getContentDescription())) {
             binding.toolbar.setVisibility(View.VISIBLE);
             binding.bottomView.setVisibility(View.VISIBLE);
             view.setContentDescription("1");
@@ -520,6 +398,59 @@ public class ComicViewActivity extends AppCompatActivity {
             binding.bottomView.setVisibility(View.INVISIBLE);
             view.setContentDescription("0");
         }
+    }
+
+    @Override
+    public void onUseSystemBrightness() {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
+        getWindow().setAttributes(params);
+
+    }
+
+    @Override
+    public void onBrightnessChange(int brightness) {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.screenBrightness = brightness / (float) systemMaxBrightness;
+        getWindow().setAttributes(params);
+    }
+
+    @Override
+    public void onVerticalModeChange(boolean isVerticalMode) {
+        mIsVerticalMode = isVerticalMode;
+        if (isVerticalMode) {
+            setRecyclerViewData();
+        } else {
+            setViewPagerData(images.size());
+        }
+    }
+
+    @Override
+    public void onComicModeChange(boolean flag) {
+
+    }
+
+    @Override
+    public void onFullScreenChange(boolean isFullScreen) {
+        if (isFullScreen) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+    }
+
+    @Override
+    public void onKeepLightChange(boolean isKeepLight) {
+        if (isKeepLight) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+    }
+
+    @Override
+    public void onShowStateChange(boolean isShowState) {
+        binding.state.setVisibility(isShowState ? View.VISIBLE : View.INVISIBLE);
     }
 
 
@@ -549,7 +480,7 @@ public class ComicViewActivity extends AppCompatActivity {
         @Override
         public Object instantiateItem(@androidx.annotation.NonNull ViewGroup container, int position) {
             PhotoView photoView = new PhotoView(ComicViewActivity.this);
-            photoView.setOnClickListener(v -> isShowTopBottom(v));
+            photoView.setOnClickListener(ComicViewActivity.this::isShowTopBottom);
 
             Glide.with(ComicViewActivity.this)
                     .load(GlideUtil.addCookie(images.get(position)))

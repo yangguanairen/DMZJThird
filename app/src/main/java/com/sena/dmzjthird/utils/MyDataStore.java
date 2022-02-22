@@ -27,6 +27,7 @@ public class MyDataStore {
 
     // 文件名
     public static String DATA_STORE_USER = "user";
+    public static String DATA_STORE_READ_SETTING = "read_setting";
 
     // key
     public static String USER_UID = "uid";
@@ -35,8 +36,17 @@ public class MyDataStore {
     public static String USER_AVATAR = "avatar";
 
 
+    public static String SETTING_SYSTEM_BRIGHTNESS = "system_brightness";
+    public static String SETTING_BRIGHTNESS = "brightness";
+    public static String SETTING_VERTICAL_MODE = "vertical_mode";
+    public static String SETTING_COMIC_MODE = "comic_mode";
+    public static String SETTING_KEEP_LIGHT = "keep_light";
+    public static String SETTING_FULL_SCREEN = "full_screen";
+    public static String SETTING_SHOW_STATE = "show_state";
+
     static {
         names.add(DATA_STORE_USER);
+        names.add(DATA_STORE_READ_SETTING);
     }
 
 

@@ -5,10 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.sena.dmzjthird.account.UserRetrofitService;
 import com.sena.dmzjthird.databinding.ActivitySettingBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
-import com.sena.dmzjthird.utils.RetrofitHelper;
 
 
 public class SettingActivity extends AppCompatActivity {

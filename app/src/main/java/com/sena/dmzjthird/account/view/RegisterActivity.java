@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.account.UserRetrofitService;
-import com.sena.dmzjthird.custom.CustomToast;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.databinding.ActivityRegisterBinding;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 import com.sena.dmzjthird.utils.XPopUpUtil;
@@ -29,7 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
 
-    private UserRetrofitService service;
+    private MyRetrofitService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        service = RetrofitHelper.getUserServer(UserRetrofitService.MY_BASE_URL);
+        service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
 
         binding.register.setOnClickListener(v -> register());
 

@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.account.UserRetrofitService;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.databinding.ActivityChangePasswordBinding;
 import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.RetrofitHelper;
@@ -26,7 +26,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     private ActivityChangePasswordBinding binding;
 
-    private UserRetrofitService service;
+    private MyRetrofitService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         binding = ActivityChangePasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        service = RetrofitHelper.getUserServer(UserRetrofitService.MY_BASE_URL);
+        service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
 
         binding.save.setOnClickListener(v -> changePassword());
 

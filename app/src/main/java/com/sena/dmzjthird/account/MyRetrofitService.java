@@ -22,7 +22,7 @@ import retrofit2.http.Query;
  * Date: 2022/1/21 9:40
  */
 
-public interface UserRetrofitService {
+public interface MyRetrofitService {
 
     String MY_BASE_URL = "https://yangguanairen.plus/";
 
@@ -62,6 +62,22 @@ public interface UserRetrofitService {
     @POST("image/upload")
     Observable<ResultBean> uploadImage(
             @Part List<MultipartBody.Part> partList
+    );
+
+
+    @GET("subscribe/control")
+    Observable<ResultBean> controlSubscribe(
+            @Query("uid") long uid,
+            @Query("comicId") String comicId,
+            @Query("cover") String cover,
+            @Query("comicName") String comicName,
+            @Query("author") String author
+    );
+
+    @GET("subscribe/query")
+    Observable<ResultBean> querySubscribe(
+            @Query("uid") long uid,
+            @Query("comicId") String comicId
     );
 
 }

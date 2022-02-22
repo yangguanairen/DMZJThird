@@ -1,4 +1,4 @@
-package com.sena.dmzjthird.custom;
+package com.sena.dmzjthird.custom.popup;
 
 import android.content.Context;
 
@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.lxj.xpopup.core.CenterPopupView;
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.custom.ProgressWheel;
 
 /**
  * Created by Android Studio.

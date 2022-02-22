@@ -5,8 +5,8 @@ import android.content.Context;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.custom.CustomLoading;
-import com.sena.dmzjthird.custom.CustomToast;
+import com.sena.dmzjthird.custom.popup.CustomLoading;
+import com.sena.dmzjthird.custom.popup.CustomToast;
 
 /**
  * FileName: XPopUpUtil
@@ -26,6 +26,14 @@ public class XPopUpUtil {
 
     public static void showCustomToast(Context context, int imageId, String content) {
         showCustomToast(context, imageId, "", content);
+    }
+
+    public static void showCustomErrorToast(Context context, String content) {
+        showCustomToast(context, R.drawable.ic_error_red, content);
+    }
+
+    public static void showCustomCheckToast(Context context, String content) {
+        showCustomToast(context, R.drawable.ic_check_green, content);
     }
 
     public static BasePopupView showLoadingView(Context context) {

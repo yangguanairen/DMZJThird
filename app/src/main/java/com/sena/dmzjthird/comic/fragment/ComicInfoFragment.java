@@ -63,7 +63,7 @@ public class ComicInfoFragment extends Fragment {
 
 
     public interface Callbacks {
-        void loadingDataFinish(String title);
+        void loadingDataFinish(String title, String cover, String author);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class ComicInfoFragment extends Fragment {
 
         Consumer<List<ComicInfoBean>> observer = comicInfoBeans -> {
             if (isError) {
-                mCallbacks.loadingDataFinish(null);
+                mCallbacks.loadingDataFinish(null, null, null);
                 return;
             }
             adapter.setList(comicInfoBeans);
@@ -177,7 +177,7 @@ public class ComicInfoFragment extends Fragment {
             initComicTag();
 
 
-            mCallbacks.loadingDataFinish(title);
+            mCallbacks.loadingDataFinish(title, coverUrl, authorName);
         };
 
         observable.subscribeOn(Schedulers.io())

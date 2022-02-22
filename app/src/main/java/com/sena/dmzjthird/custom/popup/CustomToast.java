@@ -1,4 +1,4 @@
-package com.sena.dmzjthird.custom;
+package com.sena.dmzjthird.custom.popup;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

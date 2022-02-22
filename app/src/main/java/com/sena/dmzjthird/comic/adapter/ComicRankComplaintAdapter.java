@@ -2,19 +2,18 @@ package com.sena.dmzjthird.comic.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.RetrofitService;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.comic.bean.ComicComplaintRankBean;
 import com.sena.dmzjthird.utils.GlideUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
-import com.sena.dmzjthird.utils.PreferenceHelper;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 import com.sena.dmzjthird.utils.TimeUtil;
+import com.sena.dmzjthird.utils.XPopUpUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,41 +48,29 @@ public class ComicRankComplaintAdapter extends BaseQuickAdapter<ComicComplaintRa
 
 
         holder.getView(R.id.subscribe).setOnClickListener(v -> {
-            String uid = MyDataStore.getInstance(mContext).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
-            if ("".equals(uid)) {
-                Toast.makeText(mContext, mContext.getString(R.string.not_login), Toast.LENGTH_SHORT).show();
-                return ;
-            }
-            RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
-            if (holder.getView(R.id.subscribe).getContentDescription().equals("0")) {
-                // 订阅
-                service.subscribeComic(bean.getId(), uid, "mh")
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(bean1 -> {
-                            if (bean1.getCode() != 0) {
-                                Toast.makeText(mContext, mContext.getString(R.string.subscribe_fail), Toast.LENGTH_SHORT).show();
-                            } else {
-                                holder.setBackgroundResource(R.id.subscribe, R.drawable.ic_subscribed_black);
-                                Toast.makeText(mContext, mContext.getString(R.string.subscribe_success), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                holder.getView(R.id.subscribe).setContentDescription("1");
-            } else {
-                // 取消订阅
-                service.cancelSubscribeComic(bean.getId(), uid, "mh")
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(bean1 -> {
-                            if (bean1.getCode() != 0) {
-                                Toast.makeText(mContext, mContext.getString(R.string.cancel_subscribe_fail), Toast.LENGTH_SHORT).show();
-                            } else {
-                                holder.setBackgroundResource(R.id.subscribe, R.drawable.ic_subscribe_black);
-                                Toast.makeText(mContext, mContext.getString(R.string.cancel_subscribe_success), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                holder.getView(R.id.subscribe).setContentDescription("0");
-            }
+            long uid = MyDataStore.getInstance(mContext).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+//            if ("".equals(uid)) {
+//                Toast.makeText(mContext, mContext.getString(R.string.not_login), Toast.LENGTH_SHORT).show();
+//                return ;
+//            }
+            MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
+            service.controlSubscribe(uid, bean.getId(), bean.getCover(), bean.getName(), bean.getAuthors())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(resultBean -> {
+                        if (resultBean == null) {
+                            XPopUpUtil.showCustomErrorToast(mContext, "请求失败，请稍后重试");
+                            return ;
+                        }
+                        if (resultBean.getCode() == 100) {
+                            XPopUpUtil.showCustomErrorToast(mContext, mContext.getString(R.string.not_login));
+                            return ;
+                        }
+                        holder.setBackgroundResource(R.id.subscribe,
+                                "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed_black : R.drawable.ic_subscribe_black);
+
+
+                    });
         });
     }
 }
