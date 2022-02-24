@@ -21,8 +21,7 @@ import com.sena.dmzjthird.comic.bean.ComicSubscribeBean;
 import com.sena.dmzjthird.comic.bean.ComicSubscribeRankBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicInfoBean;
-import com.sena.dmzjthird.comic.bean.ComicViewBean;
-import com.sena.dmzjthird.comic.bean.UploadImageBean;
+import com.sena.dmzjthird.comic.bean.ComicChapterInfoBean;
 import com.sena.dmzjthird.comic.bean.UserIsSubscribeBean;
 
 import java.util.List;
@@ -33,7 +32,6 @@ import okhttp3.RequestBody;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -188,8 +186,8 @@ public interface RetrofitService {
     );
 
     // m.dmzj.com/chapinfo/45854/113148.html
-    @GET("chapinfo/{comicId}/{chapterId}.html")
-    Observable<ComicViewBean> getChapterInfo(
+    @GET("chapter/{comicId}/{chapterId}.json")
+    Observable<ComicChapterInfoBean> getChapterInfo(
             @Path("comicId") String comicId,
             @Path("chapterId") String chapterId
     );

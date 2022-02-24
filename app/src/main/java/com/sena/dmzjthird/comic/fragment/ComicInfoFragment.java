@@ -14,43 +14,18 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.GlideUrl;
 import com.example.application.ComicDetailInfo;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicInfoAdapter;
-import com.sena.dmzjthird.comic.bean.ComicClassifyFilterBean;
-import com.sena.dmzjthird.comic.bean.ComicInfoBean;
 import com.sena.dmzjthird.databinding.FragmentComicInfoBinding;
 import com.sena.dmzjthird.utils.GlideUtil;
 import com.sena.dmzjthird.utils.IntentUtil;
-import com.sena.dmzjthird.utils.RetrofitHelper;
-import com.sena.dmzjthird.utils.RsaUtil;
 import com.sena.dmzjthird.utils.TimeUtil;
 import com.sena.dmzjthird.utils.api.ComicApi;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 
 public class ComicInfoFragment extends Fragment {
 
@@ -64,13 +39,6 @@ public class ComicInfoFragment extends Fragment {
     private ComicInfoAdapter adapter;
 
     private String coverUrl = "";
-    private String title = "";
-    private String authorName = "";
-    private String updateTime = "";
-    private String description = "";
-    private List<String> tags = new ArrayList<>();
-    private String jsonData = "[{\"title\": \"\", \"data\":[{}]}]";
-
 
     public interface Callbacks {
         void loadingDataFinish(String title, String cover, String author);
