@@ -255,7 +255,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
                     if (mIsVerticalMode) {
                         setRecyclerViewData();
                     } else {
-                        setViewPagerData(bean.getPicnum());
+                        setViewPagerData(images.size());
                     }
                 });
     }
