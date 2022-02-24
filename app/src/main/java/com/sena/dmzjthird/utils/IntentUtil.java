@@ -14,6 +14,8 @@ import com.sena.dmzjthird.comic.view.UserInfoActivity;
 import com.sena.dmzjthird.custom.LargeImageActivity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Android Studio.
@@ -36,8 +38,6 @@ public class IntentUtil {
     private static final String CONTENT = "content";
     private static final String COVER_URL = "cover_url";
 
-    private static final String SERIAL_DATA = "serial_data";
-
 
     public static void goToComicInfoActivity(Context context, String comicId) {
 
@@ -46,11 +46,10 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
-    public static void goToComicViewActivity(Context context, String comicId, String chapterId, Serializable data) {
+    public static void goToComicViewActivity(Context context, String comicId, String chapterId) {
         Intent intent = new Intent(context, ComicViewActivity.class);
         intent.putExtra(OBJECT_ID, comicId);
         intent.putExtra(CHAPTER_ID, chapterId);
-        intent.putExtra(SERIAL_DATA, data);
         context.startActivity(intent);
     }
 
@@ -110,10 +109,6 @@ public class IntentUtil {
 
     public static String getChapterId(Activity activity) {
         return activity.getIntent().getStringExtra(CHAPTER_ID);
-    }
-
-    public static Serializable getSerialize(Activity activity) {
-        return activity.getIntent().getSerializableExtra(SERIAL_DATA);
     }
 
     public static String getClassifyTagId(Activity activity) {

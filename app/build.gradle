@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.protobuf'
 }
 
 android {
@@ -29,8 +30,42 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    sourceSets {main {res.srcDirs = ['src/main/res', 'src/main/res-night', 'src/main/res-pink', 'src/main/res-green',
-    'src/main/res-purple', 'src/main/res-red', 'src/main/res-yellow']}}
+
+    sourceSets {
+        main {
+            java {
+                srcDir 'src/main/java'
+            }
+            proto {
+                srcDir 'src/main/protobuf' //指定.proto文件路径
+                include '**/*.proto'
+            }
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        // You still need protoc like in the non-Android case
+        artifact = 'com.google.protobuf:protoc:3.0.0'
+    }
+    plugins {
+        javalite {
+            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                remove java
+            }
+            task.plugins {
+                javalite {}
+            }
+        }
+    }
+//    //配置生成java代码的目录
+    generatedFilesBaseDir = "$projectDir/src/generated"
 }
 
 dependencies {
@@ -83,6 +118,10 @@ dependencies {
 
     // 沉浸式状态栏
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.1'
+
+    // protobuf序列化存储
+    implementation 'com.google.protobuf:protobuf-lite:3.0.0'
+
 
 
 }

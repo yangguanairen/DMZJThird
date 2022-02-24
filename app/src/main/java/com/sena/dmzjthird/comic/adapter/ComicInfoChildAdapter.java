@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.example.application.ComicDetailInfo;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.bean.ComicInfoBean;
 
@@ -13,7 +14,7 @@ import com.sena.dmzjthird.comic.bean.ComicInfoBean;
  * Date: 2021/8/13
  * Time: 14:11
  */
-public class ComicInfoChildAdapter extends BaseQuickAdapter<ComicInfoBean.Data, BaseViewHolder> {
+public class ComicInfoChildAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
 
     public ComicInfoChildAdapter() {
@@ -21,7 +22,7 @@ public class ComicInfoChildAdapter extends BaseQuickAdapter<ComicInfoBean.Data, 
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder holder, ComicInfoBean.Data data) {
-        holder.setText(R.id.chapterName, data.getChapter_name());
+    protected void convert(@NonNull BaseViewHolder holder, String title) {
+        holder.setText(R.id.chapterName, title);
     }
 }

@@ -31,7 +31,6 @@ import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicViewAdapter;
 import com.sena.dmzjthird.comic.adapter.ComicViewCatalogAdapter;
-import com.sena.dmzjthird.comic.bean.ComicInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicViewBean;
 import com.sena.dmzjthird.custom.popup.CustomBottomPopup;
 import com.sena.dmzjthird.databinding.ActivityComicViewBinding;
@@ -41,6 +40,7 @@ import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 import com.sena.dmzjthird.utils.XPopUpUtil;
+import com.sena.dmzjthird.utils.api.ComicApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,6 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
     private RetrofitService service;
     private String comicId;
     private String chapterId;
-    private ComicInfoBean bean;  // 源Activity传来的数据，用于添加catalog
     private ComicViewBean mBean; // 自己请求的数据
     private boolean preChapterClick = false;
     private ComicViewAdapter adapter;
@@ -78,15 +77,11 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
         binding = ActivityComicViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-
         getWindow().setStatusBarColor(Color.BLACK);
 
         service = RetrofitHelper.getServer(RetrofitService.BASE_ORIGIN_URL);
         comicId = IntentUtil.getObjectId(this);
         chapterId = IntentUtil.getChapterId(this);
-        bean = (ComicInfoBean) IntentUtil.getSerialize(this);
-
 
         initView();
 
@@ -110,27 +105,51 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
         setSubscribeStatus();
 
         // 侧边栏
-        binding.catalogCount.setText(getString(R.string.catalog, bean.getData().size()));
-        binding.catalogRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        ComicViewCatalogAdapter adapter = new ComicViewCatalogAdapter(this);
-        binding.catalogRecyclerview.setAdapter(adapter);
-        adapter.setCurrentChapterId(chapterId);
-        adapter.setList(bean.getData());
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
-            String clickChapterId = ((ComicInfoBean.Data) adapter1.getData().get(position)).getId();
-            if (chapterId.equals(clickChapterId)) {
-                return;
-            }
-            chapterId = clickChapterId;
-            getResponse();
-            binding.drawerLayout.closeDrawer(binding.catalog);
-            adapter.setCurrentChapterId(chapterId);
-            adapter.setList(adapter.getData());
-        });
+        initCatalog();
+
+    }
+
+    /**
+     * 初始化侧边栏
+     * 展示章节列表
+     * 目前先做一个分类的
+     */
+    private void initCatalog() {
+
+        ComicApi.getComicChapter(comicId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(data -> {
+                    if (data == null) return ;
+                    List<String> chapterNames = new ArrayList<>();
+                    List<String> chapterIds = new ArrayList<>();
+                    for (int i = 0; i < data.getDataCount(); i++) {
+                        chapterIds.add(data.getData(i).getChapterId() + "");
+                        chapterNames.add(data.getData(i).getChapterTitle());
+                    }
+                    binding.catalogCount.setText(getString(R.string.catalog, data.getDataCount()));
+                    binding.catalogRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+                    ComicViewCatalogAdapter adapter = new ComicViewCatalogAdapter(this);
+                    binding.catalogRecyclerview.setAdapter(adapter);
+                    adapter.setCurrentChapterName(chapterId);
+                    adapter.setList(chapterNames);
+                    adapter.setOnItemClickListener((adapter1, view, position) -> {
+                        String selectedId = chapterIds.get(position);
+                        if (chapterId.equals(selectedId)) {
+                            return;
+                        }
+                        chapterId = selectedId;
+                        getResponse();
+                        binding.drawerLayout.closeDrawer(binding.catalog);
+                        adapter.setCurrentChapterName(chapterId);
+                        adapter.setList(adapter.getData());
+                    });
+                });
+
+
     }
 
     private void initClick() {
-
 
         binding.toolbar.setBackListener(v -> finish());
         binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -459,10 +478,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
 
         @Override
         public int getCount() {
-            if (images != null) {
-                return images.size();
-            }
-            return 0;
+            return images.size();
         }
 
 

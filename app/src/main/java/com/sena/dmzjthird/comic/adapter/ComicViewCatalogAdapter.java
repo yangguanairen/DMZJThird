@@ -18,10 +18,10 @@ import com.sena.dmzjthird.comic.bean.ComicInfoBean;
  * Date: 2021/8/17
  * Time: 13:33
  */
-public class ComicViewCatalogAdapter extends BaseQuickAdapter<ComicInfoBean.Data, BaseViewHolder> {
+public class ComicViewCatalogAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     private final Context mContext;
-    private String currentChapterId;
+    private String currentChapterName;
 
     public ComicViewCatalogAdapter(Context context) {
         super(R.layout.item_comic_info_child);
@@ -29,10 +29,10 @@ public class ComicViewCatalogAdapter extends BaseQuickAdapter<ComicInfoBean.Data
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder holder, ComicInfoBean.Data data) {
+    protected void convert(@NonNull BaseViewHolder holder, String s) {
         TextView textView = holder.getView(R.id.chapterName);
-        textView.setText(data.getChapter_name());
-        if (currentChapterId.equals(data.getId())) {
+        textView.setText(s);
+        if (currentChapterName.equals(s)) {
             textView.setTextColor(mContext.getColor(R.color.theme_blue));
         } else {
             textView.setTextColor(Color.WHITE);
@@ -41,8 +41,8 @@ public class ComicViewCatalogAdapter extends BaseQuickAdapter<ComicInfoBean.Data
         textView.setGravity(Gravity.CENTER_VERTICAL);
     }
 
-    public void setCurrentChapterId(String id) {
-        currentChapterId = id;
+    public void setCurrentChapterName(String name) {
+        currentChapterName = name;
     }
 
 

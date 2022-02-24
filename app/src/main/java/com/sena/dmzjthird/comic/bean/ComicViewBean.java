@@ -3,11 +3,11 @@ package com.sena.dmzjthird.comic.bean;
 import java.util.List;
 
 /**
- * Created by Android Studio.
- * User: Sena
- * Date: 2021/8/16
- * Time: 17:51
+ * FileName: ComicViewBean
+ * Author: JiaoCan
+ * Date: 2022/2/24 15:26
  */
+
 public class ComicViewBean {
 
     private String id;
@@ -39,15 +39,6 @@ public class ComicViewBean {
     private String next_chap_id;
     private String prev_chap_id;
     private int comment_count;
-
-
-    public String getNext_chap_id() {
-        return next_chap_id;
-    }
-
-    public void setNext_chap_id(String next_chap_id) {
-        this.next_chap_id = next_chap_id;
-    }
 
     public String getId() {
         return id;
@@ -255,6 +246,14 @@ public class ComicViewBean {
 
     public void setHit(int hit) {
         this.hit = hit;
+    }
+
+    public String getNext_chap_id() {
+        return next_chap_id;
+    }
+
+    public void setNext_chap_id(String next_chap_id) {
+        this.next_chap_id = next_chap_id;
     }
 
     public String getPrev_chap_id() {

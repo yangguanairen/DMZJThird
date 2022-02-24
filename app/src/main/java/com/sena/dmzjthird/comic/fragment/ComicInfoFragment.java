@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.example.application.ComicDetailInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sena.dmzjthird.R;
@@ -25,6 +28,9 @@ import com.sena.dmzjthird.databinding.FragmentComicInfoBinding;
 import com.sena.dmzjthird.utils.GlideUtil;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.RsaUtil;
+import com.sena.dmzjthird.utils.TimeUtil;
+import com.sena.dmzjthird.utils.api.ComicApi;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -32,6 +38,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -40,6 +47,9 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class ComicInfoFragment extends Fragment {
@@ -103,7 +113,7 @@ public class ComicInfoFragment extends Fragment {
         binding = FragmentComicInfoBinding.inflate(inflater, container, false);
 
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new ComicInfoAdapter(getActivity());
+        adapter = new ComicInfoAdapter(getActivity(), comicId);
         binding.recyclerview.setAdapter(adapter);
 
         binding.cover.setOnClickListener(v -> IntentUtil.goToLargeImageActivity(getActivity(), coverUrl));
@@ -115,129 +125,63 @@ public class ComicInfoFragment extends Fragment {
     }
 
     private void getResponse() {
-        Observable<List<ComicInfoBean>> observable = Observable.create(emitter -> {
-            Document doc;
-            try {
-                doc = Jsoup.connect("https://m.dmzj.com/info/" + comicId + ".html").get();
-                Element introduct = doc.getElementsByClass("Introduct_Sub autoHeight").get(0);
-                description = doc.getElementsByClass("txtDesc autoHeight").text().replace("介绍:", "");
-                Element pic = introduct.getElementsByClass("pic").get(0);
-                coverUrl = pic.getElementsByTag("img").attr("src");
-                title = pic.getElementsByTag("img").attr("title");
-                Elements sub_r = doc.getElementsByClass("sub_r").get(0).getElementsByClass("txtItme");
-                authorName = sub_r.get(0).getElementsByTag("a").text();
 
-                for (Element e: doc.getElementsByClass("pd")) {
-                    if (e.attr("class").equals("pd introName")) {
-                        continue;
-                    }
-                    tags.add(e.text());
-                }
-
-                updateTime = sub_r.get(3).getElementsByClass("date").text();
-
-
-                Elements javascript = doc.getElementsByTag("script");
-                for (Element e : javascript) {
-                    if (e.toString().contains("initIntroData")) {
-                        for (String s : e.toString().split("\n")) {
-                            if (s.contains("initIntroData")) {
-                                int startIndex = s.indexOf("[");
-                                int endIndex = s.lastIndexOf("]");
-                                jsonData = s.substring(startIndex, endIndex + 1);
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                isError = true;
-            }
-
-            emitter.onNext(new Gson().fromJson(jsonData, new TypeToken<List<ComicInfoBean>>() {
-            }.getType()));
-        });
-
-        Consumer<List<ComicInfoBean>> observer = comicInfoBeans -> {
-            if (isError) {
+        Consumer<ComicDetailInfo.ComicDetailInfoResponse> observer = data -> {
+            if (data == null) {
                 mCallbacks.loadingDataFinish(null, null, null);
                 return;
             }
-            adapter.setList(comicInfoBeans);
+
+            coverUrl = data.getCover() == null ? "" : data.getCover();
             GlideUtil.loadImageWithCookie(getActivity(), coverUrl, binding.cover);
 
-            binding.title.setText(title);
-            binding.author.setText(authorName);
-            binding.updateTime.setText(updateTime);
-            binding.description.setText(description);
+            binding.title.setText(data.getTitle());
 
-            initComicTag();
+            String authors = "";
+            for (ComicDetailInfo.ComicDetailTypeItemResponse t: data.getAuthorsList()) {
+                authors += t.getTagName();
+            }
+            authors = authors.substring(0, authors.length() - 1);
+            binding.author.setText(authors);
 
+            binding.updateTime.setText(TimeUtil.millConvertToDate(data.getLastUpdatetime()));
 
-            mCallbacks.loadingDataFinish(title, coverUrl, authorName);
+            binding.description.setText(data.getDescription());
+
+            adapter.setList(data.getChaptersList());
+
+            // 设置tag
+            for (ComicDetailInfo.ComicDetailTypeItemResponse t: data.getStatusList()) {
+                addTagView(t.getTagName(), t.getTagId() + "", binding.tag1);
+            }
+            for (ComicDetailInfo.ComicDetailTypeItemResponse t: data.getTypesList()) {
+                addTagView(t.getTagName(), t.getTagId() + "", binding.tag2);
+            }
+
+            mCallbacks.loadingDataFinish(data.getTitle(), data.getCover(), authors);
         };
 
-        observable.subscribeOn(Schedulers.io())
+        ComicApi.getComicInfo(comicId)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 
-    private void initComicTag() {
-        RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
-        service.getComicClassifyFilter()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<ComicClassifyFilterBean>>() {
-                    @Override
-                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+    private void addTagView(String tagName, String tagId, LinearLayout targetView) {
+        TextView textView = new TextView(getActivity());
+        textView.setText(tagName);
+        textView.setBackgroundResource(R.drawable.shape_filter_tag);
+        textView.setPadding(20, 10, 20, 10);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.rightMargin = 20;
+        textView.setLayoutParams(params);
 
-                    }
+        textView.setOnClickListener(v ->
+                IntentUtil.goToComicClassifyActivity(getActivity(), String.valueOf(tagId)));
 
-                    @Override
-                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<ComicClassifyFilterBean> beans) {
-                        for (String tag: tags) {
-
-                            TextView textView = new TextView(getActivity());
-                            textView.setText(tag);
-                            textView.setBackgroundResource(R.drawable.shape_filter_tag);
-                            textView.setPadding(20, 10, 20, 10);
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            params.rightMargin = 20;
-                            textView.setLayoutParams(params);
-
-                            if (tags.indexOf(tag) < 3) {
-                                binding.tag1.addView(textView);
-                            } else {
-                                binding.tag2.addView(textView);
-                            }
-
-                            for (ComicClassifyFilterBean bean: beans) {
-                                for (ComicClassifyFilterBean.Items item: bean.getItems()) {
-                                    if (item.getTag_name().contains(tag) || tag.contains(item.getTag_name())) {
-                                        textView.setOnClickListener(v ->
-                                                IntentUtil.goToComicClassifyActivity(getActivity(), item.getTag_id()));
-
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        targetView.addView(textView);
     }
+
 
     @Override
     public void onDestroy() {
