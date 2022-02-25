@@ -1,19 +1,17 @@
 package com.sena.dmzjthird.custom;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,8 +20,8 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.comic.bean.ComicRecommendBean;
 import com.sena.dmzjthird.utils.GlideUtil;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,24 +42,24 @@ public class AutoBanner extends ConstraintLayout {
     private LinearLayout linear;
     private TextView titleTV;
 
-    private Context mContext;
+    private final Context mContext;
     private static Handler handler;
     private boolean mIsTouch = false;
 
-    private List<ComicRecommendBean.Data> dataList = new ArrayList<>();
+    private final List<AutoBannerData> dataList = new ArrayList<>();
 
     private static Runnable runnable;
 
 
     public AutoBanner(@NonNull @NotNull Context context) {
         this(context, null);
-
     }
 
+    @SuppressLint("InflateParams")
     public AutoBanner(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
         super(context, attrs);
-        this.mContext = context;
-        handler = new Handler();
+        mContext = context;
+        handler = new Handler(Looper.getMainLooper());
 
 
         if (view == null) {
@@ -132,20 +130,20 @@ public class AutoBanner extends ConstraintLayout {
     }
 
 
-    public void setDataList(List<ComicRecommendBean.Data> list) {
+    public void setDataList(List<AutoBannerData> list) {
         if (list == null) {
             return;
         }
-        this.dataList.add(list.get(list.size() - 1));
-        this.dataList.addAll(list);
-        this.dataList.add(list.get(0));
+        dataList.add(list.get(list.size() - 1));
+        dataList.addAll(list);
+        dataList.add(list.get(0));
 
         initPoints();
 
         viewPager.setAdapter(new MyAdapter());
         viewPager.setCurrentItem(1);
 
-        for (ComicRecommendBean.Data data: list) {
+        for (AutoBannerData data: list) {
             LogUtil.e("title: " + data.getTitle());
         }
 
@@ -194,6 +192,7 @@ public class AutoBanner extends ConstraintLayout {
         // 难点: Runnable采用if判断，当触点在屏幕上停留超过5s，内部会执行false，不在运行条件体内的语句
         // 解决: 触点发生时，取消Runnable，触点结束时，再把Runnable添加回去
         // 另外，DOWN没有用，未探究原因。可能是最外围使用NestedScrollView，事件分发机制出现问题。
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouchEvent(MotionEvent ev) {
             switch (ev.getAction()) {
@@ -230,10 +229,7 @@ public class AutoBanner extends ConstraintLayout {
 
         @Override
         public int getCount() {
-            if (dataList != null) {
-                return dataList.size();
-            }
-            return 0;
+            return dataList.size();
         }
 
         @Override
@@ -252,11 +248,24 @@ public class AutoBanner extends ConstraintLayout {
         public Object instantiateItem(@NonNull @NotNull ViewGroup container, int position) {
             ImageView imageView = new ImageView(mContext);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            GlideUtil.loadImageWithCookie(mContext, dataList.get(position).getCover(), imageView);
+            AutoBannerData data = dataList.get(position);
+            GlideUtil.loadImageWithCookie(mContext, data.getCoverUrl(), imageView);
 
             imageView.setOnClickListener(v -> {
-                // 跳转
-                Toast.makeText(mContext, "暂时这样" + dataList.get(position).getObj_id(), Toast.LENGTH_SHORT).show();
+
+                switch (data.getType()) {
+                    case 0:
+                        // 跳转漫画详情页
+                        break;
+                    case 1:
+                        // 跳转小说详情页
+                        break;
+                    case 2:
+                        // 跳转webView加载网页链接
+                        IntentUtil.goToWebViewActivity(mContext, data.getObjectId(), data.getTitle(), data.getCoverUrl(), data.getPageUrl());
+                        break;
+                }
+//                Toast.makeText(mContext, "暂时这样" + dataList.get(position).get(), Toast.LENGTH_SHORT).show();
             });
             container.addView(imageView);
 

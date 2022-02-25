@@ -4,9 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.example.application.ComicDetailInfo;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.comic.bean.ComicInfoBean;
 
 /**
  * Created by Android Studio.

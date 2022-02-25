@@ -17,6 +17,8 @@ import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean1;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean2;
 import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean3;
 import com.sena.dmzjthird.comic.bean.ComicTopicBean;
+import com.sena.dmzjthird.custom.AutoBanner;
+import com.sena.dmzjthird.custom.AutoBannerData;
 import com.sena.dmzjthird.databinding.FragmentComicRecommendBinding;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
@@ -103,7 +105,21 @@ public class ComicRecommendFragment extends Fragment {
         service.getComicRecommend1(46)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bean -> binding.banner.setDataList(bean.getData().getData()));
+                .subscribe(bean -> {
+
+                    List<AutoBannerData> bannerList = new ArrayList<>();
+                    for (ComicRecommendBean.Data data: bean.getData().getData()) {
+                        AutoBannerData bannerData = new AutoBannerData();
+                        bannerData.setObjectId(data.getObj_id());
+                        bannerData.setTitle(data.getTitle());
+                        bannerData.setCoverUrl(data.getCover());
+                        bannerData.setType(0);
+                        bannerList.add(bannerData);
+                    }
+
+                    binding.banner.setDataList(bannerList);
+
+                });
     }
 
 

@@ -1,6 +1,6 @@
 package com.sena.dmzjthird.utils.api;
 
-import com.example.application.ComicDetailInfo;
+import com.example.application.ComicDetailRes;
 import com.sena.dmzjthird.utils.RsaUtil;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -19,7 +19,7 @@ public class ComicApi {
     /**
      * 获取漫画详情
      */
-    public static Observable<ComicDetailInfo.ComicDetailInfoResponse> getComicInfo(String comicId) {
+    public static Observable<ComicDetailRes.ComicDetailInfoResponse> getComicInfo(String comicId) {
 
         return Observable.create(emitter -> {
 
@@ -31,9 +31,9 @@ public class ComicApi {
 
             byte[] decryptByte = RsaUtil.decrypt(bodyStr);
 
-            ComicDetailInfo.ComicDetailInfoResponse data;
+            ComicDetailRes.ComicDetailInfoResponse data;
             try {
-                ComicDetailInfo.ComicDetailResponse tmp = ComicDetailInfo.ComicDetailResponse.parseFrom(decryptByte);
+                ComicDetailRes.ComicDetailResponse tmp = ComicDetailRes.ComicDetailResponse.parseFrom(decryptByte);
                 data = tmp.getData();
             } catch (Exception e) {
                 data = null;
@@ -46,7 +46,7 @@ public class ComicApi {
     /**
      * 获取漫画章节列表
      */
-    public static Observable<ComicDetailInfo.ComicDetailChapterResponse> getComicChapter(String comicId) {
+    public static Observable<ComicDetailRes.ComicDetailChapterResponse> getComicChapter(String comicId) {
 
         return Observable.create(emitter -> {
 
@@ -56,9 +56,9 @@ public class ComicApi {
 
             byte[] decryptByte = RsaUtil.decrypt(response.body().string());
 
-            ComicDetailInfo.ComicDetailChapterResponse data = null;
+            ComicDetailRes.ComicDetailChapterResponse data = null;
             try {
-                ComicDetailInfo.ComicDetailResponse tmp = ComicDetailInfo.ComicDetailResponse.parseFrom(decryptByte);
+                ComicDetailRes.ComicDetailResponse tmp = ComicDetailRes.ComicDetailResponse.parseFrom(decryptByte);
                 data = tmp.getData().getChaptersList().get(0);
             } catch (Exception e) {
 

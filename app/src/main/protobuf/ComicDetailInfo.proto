@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package com.example.application;
 
-option java_outer_classname = "ComicDetailInfo";
+option java_outer_classname = "ComicDetailRes";
 
 
 message ComicDetailResponse {

@@ -10,13 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.example.application.ComicDetailInfo;
+import com.example.application.ComicDetailRes;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.utils.IntentUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Android Studio.
@@ -24,7 +23,7 @@ import java.util.List;
  * Date: 2021/8/13
  * Time: 14:10
  */
-public class ComicInfoAdapter extends BaseQuickAdapter<ComicDetailInfo.ComicDetailChapterResponse, BaseViewHolder> {
+public class ComicInfoAdapter extends BaseQuickAdapter<ComicDetailRes.ComicDetailChapterResponse, BaseViewHolder> {
 
     private final Context mContext;
 
@@ -40,7 +39,7 @@ public class ComicInfoAdapter extends BaseQuickAdapter<ComicDetailInfo.ComicDeta
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
-    protected void convert(@NonNull BaseViewHolder holder, ComicDetailInfo.ComicDetailChapterResponse data) {
+    protected void convert(@NonNull BaseViewHolder holder, ComicDetailRes.ComicDetailChapterResponse data) {
 
         RecyclerView recyclerView = holder.getView(R.id.recyclerview);
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));

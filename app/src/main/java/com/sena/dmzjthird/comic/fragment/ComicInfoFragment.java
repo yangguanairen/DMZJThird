@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.application.ComicDetailInfo;
+import com.example.application.ComicDetailRes;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.adapter.ComicInfoAdapter;
 import com.sena.dmzjthird.databinding.FragmentComicInfoBinding;
@@ -94,7 +94,7 @@ public class ComicInfoFragment extends Fragment {
 
     private void getResponse() {
 
-        Consumer<ComicDetailInfo.ComicDetailInfoResponse> observer = data -> {
+        Consumer<ComicDetailRes.ComicDetailInfoResponse> observer = data -> {
             if (data == null) {
                 mCallbacks.loadingDataFinish(null, null, null);
                 return;
@@ -106,7 +106,7 @@ public class ComicInfoFragment extends Fragment {
             binding.title.setText(data.getTitle());
 
             String authors = "";
-            for (ComicDetailInfo.ComicDetailTypeItemResponse t: data.getAuthorsList()) {
+            for (ComicDetailRes.ComicDetailTypeItemResponse t: data.getAuthorsList()) {
                 authors += t.getTagName();
             }
             authors = authors.substring(0, authors.length() - 1);
@@ -119,10 +119,10 @@ public class ComicInfoFragment extends Fragment {
             adapter.setList(data.getChaptersList());
 
             // 设置tag
-            for (ComicDetailInfo.ComicDetailTypeItemResponse t: data.getStatusList()) {
+            for (ComicDetailRes.ComicDetailTypeItemResponse t: data.getStatusList()) {
                 addTagView(t.getTagName(), t.getTagId() + "", binding.tag1);
             }
-            for (ComicDetailInfo.ComicDetailTypeItemResponse t: data.getTypesList()) {
+            for (ComicDetailRes.ComicDetailTypeItemResponse t: data.getTypesList()) {
                 addTagView(t.getTagName(), t.getTagId() + "", binding.tag2);
             }
 

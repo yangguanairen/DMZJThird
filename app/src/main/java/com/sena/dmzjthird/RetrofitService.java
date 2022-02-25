@@ -23,6 +23,8 @@ import com.sena.dmzjthird.comic.bean.ComicTopicBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicChapterInfoBean;
 import com.sena.dmzjthird.comic.bean.UserIsSubscribeBean;
+import com.sena.dmzjthird.news.bean.NewsBannerBean;
+import com.sena.dmzjthird.news.bean.NewsCategoryBean;
 
 import java.util.List;
 import java.util.Map;
@@ -49,6 +51,18 @@ public interface RetrofitService {
     String BASE_ORIGIN_URL = "https://m.dmzj.com/";
     String BASE_COMMENT_URL = "https://nnv3api.dmzj1.com";
 
+
+
+
+    // 新闻分类
+    // https://nnv3api.muwai.com/article/category.json
+    @GET("article/category.json")
+    Observable<List<NewsCategoryBean>> getNewsCategory();
+
+    // 新闻轮播图
+    // https://nnv3api.muwai.com/article/recommend/header.json
+    @GET("article/recommend/header.json")
+    Observable<NewsBannerBean> getNewsBanner();
 
     @GET("recommend/batchUpdateWithLevel")
     Observable<ComicRecommendChildBean1> getComicRecommend1(

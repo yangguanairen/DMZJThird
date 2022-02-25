@@ -3,6 +3,7 @@ package com.sena.dmzjthird.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.webkit.WebView;
 
 import com.sena.dmzjthird.comic.view.AuthorInfoActivity;
 import com.sena.dmzjthird.comic.view.ComicClassifyActivity;
@@ -12,6 +13,7 @@ import com.sena.dmzjthird.comic.view.ComicViewActivity;
 import com.sena.dmzjthird.comic.view.CommentReplyActivity;
 import com.sena.dmzjthird.comic.view.UserInfoActivity;
 import com.sena.dmzjthird.custom.LargeImageActivity;
+import com.sena.dmzjthird.custom.WebViewActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,6 +39,11 @@ public class IntentUtil {
     private static final String USERNAME = "username";
     private static final String CONTENT = "content";
     private static final String COVER_URL = "cover_url";
+
+    private static final String NEWS_ID = "news_id";
+    private static final String NEWS_TITLE = "news_title";
+    private static final String NEWS_COVER = "news_cover";
+    private static final String NEWS_PAGE_URL = "news_page_url";
 
 
     public static void goToComicInfoActivity(Context context, String comicId) {
@@ -95,6 +102,15 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
+    public static void goToWebViewActivity(Context context, String newsId, String newsTitle, String newsCover, String newsPageUrl) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra(NEWS_ID, newsId);
+        intent.putExtra(NEWS_TITLE, newsTitle);
+        intent.putExtra(NEWS_COVER, newsCover);
+        intent.putExtra(NEWS_PAGE_URL, newsPageUrl);
+        context.startActivity(intent);
+    }
+
     public static void goToActivity(Context context, Class<?> target) {
         context.startActivity(new Intent(context, target));
     }
@@ -147,7 +163,20 @@ public class IntentUtil {
         return activity.getIntent().getStringExtra(COVER_URL);
     }
 
+    public static String getNewsId(Activity activity) {
+        return activity.getIntent().getStringExtra(NEWS_ID);
+    }
 
+    public static String getNewsTitle(Activity activity) {
+        return activity.getIntent().getStringExtra(NEWS_TITLE);
+    }
 
+    public static String getNewsCover(Activity activity) {
+        return activity.getIntent().getStringExtra(NEWS_COVER);
+    }
+
+    public static String getNewsPageUrl(Activity activity) {
+        return activity.getIntent().getStringExtra(NEWS_PAGE_URL);
+    }
 
 }
