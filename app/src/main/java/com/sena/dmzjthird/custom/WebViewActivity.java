@@ -2,6 +2,7 @@ package com.sena.dmzjthird.custom;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -14,6 +15,10 @@ import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.databinding.ActivityWebViewBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
+
+/**
+ * 参考链接：https://blog.csdn.net/jiang_rong_tao/article/details/58586041
+ */
 
 public class WebViewActivity extends AppCompatActivity {
 
@@ -45,6 +50,7 @@ public class WebViewActivity extends AppCompatActivity {
         loadUrl(pageUrl);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
 
         WebSettings settings = binding.webView.getSettings();
