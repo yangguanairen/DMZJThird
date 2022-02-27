@@ -3,10 +3,9 @@ package com.sena.dmzjthird.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.webkit.WebView;
 
 import com.sena.dmzjthird.comic.view.AuthorInfoActivity;
-import com.sena.dmzjthird.comic.view.ComicClassifyActivity;
+import com.sena.dmzjthird.comic.view.ComicFilterActivity;
 import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.comic.view.ComicTopicInfoActivity;
 import com.sena.dmzjthird.comic.view.ComicViewActivity;
@@ -14,10 +13,6 @@ import com.sena.dmzjthird.comic.view.CommentReplyActivity;
 import com.sena.dmzjthird.comic.view.UserInfoActivity;
 import com.sena.dmzjthird.custom.LargeImageActivity;
 import com.sena.dmzjthird.custom.WebViewActivity;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Android Studio.
@@ -61,7 +56,7 @@ public class IntentUtil {
     }
 
     public static void goToComicClassifyActivity(Context context, String tagId) {
-        Intent intent = new Intent(context, ComicClassifyActivity.class);
+        Intent intent = new Intent(context, ComicFilterActivity.class);
         intent.putExtra(CLASSIFY_ID, tagId);
         context.startActivity(intent);
     }

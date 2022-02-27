@@ -3,6 +3,11 @@
   <component name="WizardSettings">
     <option name="children">
       <map>
+        <entry key="imageWizard">
+          <value>
+            <PersistentState />
+          </value>
+        </entry>
         <entry key="vectorWizard">
           <value>
             <PersistentState>
@@ -18,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/E:/Editor/AndroidStudio/SDk/icons/material/materialicons/thumb_up/baseline_thumb_up_24.xml" />
+                                      <entry key="url" value="file:/$PROJECT_DIR$/../../Programming/Editor/AndroidStudio/sdk/icons/material/materialicons/book/baseline_book_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +33,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_like" />
+                            <entry key="outputName" value="ic_novel_blue" />
                             <entry key="sourceFile" value="C:\Users\18897\Desktop\DMZJThird" />
                           </map>
                         </option>

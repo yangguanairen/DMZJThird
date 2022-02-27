@@ -7,7 +7,6 @@
     android:background="@color/layout_bg">
 
 
-
     <FrameLayout
         android:id="@+id/contentView"
         android:layout_width="match_parent"
@@ -20,7 +19,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:background="@color/white"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contentView">
 
@@ -30,8 +29,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="5dp"
             android:clickable="true"
+            android:padding="@dimen/dp_10"
             android:background="?selectableItemBackground"
             android:gravity="center">
 
@@ -56,8 +55,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:padding="5dp"
             android:clickable="true"
+            android:padding="@dimen/dp_10"
             android:background="?selectableItemBackground">
 
             <ImageView
@@ -75,14 +74,38 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/novelLayout"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="?selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/novelIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_novel" />
+
+            <TextView
+                android:id="@+id/novelTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/icon_novel_title" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/accountLayout"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:padding="5dp"
             android:clickable="true"
+            android:padding="@dimen/dp_10"
             android:background="?selectableItemBackground">
 
             <ImageView

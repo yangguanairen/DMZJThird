@@ -16,12 +16,12 @@ import org.jetbrains.annotations.NotNull;
  * Date: 2021/8/11
  * Time: 12:10
  */
-public class ComicClassifyCoverAdapter extends BaseQuickAdapter<ComicClassifyCoverBean.Data, BaseViewHolder> {
+public class ComicCategoryAdapter extends BaseQuickAdapter<ComicClassifyCoverBean.Data, BaseViewHolder> {
 
     private final Context mContext;
 
-    public ComicClassifyCoverAdapter(Context context) {
-        super(R.layout.item_comic_classify_cover);
+    public ComicCategoryAdapter(Context context) {
+        super(R.layout.item_object_category);
         this.mContext = context;
     }
 

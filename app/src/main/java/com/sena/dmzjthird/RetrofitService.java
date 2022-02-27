@@ -25,6 +25,13 @@ import com.sena.dmzjthird.comic.bean.ComicChapterInfoBean;
 import com.sena.dmzjthird.comic.bean.UserIsSubscribeBean;
 import com.sena.dmzjthird.news.bean.NewsBannerBean;
 import com.sena.dmzjthird.news.bean.NewsCategoryBean;
+import com.sena.dmzjthird.novel.bean.NovelCategoryBean;
+import com.sena.dmzjthird.novel.bean.NovelFilterBean;
+import com.sena.dmzjthird.novel.bean.NovelFilterTagBean;
+import com.sena.dmzjthird.novel.bean.NovelLatestBean;
+import com.sena.dmzjthird.novel.bean.NovelRankBean;
+import com.sena.dmzjthird.novel.bean.NovelRankTagBean;
+import com.sena.dmzjthird.novel.bean.NovelRecommendBean;
 
 import java.util.List;
 import java.util.Map;
@@ -63,6 +70,67 @@ public interface RetrofitService {
     // https://nnv3api.muwai.com/article/recommend/header.json
     @GET("article/recommend/header.json")
     Observable<NewsBannerBean> getNewsBanner();
+
+    /**************************************** 轻小说 ****************************************/
+
+    // 轻小说首页推荐
+    // https://nnv3api.muwai.com/novel/recommend.json
+    @GET("novel/recommend.json")
+    Observable<List<NovelRecommendBean>> getNovelRecommend();
+
+    // 轻小说更新
+    // https://nnv3api.muwai.com/novel/recentUpdate/0.json
+    @GET("novel/recentUpdate/{page}.json")
+    Observable<List<NovelLatestBean>> getNovelLatest(
+            @Path("page") int page
+    );
+
+    // 轻小说目录
+    // https://nnv3api.muwai.com/1/category.json
+    @GET("1/category.json")
+    Observable<List<NovelCategoryBean>> getNovelCategory();
+
+    // 轻小说排行分类
+    // https://nnv3api.muwai.com/novel/tag.json
+    @GET("novel/tag.json")
+    Observable<List<NovelRankTagBean>> getNovelRankTag();
+
+    // 轻小说排行
+    // https://nnv3api.muwai.com/novel/rank/0/0/0.json
+    @GET("novel/rank/{tag}/{sort}/{page}.json")
+    Observable<List<NovelRankBean>> getNovelRank(
+            @Path("tag") int tag,
+            @Path("sort") int sort,
+            @Path("page") int page
+    );
+
+    // 轻小说筛选分类
+    // https://nnv3api.muwai.com/novel/filter.json
+    @GET("novel/filter.json")
+    Observable<List<NovelFilterTagBean>> getNovelFilterTag();
+
+    // 轻小说筛选
+    // https://nnv3api.muwai.com/novel/0/0/1/0.json
+    @GET("novel/{tag}/{status}/{sort}/{page}.json")
+    Observable<List<NovelFilterBean>> getNovelFilter(
+        @Path("tag") int tag,
+        @Path("status") int status,
+        @Path("sort") int sort,
+        @Path("page") int page
+    );
+    /**************************************** 轻小说 ****************************************/
+
+
+
+
+
+
+
+
+
+
+
+
 
     @GET("recommend/batchUpdateWithLevel")
     Observable<ComicRecommendChildBean1> getComicRecommend1(

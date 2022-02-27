@@ -20,6 +20,7 @@ public class HomeActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private ComicFragment comicFragment;
     private TopicFragment topicFragment;
+    private NovelHomeFragment novelHomeFragment;
     private AccountFragment accountFragment;
     private Fragment currentFragment;
 
@@ -51,6 +52,7 @@ public class HomeActivity extends AppCompatActivity {
 
         comicFragment = ComicFragment.newInstance();
         topicFragment = TopicFragment.newInstance();
+        novelHomeFragment = NovelHomeFragment.newInstance();
         accountFragment = AccountFragment.newInstance();
 
         navigateFragment(comicFragment, "comicFragment");
@@ -60,6 +62,8 @@ public class HomeActivity extends AppCompatActivity {
         binding.comicLayout.setOnClickListener(v -> navigateFragment(comicFragment, "comicFragment"));
 
         binding.topicLayout.setOnClickListener(v -> navigateFragment(topicFragment, "topicFragment"));
+
+        binding.novelLayout.setOnClickListener(v -> navigateFragment(novelHomeFragment, "novelHomeFragment"));
 
         binding.accountLayout.setOnClickListener(v -> navigateFragment(accountFragment, "accountFragment"));
     }
@@ -84,10 +88,12 @@ public class HomeActivity extends AppCompatActivity {
 
         binding.comicTitle.setTextColor(currentFragment == comicFragment ? getColor(R.color.theme_blue) : Color.GRAY);
         binding.topicTitle.setTextColor(currentFragment == topicFragment ? getColor(R.color.theme_blue) : Color.GRAY);
+        binding.novelTitle.setTextColor(currentFragment == novelHomeFragment ? getColor(R.color.theme_blue) : Color.GRAY);
         binding.accountTitle.setTextColor(currentFragment == accountFragment ? getColor(R.color.theme_blue) : Color.GRAY);
 
         binding.comicIcon.setImageResource(currentFragment == comicFragment ? R.drawable.ic_comic_blue : R.drawable.ic_comic);
         binding.topicIcon.setImageResource(currentFragment == topicFragment ? R.drawable.ic_topic_blue : R.drawable.ic_topic);
+        binding.novelIcon.setImageResource(currentFragment == novelHomeFragment ? R.drawable.ic_novel_blue : R.drawable.ic_novel);
         binding.accountIcon.setImageResource(currentFragment == accountFragment ? R.drawable.ic_account_blue : R.drawable.ic_account);
 
     }

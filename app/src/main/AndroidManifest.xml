@@ -18,7 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoAction"
         android:usesCleartextTraffic="true">
-        <activity android:name=".custom.WebViewActivity"
+        <activity
+            android:name=".novel.view.NovelFilterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".custom.WebViewActivity"
             android:exported="false" />
         <activity
             android:name=".account.view.ChangePasswordActivity"
@@ -57,7 +61,7 @@
             android:name=".account.view.UserSubscribedActivity"
             android:exported="true" />
         <activity
-            android:name=".comic.view.ComicClassifyActivity"
+            android:name=".comic.view.ComicFilterActivity"
             android:exported="true" />
         <activity
             android:name=".comic.view.AuthorInfoActivity"

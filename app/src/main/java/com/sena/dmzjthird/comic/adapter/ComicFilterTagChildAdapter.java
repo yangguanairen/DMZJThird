@@ -13,12 +13,12 @@ import com.sena.dmzjthird.comic.bean.ComicClassifyFilterBean;
  * Date: 2021/8/14
  * Time: 17:03
  */
-public class ComicFilterChildAdapter extends BaseQuickAdapter<ComicClassifyFilterBean.Items, BaseViewHolder> {
+public class ComicFilterTagChildAdapter extends BaseQuickAdapter<ComicClassifyFilterBean.Items, BaseViewHolder> {
 
     private String tagId = "0";
 
-    public ComicFilterChildAdapter() {
-        super(R.layout.item_comic_filter_child);
+    public ComicFilterTagChildAdapter() {
+        super(R.layout.item_object_filter_tag_child);
     }
 
     @Override

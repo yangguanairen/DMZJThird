@@ -4,18 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
-import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
-import com.sena.dmzjthird.comic.adapter.ComicClassifyAdapter;
 import com.sena.dmzjthird.comic.adapter.ComicFilterAdapter;
+import com.sena.dmzjthird.comic.adapter.ComicFilterTagAdapter;
 import com.sena.dmzjthird.comic.bean.ComicClassifyBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyFilterBean;
-import com.sena.dmzjthird.databinding.ActivityComicClassifyBinding;
+import com.sena.dmzjthird.databinding.ActivityComicFilterBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
@@ -30,10 +28,10 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.HttpException;
 
-public class ComicClassifyActivity extends AppCompatActivity implements ComicFilterAdapter.Callbacks {
+public class ComicFilterActivity extends AppCompatActivity implements ComicFilterTagAdapter.Callbacks {
 
-    private ActivityComicClassifyBinding binding;
-    private ComicClassifyAdapter adapter;
+    private ActivityComicFilterBinding binding;
+    private ComicFilterAdapter adapter;
     private RetrofitService service;
 
     private String filter;
@@ -44,7 +42,7 @@ public class ComicClassifyActivity extends AppCompatActivity implements ComicFil
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityComicClassifyBinding.inflate(getLayoutInflater());
+        binding = ActivityComicFilterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         filter = IntentUtil.getClassifyTagId(this);
@@ -63,7 +61,7 @@ public class ComicClassifyActivity extends AppCompatActivity implements ComicFil
 
     private void initAdapter() {
         binding.recyclerview.setLayoutManager(new GridLayoutManager(this, 3));
-        adapter = new ComicClassifyAdapter(this);
+        adapter = new ComicFilterAdapter(this);
         binding.recyclerview.setAdapter(adapter);
 
         // 跳转ComicInfo页面
@@ -135,8 +133,8 @@ public class ComicClassifyActivity extends AppCompatActivity implements ComicFil
 
     private void initDrawerLayout() {
         binding.recyclerviewDrawer.setLayoutManager(new LinearLayoutManager(this));
-        ComicFilterAdapter filterAdapter = new ComicFilterAdapter(this);
-        binding.recyclerviewDrawer.setAdapter(filterAdapter);
+        ComicFilterTagAdapter tagAdapter = new ComicFilterTagAdapter(this);
+        binding.recyclerviewDrawer.setAdapter(tagAdapter);
 
         service.getComicClassifyFilter()
                 .subscribeOn(Schedulers.io())
@@ -179,14 +177,14 @@ public class ComicClassifyActivity extends AppCompatActivity implements ComicFil
                             }
                         }
 
-                        filterAdapter.setFilterData(sort + "-" + theme + "-" + readership + "-" + status + "-" + area);
+                        tagAdapter.setFilterData(sort + "-" + theme + "-" + readership + "-" + status + "-" + area);
 
                         List<ComicClassifyFilterBean.Items> items = Arrays.asList(
                                 new ComicClassifyFilterBean.Items("0", "人气排序"),
                                 new ComicClassifyFilterBean.Items("1", "更新排序")
                         );
                         beans.add(0, new ComicClassifyFilterBean("排序", items));
-                        filterAdapter.setList(beans);
+                        tagAdapter.setList(beans);
                     }
 
                     @Override
@@ -214,6 +212,6 @@ public class ComicClassifyActivity extends AppCompatActivity implements ComicFil
         this.sort = sort;
 
         initAdapter();
-        new Handler().postDelayed(() -> binding.drawerLayout.closeDrawer(binding.drawerContent), 300);
+        new Handler(getMainLooper()).postDelayed(() -> binding.drawerLayout.closeDrawer(binding.drawerContent), 300);
     }
 }

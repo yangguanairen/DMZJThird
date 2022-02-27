@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10">
+
+        <ImageView
+            android:id="@+id/cover"
+            android:layout_width="90dp"
+            android:layout_height="120dp"
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/default_text"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:lines="1"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cover"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="@dimen/dp_10"/>
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/default_text"
+            android:lines="1"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintStart_toEndOf="@+id/cover"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_account"
+            android:drawablePadding="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/tag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/default_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/author"
+            app:layout_constraintStart_toEndOf="@+id/cover"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_tag"
+            android:drawablePadding="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/latestChapter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/default_text"
+            android:gravity="center_vertical"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@drawable/ic_book"
+            android:layout_marginStart="@dimen/dp_10"
+            app:layout_constraintTop_toBottomOf="@+id/tag"
+            app:layout_constraintStart_toEndOf="@+id/cover"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="5dp"  />
+
+        <TextView
+            android:id="@+id/updateTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/default_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/latestChapter"
+            app:layout_constraintStart_toEndOf="@+id/cover"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_update_time"
+            android:drawablePadding="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/layout_bg"/>
+
+</LinearLayout>

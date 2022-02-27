@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sena.dmzjthird.RetrofitService;
-import com.sena.dmzjthird.comic.adapter.ComicClassifyCoverAdapter;
+import com.sena.dmzjthird.comic.adapter.ComicCategoryAdapter;
 import com.sena.dmzjthird.comic.bean.ComicClassifyCoverBean;
 import com.sena.dmzjthird.databinding.FragmentComicClassifyBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
@@ -30,7 +30,7 @@ import retrofit2.HttpException;
 public class ComicClassifyFragment extends Fragment {
 
     private FragmentComicClassifyBinding binding;
-    private ComicClassifyCoverAdapter adapter;
+    private ComicCategoryAdapter adapter;
     private RetrofitService service;
 
     @Override
@@ -48,7 +48,7 @@ public class ComicClassifyFragment extends Fragment {
 
     private void initRecyclerView() {
         binding.recyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        adapter = new ComicClassifyCoverAdapter(getActivity());
+        adapter = new ComicCategoryAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
 
         adapter.setOnItemClickListener((adapter, view, position) ->
