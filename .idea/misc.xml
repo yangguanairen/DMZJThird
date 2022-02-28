@@ -11,15 +11,20 @@
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/drawable/ic_tag.xml" value="0.257" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/drawable/ic_update_time.xml" value="0.257" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/activity_comic_classify.xml" value="0.1" />
+        <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/activity_comic_topic_info.xml" value="0.1" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/activity_home.xml" value="0.5" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/activity_novel_filter.xml" value="0.1" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_comic.xml" value="0.17806484295845998" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_comic_classify.xml" value="0.1778115501519757" />
+        <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_comic_info.xml" value="0.2" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_comic_latest.xml" value="0.14814814814814814" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_comic_rank.xml" value="0.1" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_comic_recommend.xml" value="0.1778115501519757" />
+        <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_comic_topic.xml" value="0.1" />
+        <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_comic_topic_info.xml" value="0.1" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_novel_category.xml" value="0.1778115501519757" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_novel_home.xml" value="0.2151268115942029" />
+        <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_novel_info.xml" value="0.18" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_novel_latest.xml" value="0.14814814814814814" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_novel_rank.xml" value="0.1778115501519757" />
         <entry key="..\:/PersonalProject/DMZJThird/app/src/main/res/layout/fragment_novel_recommend.xml" value="0.1778115501519757" />
