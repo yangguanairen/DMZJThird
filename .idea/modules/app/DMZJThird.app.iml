@@ -162,5 +162,6 @@
     <orderEntry type="library" name="Gradle: com.github.chrisbanes:PhotoView:2.3.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.lxj:xpopup:2.2.23@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.geyifeng.immersionbar:immersionbar:3.2.1@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.pokercc:ExpandableRecyclerView:0.9.3@aar" level="project" />
   </component>
 </module>

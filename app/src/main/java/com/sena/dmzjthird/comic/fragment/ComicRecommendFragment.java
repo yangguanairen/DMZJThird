@@ -105,20 +105,40 @@ public class ComicRecommendFragment extends Fragment {
         service.getComicRecommend1(46)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bean -> {
+                .subscribe(new Observer<ComicRecommendChildBean1>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
 
-                    List<AutoBannerData> bannerList = new ArrayList<>();
-                    for (ComicRecommendBean.Data data: bean.getData().getData()) {
-                        AutoBannerData bannerData = new AutoBannerData();
-                        bannerData.setObjectId(data.getObj_id());
-                        bannerData.setTitle(data.getTitle());
-                        bannerData.setCoverUrl(data.getCover());
-                        bannerData.setType(0);
-                        bannerList.add(bannerData);
                     }
 
-                    binding.banner.setDataList(bannerList);
+                    @Override
+                    public void onNext(@NonNull ComicRecommendChildBean1 beanList) {
+                        if (beanList.getData().getData().size() == 0) {
+                            // 出错处理
+                            return ;
+                        }
+                        List<AutoBannerData> bannerList = new ArrayList<>();
+                        for (ComicRecommendBean.Data data: beanList.getData().getData()) {
+                            AutoBannerData bannerData = new AutoBannerData();
+                            bannerData.setObjectId(data.getObj_id());
+                            bannerData.setTitle(data.getTitle());
+                            bannerData.setCoverUrl(data.getCover());
+                            bannerData.setType(0);
+                            bannerList.add(bannerData);
+                        }
 
+                        binding.banner.setDataList(bannerList);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        // 出错处理
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                 });
     }
 
