@@ -132,4 +132,12 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
 
+    // ObjectInfo文字
+    <string name="object_info_author">作者:%s</string>
+    <string name="object_info_hit_count">点击:%d</string>
+    <string name="object_info_subscribe_count">订阅:%d</string>
+    <string name="object_info_status">状态:%s</string>
+    <string name="object_info_last_update_time">最后更新:%s</string>
+
+
 </resources>
