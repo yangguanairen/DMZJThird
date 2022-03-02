@@ -10,15 +10,12 @@ import com.sena.dmzjthird.comic.bean.AuthorInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyCoverBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyFilterBean;
-import com.sena.dmzjthird.comic.bean.ComicComplaintRankBean;
 import com.sena.dmzjthird.comic.bean.ComicLatestBean;
-import com.sena.dmzjthird.comic.bean.ComicPopularityRankBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendNewBean;
 import com.sena.dmzjthird.comic.bean.ComicRelatedBean;
 import com.sena.dmzjthird.comic.bean.ComicSearchResultBean;
 import com.sena.dmzjthird.comic.bean.SearchHotBean;
 import com.sena.dmzjthird.comic.bean.ComicSubscribeBean;
-import com.sena.dmzjthird.comic.bean.ComicSubscribeRankBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicBean;
 import com.sena.dmzjthird.comic.bean.ComicTopicInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicChapterInfoBean;
@@ -157,9 +154,7 @@ public interface RetrofitService {
 
     // nnv3api.muwai.com/0/category_with_level.json
     @GET("0/category_with_level.json")
-    Observable<ComicClassifyCoverBean> getComicClassifyCover(
-
-    );
+    Observable<ComicClassifyCoverBean> getComicCategory();
 
     // nnv3api.muwai.com/subject_with_level/0/0.json
     @GET("subject_with_level/0/{page}.json")
@@ -167,32 +162,6 @@ public interface RetrofitService {
             @Path("page") int page
     );
 
-    // https://m.dmzj.com/latest/0.json
-    @GET("latest/{page}.json")
-    Observable<List<ComicLatestBean>> getLatestComic(
-            @Path("page") int page
-    );
-
-    // https://m.dmzj.com/rank/0-0-0-0.json
-    @GET("rank/0-0-{time}-{page}.json")
-    Observable<List<ComicPopularityRankBean>> getPopularityRankComic(
-            @Path("time") int time,
-            @Path("page") int page
-    );
-
-    // https://m.dmzj.com/rank/1-0-0-0.json
-    @GET("rank/1-0-{time}-{page}.json")
-    Observable<List<ComicComplaintRankBean>> getComplaintRankComic(
-            @Path("time") int time,
-            @Path("page") int page
-    );
-
-    // https://m.dmzj.com/rank/2-0-0-0.json
-    @GET("rank/2-0-{time}-{page}.json")
-    Observable<List<ComicSubscribeRankBean>> getSubscribeRankComic(
-            @Path("time") int time,
-            @Path("page") int page
-    );
 
     @GET("v3/comic/related/{id}.json")
     Observable<ComicRelatedBean> getComicRelated(
@@ -216,8 +185,7 @@ public interface RetrofitService {
 
     // nnv3api.muwai.com/classify/filter.json
     @GET("classify/filter.json")
-    Observable<List<ComicClassifyFilterBean>> getComicClassifyFilter(
-    );
+    Observable<List<ComicClassifyFilterBean>> getComicClassifyFilter();
 
 
     @Multipart

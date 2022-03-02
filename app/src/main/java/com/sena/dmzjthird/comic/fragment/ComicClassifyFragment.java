@@ -56,7 +56,7 @@ public class ComicClassifyFragment extends Fragment {
     }
 
     private void getResponse() {
-        service.getComicClassifyCover()
+        service.getComicCategory()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ComicClassifyCoverBean>() {

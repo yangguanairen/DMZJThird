@@ -9,38 +9,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.example.application.ComicRankListRes;
 import com.lxj.xpopup.XPopup;
-import com.sena.dmzjthird.RetrofitService;
-import com.sena.dmzjthird.comic.adapter.ComicRankComplaintAdapter;
-import com.sena.dmzjthird.comic.adapter.ComicRankPopularityAdapter;
-import com.sena.dmzjthird.comic.adapter.ComicRankSubscribeAdapter;
-import com.sena.dmzjthird.comic.bean.ComicComplaintRankBean;
-import com.sena.dmzjthird.comic.bean.ComicPopularityRankBean;
-import com.sena.dmzjthird.comic.bean.ComicSubscribeRankBean;
+import com.sena.dmzjthird.comic.adapter.ComicRankAdapter;
 import com.sena.dmzjthird.databinding.FragmentComicRankBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
-import com.sena.dmzjthird.utils.LogUtil;
-import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.api.ComicApi;
 
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 
 public class ComicRankFragment extends Fragment {
 
     private FragmentComicRankBinding binding;
 
-    private RetrofitService service;
-    private BaseQuickAdapter adapter;
+    private ComicRankAdapter adapter;
     private int classify = 0;
     private int sort = 0;
     private int time = 0;
@@ -48,21 +37,13 @@ public class ComicRankFragment extends Fragment {
 
     private boolean isLoaded;
 
-    private CompositeDisposable disposable;
-
     @Override
     public View onCreateView(@androidx.annotation.NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentComicRankBinding.inflate(inflater, container, false);
 
-        service = RetrofitHelper.getServer(RetrofitService.BASE_ORIGIN_URL);
-        disposable = new CompositeDisposable();
-
-        initAdapter();
-        initRefreshLayout();
-
-        initDialog();
+        initView();
 
         return binding.getRoot();
     }
@@ -70,104 +51,92 @@ public class ComicRankFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!isLoaded) {
-            isLoaded = true;
-            binding.refreshLayout.setRefreshing(true);
-            getResponse();
-        }
+        if (isLoaded) return ;
+        isLoaded = true;
+        lazyLoad();
+    }
+
+    private void lazyLoad() {
+        binding.refreshLayout.setRefreshing(true);
+        getResponse();
     }
 
     private void initAdapter() {
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        if (sort == 1) {
-            adapter = new ComicRankComplaintAdapter(getActivity());
-        } else if (sort == 2) {
-            adapter = new ComicRankSubscribeAdapter(getActivity());
-        } else {
-            adapter = new ComicRankPopularityAdapter(getActivity());
-        }
+        adapter = new ComicRankAdapter(getContext());
         binding.recyclerview.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter, view, position) -> {
-            String comicId;
-            if (sort == 1) {
-                comicId = ((ComicComplaintRankBean) this.adapter.getData().get(position)).getId();
-            } else if (sort == 2) {
-                comicId = ((ComicSubscribeRankBean) adapter.getData().get(position)).getId();
-            } else {
-                comicId = ((ComicPopularityRankBean) adapter.getData().get(position)).getId();
-            }
+        adapter.setOnItemClickListener((a, view, position) -> {
+            ComicRankListRes.ComicRankListItemResponse data = (ComicRankListRes.ComicRankListItemResponse) a.getData().get(position);
+            String comicId = String.valueOf(data.getComicId());
+
             IntentUtil.goToComicInfoActivity(getActivity(), comicId);
         });
 
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);
         adapter.getLoadMoreModule().setAutoLoadMore(true);
         adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
+    }
 
-        page = 0;
-        getResponse();
+    private void initView() {
+
+        initAdapter();
+
+        binding.refreshLayout.setOnRefreshListener(() -> {
+            page = 0;
+            getResponse();
+        });
+
+        initDialog();
     }
 
     private void getResponse() {
-        if (sort == 1) {
-            if (time == 3) {
-                time = 2;
-            }
-            setAdapterData(service.getComplaintRankComic(time, page));
-        } else if (sort == 2) {
-            setAdapterData(service.getSubscribeRankComic(time, page));
-        } else {
-            setAdapterData(service.getPopularityRankComic(time, page));
-        }
-    }
 
-    private <T> void setAdapterData(Observable<List<T>> observable) {
-        observable.subscribeOn(Schedulers.io())
+        ComicApi.getComicRank(classify, sort, time, page)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<T>>() {
+                .subscribe(new Observer<List<ComicRankListRes.ComicRankListItemResponse>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull List<T> beans) {
-                        if (page == 0) {
-                            adapter.setList(beans);
-                        } else {
-                            adapter.addData(beans);
+                    public void onNext(@NonNull List<ComicRankListRes.ComicRankListItemResponse> dataList) {
+                        binding.refreshLayout.setRefreshing(false);
+                        if (page == 0 && dataList.isEmpty()) {
+                            // 出错处理
+                            return ;
                         }
-                        if (beans.size() < 10) {
+
+                        if (page == 0) {
+                            adapter.setList(dataList);
+                        } else {
+                            adapter.addData(dataList);
+                        }
+
+                        if (dataList.isEmpty()) {
                             adapter.getLoadMoreModule().loadMoreEnd();
                         } else {
                             adapter.getLoadMoreModule().loadMoreComplete();
-                            page++;
                         }
+                        page++;
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        if (binding.refreshLayout.isRefreshing()) {
-                            binding.refreshLayout.setRefreshing(false);
-                        }
-
-                        if (e instanceof HttpException) {
-                            LogUtil.e("HttpError: " + ((HttpException) e).code());
-                        } else {
-                            LogUtil.e("OtherError: " + e.getMessage());
-                        }
-                        disposable.clear();
+                        // 出错处理
+                        binding.refreshLayout.setRefreshing(false);
                     }
 
                     @Override
                     public void onComplete() {
-                        disposable.clear();
-                        if (binding.refreshLayout.isRefreshing()) {
-                            binding.refreshLayout.setRefreshing(false);
-                        }
+
                     }
                 });
+
     }
+
 
     private void initDialog() {
         String[] classifyName = {"全部分类"};
@@ -185,44 +154,33 @@ public class ComicRankFragment extends Fragment {
 
                     switch (flag) {
                         case 1:
+                            if (classify == position) return ;
                             classify = position;
                             binding.rankClassify.setText(text);
                             break;
                         case 2:
+                            if (sort == position) return ;
                             sort = position;
                             binding.rankSort.setText(text);
                             break;
                         case 3:
+                            if (time == position) return ;
                             time = position;
                             binding.rankTime.setText(text);
                             break;
                     }
 
+                    page = 0;
                     initAdapter();
-
+                    getResponse();
                 })
                 .show();
-    }
-
-    private void initRefreshLayout() {
-        binding.refreshLayout.setOnRefreshListener(() -> {
-            page = 0;
-            getResponse();
-        });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        disposable.dispose();
-        disposable = null;
-        binding = null;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        binding = null;
         isLoaded = false;
-
     }
 }

@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.example.application.ComicUpdateListRes;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.adapter.ComicLatestAdapter;
-import com.sena.dmzjthird.comic.bean.ComicLatestBean;
 import com.sena.dmzjthird.databinding.FragmentComicLatestBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.api.ComicApi;
@@ -83,11 +82,9 @@ public class ComicLatestFragment extends Fragment {
         adapter = new ComicLatestAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
         adapter.setOnItemClickListener((a, view, position) -> {
-//            Intent intent = new Intent(getActivity(), ComicInfoActivity.class);
-//            intent.putExtra(getString(R.string.intent_comic_id), ((ComicLatestBean) adapter.getData().get(position)).getId());
-//            startActivity(intent);
-
-            IntentUtil.goToComicInfoActivity(getActivity(), ((ComicLatestBean) a.getData().get(position)).getId());
+            ComicUpdateListRes.ComicUpdateListItemResponse data = (ComicUpdateListRes.ComicUpdateListItemResponse) a.getData().get(position);
+            String comicId = String.valueOf(data.getComicId());
+            IntentUtil.goToComicInfoActivity(getActivity(), comicId);
         });
 
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);
