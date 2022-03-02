@@ -116,4 +116,10 @@ public class NovelRecommendFragment extends Fragment {
                 });
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        isLoaded = false;
+    }
 }

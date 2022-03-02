@@ -85,7 +85,6 @@ public class NovelInfoFragment extends Fragment {
 
                     @Override
                     public void onNext(NovelDetailRes.@io.reactivex.rxjava3.annotations.NonNull NovelDetailInfoResponse data) {
-
                         mCoverUrl = data.getCover();
 
                         Glide.with(getContext()).load(data.getCover())
@@ -105,7 +104,6 @@ public class NovelInfoFragment extends Fragment {
 
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                        // 出错处理
                         callbacks.onLoadInfoEnd(null);
                     }
 

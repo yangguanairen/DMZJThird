@@ -10,11 +10,12 @@ import android.os.Bundle;
 
 import com.sena.dmzjthird.databinding.ActivityNovelInfoBinding;
 import com.sena.dmzjthird.novel.fragment.NovelChapterFragment;
+import com.sena.dmzjthird.novel.fragment.NovelInfoFragment;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class NovelInfoActivity extends AppCompatActivity {
+public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFragment.Callbacks {
 
     private ActivityNovelInfoBinding binding;
 
@@ -29,8 +30,8 @@ public class NovelInfoActivity extends AppCompatActivity {
 
         String novelId = getIntent().getStringExtra("novelId");
 
-        fragmentList = Arrays.asList(NovelChapterFragment.newInstance(novelId));
-        titleList = Arrays.asList("章节");
+        fragmentList = Arrays.asList(NovelInfoFragment.newInstance(novelId), NovelChapterFragment.newInstance(novelId));
+        titleList = Arrays.asList("详情", "章节");
 
         initView();
 
@@ -66,5 +67,24 @@ public class NovelInfoActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
+    }
+
+    @Override
+    public void onLoadInfoEnd(String title) {
+        binding.toolbar.setBackListener(v -> finish());
+
+        if (title == null) {
+            // 出错处理
+            return ;
+        }
+        binding.toolbar.setTitle(title);
+        // 订阅
+        binding.toolbar.setFavoriteListener(v -> {
+
+        });
+        // 下载
+        binding.toolbar.setOtherListener(v -> {
+
+        });
     }
 }

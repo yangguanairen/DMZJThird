@@ -4,6 +4,8 @@ import com.sena.dmzjthird.account.bean.LoginBean;
 import com.sena.dmzjthird.account.bean.UserComicCommentBean;
 import com.sena.dmzjthird.account.bean.UserNovelCommentBean;
 import com.sena.dmzjthird.account.bean.UserSubscribedBean;
+import com.sena.dmzjthird.comic.bean.ComicRecommendLikeBean;
+import com.sena.dmzjthird.comic.bean.ComicRecommendOtherBean;
 import com.sena.dmzjthird.comic.bean.AuthorInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyBean;
 import com.sena.dmzjthird.comic.bean.ComicClassifyCoverBean;
@@ -11,9 +13,7 @@ import com.sena.dmzjthird.comic.bean.ComicClassifyFilterBean;
 import com.sena.dmzjthird.comic.bean.ComicComplaintRankBean;
 import com.sena.dmzjthird.comic.bean.ComicLatestBean;
 import com.sena.dmzjthird.comic.bean.ComicPopularityRankBean;
-import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean1;
-import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean2;
-import com.sena.dmzjthird.comic.bean.ComicRecommendChildBean3;
+import com.sena.dmzjthird.comic.bean.ComicRecommendNewBean;
 import com.sena.dmzjthird.comic.bean.ComicRelatedBean;
 import com.sena.dmzjthird.comic.bean.ComicSearchResultBean;
 import com.sena.dmzjthird.comic.bean.SearchHotBean;
@@ -60,6 +60,7 @@ public interface RetrofitService {
 
 
 
+    /**************************************** 新闻 ****************************************/
 
     // 新闻分类
     // https://nnv3api.muwai.com/article/category.json
@@ -70,6 +71,8 @@ public interface RetrofitService {
     // https://nnv3api.muwai.com/article/recommend/header.json
     @GET("article/recommend/header.json")
     Observable<NewsBannerBean> getNewsBanner();
+
+    /**************************************** 新闻 ****************************************/
 
     /**************************************** 轻小说 ****************************************/
 
@@ -128,27 +131,29 @@ public interface RetrofitService {
 
 
 
+    /**************************************** 漫画 ****************************************/
 
 
+    // 漫画首页推荐
+    // https://nnv3api.muwai.com/recommend_new.json
+    @GET("recommend_new.json")
+    Observable<List<ComicRecommendNewBean>> getComicRecommend();
 
+    // 漫画首页--猜你喜欢
+    // https://nnv3api.muwai.com/recommend/batchUpdate?category_id=50
+    @GET("recommend/batchUpdate?category_id=50")
+    Observable<ComicRecommendLikeBean> getComicRecommendLike();
 
-    @GET("recommend/batchUpdateWithLevel")
-    Observable<ComicRecommendChildBean1> getComicRecommend1(
-            @Query("category_id") int category_id
-    );
+    // 漫画首页--国漫也精彩
+    // https://nnv3api.muwai.com/recommend/batchUpdate?category_id=52
+    @GET("recommend/batchUpdate?category_id=52")
+    Observable<ComicRecommendOtherBean> getComicRecommendGuoman();
 
-    @GET("recommend/batchUpdateWithLevel")
-    Observable<ComicRecommendChildBean2> getComicRecommend2(
-            @Query("category_id") int category_id
-    );
+    // 漫画首页--热门连载
+    // https://nnv3api.muwai.com/recommend/batchUpdate?category_id=54
+    @GET("recommend/batchUpdate?category_id=54")
+    Observable<ComicRecommendOtherBean> getComicRecommendHot();
 
-
-    // nnv3api.muwai.com/recommend/batchUpdateWithLevel?uid=109697332&category_id=49
-    @GET("recommend/batchUpdateWithLevel?uid=109697332&category_id=49")
-    Observable<ComicRecommendChildBean3> getComicRecommend3(
-            @Query("uid") String uid,
-            @Query("category_id") int category_id
-    );
 
     // nnv3api.muwai.com/0/category_with_level.json
     @GET("0/category_with_level.json")

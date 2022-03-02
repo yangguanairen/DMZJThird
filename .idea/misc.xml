@@ -96,11 +96,16 @@
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_error.xml" value="0.18070652173913043" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_novel.xml" value="0.33967391304347827" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_novel_chapter.xml" value="0.3342391304347826" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_novel_recommend.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_topic.xml" value="0.2989583333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_comic_filter.xml" value="0.2989583333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_comic_recommend.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_comic_topic.xml" value="0.2989583333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_object_expand_child.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_object_expand_group.xml" value="0.3342391304347826" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_object_recommend.xml" value="0.25677083333333334" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_object_recommend_child.xml" value="0.25677083333333334" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_object_recommend_child2.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/toolbar_normal.xml" value="0.3020833333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/toolbar_serach.xml" value="0.3020833333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/view_pager_chapter.xml" value="0.2989583333333333" />

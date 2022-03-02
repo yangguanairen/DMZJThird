@@ -1,12 +1,11 @@
 package com.sena.dmzjthird.comic.adapter;
 
 import android.content.Context;
-import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.comic.bean.ComicRecommendBean;
+import com.sena.dmzjthird.comic.bean.ComicRecommendNewBean;
 import com.sena.dmzjthird.utils.GlideUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,26 +16,32 @@ import org.jetbrains.annotations.NotNull;
  * Date: 2021/8/3
  * Time: 22:35
  */
-public class ComicRecommendChildAdapter extends BaseQuickAdapter<ComicRecommendBean.Data, BaseViewHolder> {
+public class ComicRecommendChildAdapter extends BaseQuickAdapter<ComicRecommendNewBean.ComicRecommendItem, BaseViewHolder> {
 
     private final Context mContext;
 
-    public ComicRecommendChildAdapter(Context context) {
-        super(R.layout.item_comic_recommend_child);
+    public ComicRecommendChildAdapter(Context context, int layoutId) {
+        super(layoutId);
         this.mContext = context;
     }
 
     @Override
-    protected void convert(@NotNull BaseViewHolder holder, ComicRecommendBean.Data data) {
+    protected void convert(@NotNull BaseViewHolder holder, ComicRecommendNewBean.ComicRecommendItem item) {
 
-        GlideUtil.loadImageWithCookie(mContext, data.getCover(), holder.getView(R.id.comic_cover));
+        GlideUtil.loadImageWithCookie(mContext, item.getCover(), holder.getView(R.id.cover));
 
-        holder.setText(R.id.comic_title, data.getTitle());
+        holder.setText(R.id.title, item.getTitle());
 
-        if ("".equals(data.getSub_title()) || data.getSub_title() == null) {
-            holder.getView(R.id.comic_author).setVisibility(View.GONE);
-        } else {
-            holder.setText(R.id.comic_author, data.getSub_title());
+        // item_object_recommend_child2没有subTitle
+        // 故，需要try-catch包裹
+        try {
+            if ("".equals(item.getSub_title()) || item.getSub_title() == null) {
+                holder.setGone(R.id.subTitle, true);
+            } else {
+                holder.setText(R.id.subTitle, item.getSub_title());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

@@ -61,6 +61,7 @@ public class NovelChapterAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
             mChildPosition = childPosition;
             notifyDataSetChanged();
 
+            int volumeId = mDataList.get(groupPosition).getVolumeId();
             int chapterId = mDataList.get(groupPosition).getChapters(childPosition).getChapterId();
             // 跳转轻小说观看
 

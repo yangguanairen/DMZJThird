@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.adapter.ComicRecommendAdapter;
@@ -33,6 +34,8 @@ import java.util.List;
 public class ComicFragment extends Fragment {
 
     private FragmentComicBinding binding;
+
+    private BroadcastReceiver receiver;
 
     public static ComicFragment newInstance() {
         return new ComicFragment();
@@ -90,19 +93,31 @@ public class ComicFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(getContext());
+        manager.unregisterReceiver(receiver);
     }
 
     private void initBroadcast() {
 
-        BroadcastReceiver receiver = new BroadcastReceiver() {
+        receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                binding.viewPager.setCurrentItem(4);
+                switch (intent.getAction()) {
+                    case ComicRecommendAdapter.ACTION_COMIC_UPDATE:
+                        binding.viewPager.setCurrentItem(1);
+                        break;
+                    case ComicRecommendAdapter.ACTION_COMIC_TOPIC:
+                        binding.viewPager.setCurrentItem(4);
+                        break;
+                }
             }
         };
 
-        IntentFilter filter = new IntentFilter(ComicRecommendAdapter.BROADCAST_INTENT);
-        getContext().registerReceiver(receiver, filter);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ComicRecommendAdapter.ACTION_COMIC_UPDATE);
+        filter.addAction(ComicRecommendAdapter.ACTION_COMIC_TOPIC);
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(getContext());
+        manager.registerReceiver(receiver, filter);
 
     }
 }
