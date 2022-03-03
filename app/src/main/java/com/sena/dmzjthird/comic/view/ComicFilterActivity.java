@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
+import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicFilterAdapter;
 import com.sena.dmzjthird.comic.adapter.ComicFilterTagAdapter;
@@ -48,14 +51,25 @@ public class ComicFilterActivity extends AppCompatActivity implements ComicFilte
         filter = IntentUtil.getClassifyTagId(this);
         service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
 
+        initView();
+        getResponse();
+
+    }
+
+    private void initView() {
+
         binding.progress.spin();
         binding.toolbar.setBackListener(v -> finish());
 
-        // 初始化DrawerLayout
-        initDrawerLayout();
-        binding.toolbar.setOtherListener(v -> binding.drawerLayout.openDrawer(binding.drawerContent, true));
+        ImmersionBar.with(this)
+                .statusBarColor(R.color.theme_blue)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .titleBarMarginTop(binding.toolbar)
+                .init();
 
         initAdapter();
+        initDrawerLayout();
+        binding.toolbar.setOtherListener(v -> binding.drawerLayout.openDrawer(binding.drawerContent, true));
 
     }
 
@@ -73,7 +87,6 @@ public class ComicFilterActivity extends AppCompatActivity implements ComicFilte
         adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
 
         // filter改变，page置零
-        page = 0;
         getResponse();
 
     }
@@ -95,24 +108,25 @@ public class ComicFilterActivity extends AppCompatActivity implements ComicFilte
                     public void onNext(@NonNull List<ComicClassifyBean> beans) {
                         binding.progress.stopSpinning();
                         binding.progress.setVisibility(View.GONE);
-                        if (beans.size() == 0) {
+                        if (page == 0 && beans.size() == 0) {
                             binding.noData.setVisibility(View.VISIBLE);
                             return;
                         }
                         // 防止上一次请求导致noData显示
                         binding.noData.setVisibility(View.INVISIBLE);
                         binding.recyclerview.setVisibility(View.VISIBLE);
-                        if (beans.size() < 10) {
-                            adapter.getLoadMoreModule().loadMoreEnd();
-                        } else {
-                            adapter.getLoadMoreModule().loadMoreComplete();
-                            page++;
-                        }
+
                         if (page == 0) {
                             adapter.setList(beans);
                         } else {
                             adapter.addData(beans);
                         }
+                        if (beans.isEmpty()) {
+                            adapter.getLoadMoreModule().loadMoreEnd();
+                        } else {
+                            adapter.getLoadMoreModule().loadMoreComplete();
+                        }
+                        page++;
                     }
 
                     @Override
@@ -211,7 +225,8 @@ public class ComicFilterActivity extends AppCompatActivity implements ComicFilte
         this.filter = filter;
         this.sort = sort;
 
-        initAdapter();
+        page = 0;
+        getResponse();
         new Handler(getMainLooper()).postDelayed(() -> binding.drawerLayout.closeDrawer(binding.drawerContent), 300);
     }
 }

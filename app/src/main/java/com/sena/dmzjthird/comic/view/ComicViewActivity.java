@@ -34,11 +34,13 @@ import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.ViewHelper;
 import com.sena.dmzjthird.utils.XPopUpUtil;
 import com.sena.dmzjthird.utils.api.ComicApi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -93,7 +95,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
 
         popup = new XPopup.Builder(this).asCustom(new CustomBottomPopup(this, systemMaxBrightness));
 
-        setSubscribeStatus();
+        ViewHelper.setSubscribeStatus(this, binding.subscribe, comicId);
 
         // 侧边栏
         initCatalog();
@@ -188,7 +190,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
 
         binding.setting.setOnClickListener(v -> popup.show());
 
-        binding.subscribe.setOnClickListener(v -> controlSubscribe());
+        binding.subscribe.setOnClickListener(v -> ViewHelper.controlSubscribe(this, binding.subscribe, comicId, "cover", "title", "author"));
 
         // 设置上一话/下一话监听器
         binding.preChapter.setOnClickListener(v -> {
@@ -257,51 +259,6 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
                     } else {
                         setViewPagerData(images.size());
                     }
-                });
-    }
-
-    /**
-     * 发送请求询问服务器
-     * 该漫画是否订阅
-     */
-    private void setSubscribeStatus() {
-        long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-//        if ("".equals(uid)) {
-//            return;
-//        }
-        MyRetrofitService myService = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
-        myService.querySubscribe(uid, comicId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resultBean -> {
-                    if (resultBean == null || resultBean.getCode() == 100) {
-                        return ;
-                    }
-                    binding.subscribe.setCompoundDrawablesWithIntrinsicBounds(
-                            0, "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed : R.drawable.ic_subscribe, 0, 0
-                    );
-                });
-    }
-
-    // 订阅按钮的点击事件
-    private void controlSubscribe() {
-        long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-        MyRetrofitService myService = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
-        myService.controlSubscribe(uid, comicId, "cover", "title", "author")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resultBean -> {
-                    if (resultBean == null) {
-                        XPopUpUtil.showCustomErrorToast(this, "请求失败，请稍后重试");
-                        return ;
-                    }
-                    if (resultBean.getCode() == 100) {
-                        XPopUpUtil.showCustomErrorToast(this, getString(R.string.not_login));
-                        return ;
-                    }
-                    binding.subscribe.setCompoundDrawablesWithIntrinsicBounds(
-                            0, "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed : R.drawable.ic_subscribe, 0, 0
-                    );
                 });
     }
 

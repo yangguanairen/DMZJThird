@@ -3,12 +3,11 @@ package com.sena.dmzjthird.comic.view;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.AuthorInfoAdapter;
@@ -36,7 +35,23 @@ public class AuthorInfoActivity extends AppCompatActivity {
         binding = ActivityAuthorInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        initView();
+
+        getResponse();
+
+
+    }
+
+    private void initView() {
+
+        ImmersionBar.with(this)
+                .statusBarColor(R.color.theme_blue)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .titleBarMarginTop(binding.toolbar)
+                .init();
+
         binding.progress.spin();
+
         binding.toolbar.setBackListener(v -> finish());
 
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
@@ -44,8 +59,6 @@ public class AuthorInfoActivity extends AppCompatActivity {
         binding.recyclerview.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) ->
                 IntentUtil.goToComicInfoActivity(this, ((AuthorInfoBean.Data) adapter.getData().get(position)).getId()));
-
-        getResponse();
 
 
     }

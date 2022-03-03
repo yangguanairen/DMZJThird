@@ -34,8 +34,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
         List<String> tabTitles = Arrays.asList(getString(R.string.comic_subscribed), getString(R.string.comic_comment),
                 getString(R.string.novel_subscribed), getString(R.string.novel_comment));
-        List<Fragment> fragments = Arrays.asList(UserSubscribedFragment.newInstance(0,uid), UserCommentFragment.newInstance(0, uid),
-                UserSubscribedFragment.newInstance(1,uid), UserCommentFragment.newInstance(1, uid));
+        List<Fragment> fragments = Arrays.asList(UserSubscribedFragment.newInstance(0), UserCommentFragment.newInstance(0, uid),
+                UserSubscribedFragment.newInstance(1), UserCommentFragment.newInstance(1, uid));
 
         binding.viewPager.setOffscreenPageLimit(3);
         binding.viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

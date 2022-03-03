@@ -17,7 +17,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.adapter.ComicRecommendAdapter;
-import com.sena.dmzjthird.comic.fragment.ComicClassifyFragment;
+import com.sena.dmzjthird.comic.fragment.ComicCategoryFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRankFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRecommendFragment;
 import com.sena.dmzjthird.comic.fragment.ComicTopicFragment;
@@ -51,7 +51,7 @@ public class ComicFragment extends Fragment {
         binding.search.setOnClickListener(v -> startActivity(new Intent(getActivity(), ComicSearchActivity.class)));
 
         List<Fragment> fragments = Arrays.asList(new ComicRecommendFragment(), new ComicLatestFragment(),
-                new ComicClassifyFragment(), new ComicRankFragment(), new ComicTopicFragment());
+                new ComicCategoryFragment(), new ComicRankFragment(), new ComicTopicFragment());
         List<String> tabTitles = Arrays.asList(getString(R.string.recommend), getString(R.string.update),
                 getString(R.string.classify), getString(R.string.rank), getString(R.string.topic));
 

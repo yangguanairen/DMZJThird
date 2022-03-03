@@ -24,31 +24,31 @@ public class ComicRelatedAdapter extends BaseQuickAdapter<ComicRelatedBean.Autho
     private final Context mContext;
 
     public ComicRelatedAdapter(Context context) {
-        super(R.layout.item_comic_recommend);
+        super(R.layout.item_object_recommend);
         this.mContext = context;
     }
 
     @Override
     protected void convert(@NonNull BaseViewHolder holder, ComicRelatedBean.Author_Comics data) {
 
-        RecyclerView recyclerView = holder.getView(R.id.recyclerview);
+        RecyclerView recyclerView = holder.getView(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
         ComicRelatedChildAdapter adapter = new ComicRelatedChildAdapter(mContext);
         recyclerView.setAdapter(adapter);
         adapter.setList(data.getData());
 
-        adapter.setOnItemClickListener((adapter1, view, position) ->
-                IntentUtil.goToComicInfoActivity(mContext, ((ComicRelatedBean.Data) adapter1.getData().get(position)).getId()));
+        adapter.setOnItemClickListener((a, view, position) ->
+                IntentUtil.goToComicInfoActivity(mContext, ((ComicRelatedBean.Data) a.getData().get(position)).getId()));
 
         if (data.getAuthor_name().equals("同类题材")) {
             holder.setText(R.id.title, data.getAuthor_name()+"作品");
+
         } else {
             holder.setText(R.id.title, data.getAuthor_name()+"的其他作品");
-            holder.setBackgroundResource(R.id.refresh, R.drawable.ic_right);
-            holder.getView(R.id.refresh).setVisibility(View.VISIBLE);
-
+            holder.setBackgroundResource(R.id.icon, R.drawable.ic_right);
+            holder.getView(R.id.icon).setOnClickListener(v ->
+                    IntentUtil.goToAuthorInfoActivity(mContext, data.getAuthor_id()));
         }
-        holder.getView(R.id.refresh).setOnClickListener(v ->
-                IntentUtil.goToAuthorInfoActivity(mContext, data.getAuthor_id()));
+
     }
 }

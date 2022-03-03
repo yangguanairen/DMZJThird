@@ -2,6 +2,7 @@ package com.sena.dmzjthird.account;
 
 import com.sena.dmzjthird.account.bean.ResultBean;
 import com.sena.dmzjthird.account.bean.UserResultBean;
+import com.sena.dmzjthird.account.bean.UserSubscribedBean;
 
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,11 @@ public interface MyRetrofitService {
     Observable<ResultBean> querySubscribe(
             @Query("uid") long uid,
             @Query("comicId") String comicId
+    );
+
+    @GET("subscribe/all")
+    Observable<List<UserSubscribedBean>> getAllSubscribe(
+            @Query("uid") long uid
     );
 
 }

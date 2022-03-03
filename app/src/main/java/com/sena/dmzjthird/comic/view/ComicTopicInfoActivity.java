@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.fragment.CommentFragment;
 import com.sena.dmzjthird.comic.fragment.ComicTopicInfoFragment;
@@ -29,6 +31,12 @@ public class ComicTopicInfoActivity extends AppCompatActivity implements ComicTo
         super.onCreate(savedInstanceState);
         binding = ActivityComicTopicInfoBinding.inflate(getLayoutInflater());
         String topicId = IntentUtil.getTopicId(this);
+
+        ImmersionBar.with(this)
+                .statusBarColor(R.color.theme_blue)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .titleBarMarginTop(binding.toolbar)
+                .init();
 
         binding.progress.spin();
         binding.toolbar.setBackListener(v -> finish());

@@ -1,7 +1,11 @@
 package com.sena.dmzjthird.utils;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -37,7 +41,9 @@ public class GlideUtil {
     public static void loadImage(Context context, String url, ImageView imageView) {
 
         Glide.with(context).load(url)
+                .transition(withCrossFade(500))
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
+                .skipMemoryCache(false)
                 .placeholder(R.drawable.selector_default_picture)
                 .error(R.drawable.selector_default_picture)
                 .into(imageView);
@@ -47,7 +53,9 @@ public class GlideUtil {
 
         Glide.with(context)
                 .load(addCookie(url))
+                .transition(withCrossFade(500))
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
+                .skipMemoryCache(false)
                 .placeholder(R.drawable.selector_default_picture)
                 .error(R.drawable.selector_default_picture)
                 .into(imageView);

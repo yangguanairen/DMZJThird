@@ -43,9 +43,7 @@ public class ComicTopicFragment extends Fragment {
         service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
 
 
-        initRecyclerView();
-
-        initRefreshLayout();
+        initView();
 
         return binding.getRoot();
     }
@@ -60,20 +58,18 @@ public class ComicTopicFragment extends Fragment {
         }
     }
 
-    private void initRecyclerView() {
+    private void initView() {
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ComicTopicAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter, view, position) ->
-                IntentUtil.goToComicTopicInfoActivity(getActivity(), ((ComicTopicBean.Data) adapter.getData().get(position)).getId()));
+        adapter.setOnItemClickListener((a, view, position) ->
+                IntentUtil.goToComicTopicInfoActivity(getActivity(), ((ComicTopicBean.Data) a.getData().get(position)).getId()));
 
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);
         adapter.getLoadMoreModule().setAutoLoadMore(true);
         adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(true);
-    }
 
-    private void initRefreshLayout() {
         binding.refreshLayout.setOnRefreshListener(() -> {
             page = 0;
             getResponse();
@@ -97,24 +93,28 @@ public class ComicTopicFragment extends Fragment {
 //                            binding.recyclerViewRank.setVisibility(View.GONE);
 //                            Toast.makeText(getApplicationContext(), "没有数据了", Toast.LENGTH_LONG).show();
 //                        }
-                        if (bean.getData().size() < 10) {
-                            adapter.getLoadMoreModule().loadMoreEnd();
-                        } else {
-                            adapter.getLoadMoreModule().loadMoreComplete();
-                            page++;
+                        binding.refreshLayout.setRefreshing(false);
+                        if (page == 0 && bean.getData().size() == 0) {
+                            // 出错处理
+                            return ;
                         }
                         if (page == 0) {
                             adapter.setList(bean.getData());
                         } else {
                             adapter.addData(bean.getData());
                         }
+                        if (bean.getData().size() == 0) {
+                            adapter.getLoadMoreModule().loadMoreEnd();
+                        } else {
+                            adapter.getLoadMoreModule().loadMoreComplete();
+                        }
+                        page++;
+
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        if (binding.refreshLayout.isRefreshing()) {
-                            binding.refreshLayout.setRefreshing(false);
-                        }
+                        binding.refreshLayout.setRefreshing(false);
                         if (e instanceof HttpException) {
                             LogUtil.d("HttpError: " + ((HttpException) e).code() );
                         } else {

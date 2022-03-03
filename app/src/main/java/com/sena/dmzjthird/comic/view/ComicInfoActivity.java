@@ -9,27 +9,24 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.ErrorFragment;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.comic.fragment.CommentFragment;
 import com.sena.dmzjthird.comic.fragment.ComicInfoFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRelatedFragment;
 import com.sena.dmzjthird.databinding.ActivityComicInfoBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
-import com.sena.dmzjthird.utils.MyDataStore;
-import com.sena.dmzjthird.utils.RetrofitHelper;
-import com.sena.dmzjthird.utils.XPopUpUtil;
+import com.sena.dmzjthird.utils.ViewHelper;
 
 import java.util.Arrays;
 import java.util.List;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFragment.Callbacks {
 
@@ -46,6 +43,12 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
         binding.progress.spin();
 
         comicId = IntentUtil.getObjectId(this);
+
+        ImmersionBar.with(this)
+                .statusBarColor(R.color.theme_blue)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .titleBarMarginTop(binding.toolbar)
+                .init();
 
         binding.toolbar.setBackListener(v -> finish());
 
@@ -84,27 +87,8 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
 
         binding.tableLayout.setupWithViewPager(binding.viewPager);
 
-        setSubscribeStatus();
+        ViewHelper.setSubscribeStatus(this, binding.toolbar.getFavoriteIV(), comicId);
 
-    }
-
-    private void setSubscribeStatus() {
-        long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-//        if ("".equals(uid)) {
-//            return;
-//        }
-        MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
-        service.querySubscribe(uid, comicId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resultBean -> {
-                    if (resultBean == null || resultBean.getCode() == 100) {
-                        return ;
-                    }
-                    binding.toolbar.setFavoriteBackgrounds(
-                            "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed : R.drawable.ic_subscribe
-                    );
-                });
     }
 
     @Override
@@ -117,7 +101,7 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
     @SuppressLint("SetTextI18n")
     @Override
     public void loadingDataFinish(String title, String cover, String author) {
-        new Handler().postDelayed(() -> {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (isFinishing() || binding == null) {
                 LogUtil.e("activity is finish");
                 return;
@@ -138,30 +122,7 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
                 binding.toolbar.setFavoriteIVVisibility(View.VISIBLE);
                 binding.toolbar.setOtherTVVisibility(View.VISIBLE);
 
-                binding.toolbar.setFavoriteListener(v -> {
-
-                    MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
-
-                    long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-                    service.controlSubscribe(uid, comicId, cover, title, author)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(resultBean -> {
-                                if (resultBean == null) {
-                                    XPopUpUtil.showCustomErrorToast(this, "请求失败，请稍后重试");
-                                    return ;
-                                }
-                                if (resultBean.getCode() == 100) {
-                                    XPopUpUtil.showCustomErrorToast(this, getString(R.string.not_login));
-                                    return ;
-                                }
-                                binding.toolbar.setFavoriteBackgrounds(
-                                        "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed : R.drawable.ic_subscribe
-                                );
-
-                            });
-
-                });
+                binding.toolbar.setFavoriteListener(v -> ViewHelper.controlSubscribe(this, binding.toolbar.getFavoriteIV(), comicId, cover, title, author));
                 binding.toolbar.setOtherListener(v -> {});
             }
         }, 3000);

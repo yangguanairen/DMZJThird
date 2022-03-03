@@ -71,6 +71,7 @@ public interface RetrofitService {
 
     /**************************************** 新闻 ****************************************/
 
+
     /**************************************** 轻小说 ****************************************/
 
     // 轻小说首页推荐
@@ -121,13 +122,6 @@ public interface RetrofitService {
     /**************************************** 轻小说 ****************************************/
 
 
-
-
-
-
-
-
-
     /**************************************** 漫画 ****************************************/
 
 
@@ -151,18 +145,37 @@ public interface RetrofitService {
     @GET("recommend/batchUpdate?category_id=54")
     Observable<ComicRecommendOtherBean> getComicRecommendHot();
 
-
-    // nnv3api.muwai.com/0/category_with_level.json
+    // 漫画目录
+    // https://nnv3api.muwai.com/0/category_with_level.json
     @GET("0/category_with_level.json")
     Observable<ComicClassifyCoverBean> getComicCategory();
 
-    // nnv3api.muwai.com/subject_with_level/0/0.json
-    @GET("subject_with_level/0/{page}.json")
+    // 漫画专题
+    // https://nnv3api.muwai.com/subject/0/0.json
+    @GET("subject/0/{page}.json")
     Observable<ComicTopicBean> getComicTopic(
             @Path("page") int page
     );
 
+    // 漫画专题详情
+    // https://nnv3api.muwai.com/subject/458.json
+    @GET("subject_with_level/{id}.json")
+    Observable<ComicTopicInfoBean> getTopicInfo(
+            @Path("id") String id
+    );
 
+    // 漫画筛选
+    // https://nnv3api.muwai.com/classifyWithLevel/0/0/0.json
+    @GET("classifyWithLevel/{filter}/{sort}/{page}.json")
+    Observable<List<ComicClassifyBean>> getComicClassify(
+            @Path("filter") String filter,
+            @Path("sort") String sort,
+            @Path("page") int page
+    );
+
+
+    // 漫画相关内容
+    // https://nnv3api.muwai.com/v3/comic/related/{id}.json
     @GET("v3/comic/related/{id}.json")
     Observable<ComicRelatedBean> getComicRelated(
             @Path("id") String id
@@ -174,13 +187,7 @@ public interface RetrofitService {
             @Path("id") String id
     );
 
-    // nnv3api.muwai.com//classifyWithLevel/0/0/0.json
-    @GET("classifyWithLevel/{filter}/{sort}/{page}.json")
-    Observable<List<ComicClassifyBean>> getComicClassify(
-            @Path("filter") String filter,
-            @Path("sort") String sort,
-            @Path("page") int page
-    );
+
 
 
     // nnv3api.muwai.com/classify/filter.json
@@ -234,11 +241,7 @@ public interface RetrofitService {
             @Path("page") int page
     );
 
-    // nnv3api.muwai.com/subject_with_level/458.json
-    @GET("subject_with_level/{id}.json")
-    Observable<ComicTopicInfoBean> getTopicInfo(
-            @Path("id") String id
-    );
+
 
     // m.dmzj.com/chapinfo/45854/113148.html
     @GET("chapter/{comicId}/{chapterId}.json")

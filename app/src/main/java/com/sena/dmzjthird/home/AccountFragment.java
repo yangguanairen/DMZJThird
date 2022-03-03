@@ -25,6 +25,7 @@ import com.sena.dmzjthird.account.view.UserSubscribedActivity;
 import com.sena.dmzjthird.databinding.FragmentAccountBinding;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
+import com.sena.dmzjthird.utils.XPopUpUtil;
 
 /**
  * account偶数次点击白屏
@@ -62,8 +63,8 @@ public class AccountFragment extends Fragment {
 
         binding.accountFavorite.setOnClickListener(v -> {
             long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-            if (uid != 0L) {
-                Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
+            if (uid == 0L) {
+                XPopUpUtil.showCustomErrorToast(getContext(), getString(R.string.not_login));
             } else {
                 startActivity(new Intent(getContext(), UserSubscribedActivity.class));
             }
@@ -71,8 +72,8 @@ public class AccountFragment extends Fragment {
 
         binding.accountMessage.setOnClickListener(v -> {
             long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-            if (uid != 0L) {
-                Toast.makeText(getActivity(), getString(R.string.not_login), Toast.LENGTH_SHORT).show();
+            if (uid == 0L) {
+                XPopUpUtil.showCustomErrorToast(getContext(), getString(R.string.not_login));
             } else {
                 startActivity(new Intent(getContext(), UserCommentActivity.class));
             }

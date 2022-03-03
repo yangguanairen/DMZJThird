@@ -8,24 +8,36 @@ package com.sena.dmzjthird.account.bean;
  */
 public class UserSubscribedBean {
 
-    private String obj_id;
-    private String name;
+    private long id;
+    private long uid;
+    private String comicId;
     private String cover;
+    private String comicName;
+    private String author;
+    private long cTime;
 
-    public String getObj_id() {
-        return obj_id;
+    public long getId() {
+        return id;
     }
 
-    public void setObj_id(String obj_id) {
-        this.obj_id = obj_id;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public long getUid() {
+        return uid;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public String getComicId() {
+        return comicId;
+    }
+
+    public void setComicId(String comicId) {
+        this.comicId = comicId;
     }
 
     public String getCover() {
@@ -34,5 +46,29 @@ public class UserSubscribedBean {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public String getComicName() {
+        return comicName;
+    }
+
+    public void setComicName(String comicName) {
+        this.comicName = comicName;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public long getcTime() {
+        return cTime;
+    }
+
+    public void setcTime(long cTime) {
+        this.cTime = cTime;
     }
 }

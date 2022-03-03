@@ -114,7 +114,7 @@ public class ComicRelatedFragment extends Fragment {
                         LogUtil.e("comicId" + comicId);
                         List<ComicRelatedBean.Author_Comics> data = new ArrayList<>(bean.getAuthor_comics());
                         data.add(new ComicRelatedBean.Author_Comics("同类题材", null, bean.getTheme_comics()));
-                        adapter.setList(data);
+                        adapter.setList(data.subList(0, data.size() - 1));
                     }
 
                     @Override

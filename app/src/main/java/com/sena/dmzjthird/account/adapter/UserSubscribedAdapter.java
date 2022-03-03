@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.bean.UserSubscribedBean;
 import com.sena.dmzjthird.utils.GlideUtil;
+import com.sena.dmzjthird.utils.TimeUtil;
 
 /**
  * Created by Android Studio.
@@ -22,7 +23,7 @@ public class UserSubscribedAdapter extends BaseQuickAdapter<UserSubscribedBean, 
     private final Context mContext;
 
     public UserSubscribedAdapter(Context context) {
-        super(R.layout.item_comic_classify);
+        super(R.layout.item_object_filter);
         this.mContext = context;
     }
 
@@ -31,9 +32,9 @@ public class UserSubscribedAdapter extends BaseQuickAdapter<UserSubscribedBean, 
 
         GlideUtil.loadImageWithCookie(mContext, bean.getCover(), holder.getView(R.id.cover));
 
-        holder.setText(R.id.title, bean.getName());
-        holder.setVisible(R.id.author, false);
-        holder.setVisible(R.id.status, false);
+        holder.setText(R.id.title, bean.getComicName());
+        holder.setText(R.id.author, bean.getAuthor());
+        holder.setText(R.id.status, "订阅于" + TimeUtil.millConvertToDate(bean.getcTime()));
 
 
     }

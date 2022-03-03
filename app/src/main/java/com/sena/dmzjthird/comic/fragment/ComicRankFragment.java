@@ -171,7 +171,6 @@ public class ComicRankFragment extends Fragment {
                     }
 
                     page = 0;
-                    initAdapter();
                     getResponse();
                 })
                 .show();

@@ -1,5 +1,7 @@
 package com.sena.dmzjthird.comic.adapter;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 import android.content.Context;
 import android.widget.ImageView;
 
@@ -27,16 +29,17 @@ public class ComicTopicAdapter extends BaseQuickAdapter<ComicTopicBean.Data, Bas
     private final Context mContext;
 
     public ComicTopicAdapter(Context context) {
-        super(R.layout.item_comic_topic);
+        super(R.layout.item_object_topic);
         this.mContext = context;
     }
 
     @Override
     protected void convert(@NotNull BaseViewHolder holder, ComicTopicBean.Data data) {
 
-
         Glide.with(mContext)
                 .load(GlideUtil.addCookie(data.getSmall_cover()))
+                .transition(withCrossFade(500))
+                .skipMemoryCache(false)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(5)))
                 .into((ImageView) holder.getView(R.id.cover));
 

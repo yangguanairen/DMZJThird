@@ -18,6 +18,8 @@ import android.text.TextUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
@@ -68,6 +70,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
         binding = ActivityUpdateProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        ImmersionBar.with(this)
+                .statusBarColor(R.color.theme_blue)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .titleBarMarginTop(binding.toolbar)
+                .init();
 
         service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
 

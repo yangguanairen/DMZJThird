@@ -21,16 +21,16 @@ public class ComicRelatedChildAdapter extends BaseQuickAdapter<ComicRelatedBean.
     private final Context mContext;
 
     public ComicRelatedChildAdapter(Context context) {
-        super(R.layout.item_comic_recommend_child);
-        this.mContext = context;
+        super(R.layout.item_object_recommend_child);
+        mContext = context;
     }
 
     @Override
     protected void convert(@NonNull BaseViewHolder holder, ComicRelatedBean.Data data) {
 
-        GlideUtil.loadImageWithCookie(mContext, data.getCover(), holder.getView(R.id.comic_cover));
+        GlideUtil.loadImageWithCookie(mContext, data.getCover(), holder.getView(R.id.cover));
 
-        holder.setText(R.id.comic_title, data.getName());
-        holder.setText(R.id.comic_author, data.getStatus());
+        holder.setText(R.id.title, data.getName());
+        holder.setText(R.id.subTitle, data.getStatus());
     }
 }

@@ -8,11 +8,11 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import android.os.Bundle;
 
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.fragment.UserSubscribedFragment;
 import com.sena.dmzjthird.databinding.ActivityUserSubscribedBinding;
-import com.sena.dmzjthird.utils.MyDataStore;
-import com.sena.dmzjthird.utils.PreferenceHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,12 +27,21 @@ public class UserSubscribedActivity extends AppCompatActivity {
         binding = ActivityUserSubscribedBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        initView();
+    }
+
+    private void initView() {
+
+        ImmersionBar.with(this)
+                .statusBarColor(R.color.theme_blue)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .titleBarMarginTop(binding.toolbar)
+                .init();
+
         binding.toolbar.setBackListener(v -> finish());
 
-        String uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
-
-        List<Fragment> fragments = Arrays.asList(UserSubscribedFragment.newInstance(0, uid),
-                UserSubscribedFragment.newInstance(1, uid));
+        List<Fragment> fragments = Arrays.asList(UserSubscribedFragment.newInstance(0),
+                UserSubscribedFragment.newInstance(1));
         List<String> tabTitles = Arrays.asList(getString(R.string.icon_comic_title), getString(R.string.icon_novel_title));
 
         binding.viewPager.setOffscreenPageLimit(1);
@@ -56,5 +65,6 @@ public class UserSubscribedActivity extends AppCompatActivity {
         });
 
         binding.tableLayout.setupWithViewPager(binding.viewPager);
+
     }
 }

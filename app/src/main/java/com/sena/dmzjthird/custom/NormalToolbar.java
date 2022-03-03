@@ -114,8 +114,8 @@ public class NormalToolbar extends Toolbar {
         otherIV.setVisibility(status);
     }
 
-    public void setFavoriteBackgrounds(int resourcesId) {
-        favoriteIV.setBackgroundResource(resourcesId);
+    public void setFavoriteResource(int resourcesId) {
+        favoriteIV.setImageResource(resourcesId);
     }
 
     public void setFavoriteContentDescription(String value) {
@@ -125,5 +125,9 @@ public class NormalToolbar extends Toolbar {
 
     public String getFavoriteContentDescription() {
         return favoriteIV.getContentDescription().toString();
+    }
+
+    public ImageView getFavoriteIV() {
+        return favoriteIV;
     }
 }
