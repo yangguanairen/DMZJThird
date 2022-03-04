@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import android.os.Bundle;
 
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.account.MyRetrofitService;
+import com.sena.dmzjthird.account.fragment.DmzjSubscribedFragment;
 import com.sena.dmzjthird.account.fragment.UserCommentFragment;
 import com.sena.dmzjthird.account.fragment.UserSubscribedFragment;
 import com.sena.dmzjthird.databinding.ActivityUserInfoBinding;
@@ -31,11 +33,12 @@ public class UserInfoActivity extends AppCompatActivity {
 
         binding.toolbar.setBackListener(v -> finish());
 
+        uid = MyRetrofitService.DMZJ_UID;
 
         List<String> tabTitles = Arrays.asList(getString(R.string.comic_subscribed), getString(R.string.comic_comment),
                 getString(R.string.novel_subscribed), getString(R.string.novel_comment));
-        List<Fragment> fragments = Arrays.asList(UserSubscribedFragment.newInstance(0), UserCommentFragment.newInstance(0, uid),
-                UserSubscribedFragment.newInstance(1), UserCommentFragment.newInstance(1, uid));
+        List<Fragment> fragments = Arrays.asList(DmzjSubscribedFragment.newInstance(uid, 0), UserCommentFragment.newInstance(0, uid),
+                DmzjSubscribedFragment.newInstance(uid, 1), UserCommentFragment.newInstance(1, uid));
 
         binding.viewPager.setOffscreenPageLimit(3);
         binding.viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

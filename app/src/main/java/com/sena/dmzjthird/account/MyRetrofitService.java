@@ -1,6 +1,7 @@
 package com.sena.dmzjthird.account;
 
 import com.sena.dmzjthird.account.bean.ResultBean;
+import com.sena.dmzjthird.account.bean.UserHistoryBean;
 import com.sena.dmzjthird.account.bean.UserResultBean;
 import com.sena.dmzjthird.account.bean.UserSubscribedBean;
 
@@ -84,6 +85,21 @@ public interface MyRetrofitService {
     @GET("subscribe/all")
     Observable<List<UserSubscribedBean>> getAllSubscribe(
             @Query("uid") long uid
+    );
+
+    @GET("history/all")
+    Observable<List<UserHistoryBean>> getAllHistory(
+            @Query("uid") long uid
+    );
+
+    @GET("history/add")
+    Observable<ResultBean> addHistory(
+            @Query("uid") long uid,
+            @Query("comicId") String comicId,
+            @Query("cover") String cover,
+            @Query("comicName") String comicName,
+            @Query("chapterId") String chapterId,
+            @Query("chapterName") String chapterName
     );
 
 }

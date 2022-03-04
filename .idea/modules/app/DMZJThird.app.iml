@@ -46,6 +46,8 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../app/build/generated/res/resValues/androidTest/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/generated/debug/javalite" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/main/protobuf/ComicDetailInfo.proto" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../app/src/main/protobuf/ComicRankListResponse.proto" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../app/src/main/protobuf/ComicUpdateListResponse.proto" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/main/protobuf/NewsListResponse.proto" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/main/protobuf/NovelChapterResponse.proto" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/main/protobuf/NovelDetailResponse.proto" type="java-resource" />

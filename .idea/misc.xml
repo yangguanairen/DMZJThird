@@ -84,6 +84,8 @@
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_register.xml" value="0.33967391304347827" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_setting.xml" value="0.2989583333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_update_profile.xml" value="0.26927083333333335" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_user_history.xml" value="0.3342391304347826" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_user_subscribed.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/custom_bottom_view.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/custom_comment_text_cotent.xml" value="0.3020833333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/custom_date_picker_dialog.xml" value="0.3342391304347826" />
@@ -103,6 +105,7 @@
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_novel_chapter.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_novel_recommend.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_topic.xml" value="0.2989583333333333" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_user_history.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/fragment_user_subscribed.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_comic_filter.xml" value="0.2989583333333333" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/item_comic_recommend.xml" value="0.3342391304347826" />

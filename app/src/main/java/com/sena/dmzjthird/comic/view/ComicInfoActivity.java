@@ -92,6 +92,12 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        ViewHelper.setSubscribeStatus(this, binding.toolbar.getFavoriteIV(), comicId);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         LogUtil.e("onDestroy");

@@ -1,6 +1,7 @@
 package com.sena.dmzjthird.comic.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
@@ -14,20 +15,24 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.view.DragEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.example.application.ComicDetailRes;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.account.MyRetrofitService;
+import com.sena.dmzjthird.account.bean.ResultBean;
 import com.sena.dmzjthird.comic.adapter.ComicViewAdapter;
 import com.sena.dmzjthird.comic.adapter.ComicViewCatalogAdapter;
 import com.sena.dmzjthird.comic.adapter.MyPageAdapter;
+import com.sena.dmzjthird.comic.vm.ComicViewViewModel;
 import com.sena.dmzjthird.custom.popup.CustomBottomPopup;
 import com.sena.dmzjthird.databinding.ActivityComicViewBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
@@ -43,6 +48,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ComicViewActivity extends AppCompatActivity implements CustomBottomPopup.Callbacks, MyPageAdapter.Callbacks {
@@ -50,8 +58,10 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
     private ActivityComicViewBinding binding;
     private RetrofitService service;
     private String comicId;
-    private String chapterId;
+    private String comicName;
+    private String comicCover;
 
+    private ComicViewViewModel vm;
 
     private final List<String> images = new ArrayList<>();  // 漫画图片url集合
 
@@ -61,7 +71,10 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
 
     private BasePopupView popup;
 
-    private List<String> chapterIds;
+    private final List<String> chapterIdList = new ArrayList<>();
+    private final List<String> chapterNameList = new ArrayList<>();
+
+    private boolean isUserOperate = false;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -71,23 +84,29 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
         binding = ActivityComicViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        vm = new ViewModelProvider(this).get(ComicViewViewModel.class);
+
         getWindow().setStatusBarColor(Color.BLACK);
 
         service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
         comicId = IntentUtil.getObjectId(this);
-        chapterId = IntentUtil.getChapterId(this);
+        comicCover = IntentUtil.getObjectCover(this);
+        comicName = IntentUtil.getObjectName(this);
+        String chapterId = IntentUtil.getChapterId(this);
+        String chapterName = IntentUtil.getChapterName(this);
 
-        initView();
+        initView(chapterName);
 
         initClick();
 
+        initViewModel();
         initBroadcast();
 
-        getResponse();
+        vm.currentChapterId.postValue(chapterId);
 
     }
 
-    private void initView() {
+    private void initView(String chapterName) {
 
         systemMaxBrightness = getResources().getInteger(
                 getResources().getIdentifier("config_screenBrightnessSettingMaximum", "integer", "android")
@@ -98,7 +117,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
         ViewHelper.setSubscribeStatus(this, binding.subscribe, comicId);
 
         // 侧边栏
-        initCatalog();
+        initCatalog(chapterName);
 
     }
 
@@ -107,38 +126,115 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
      * 展示章节列表
      * 目前先做一个分类的
      */
-    private void initCatalog() {
+    private void initCatalog(String chapterName) {
 
         ComicApi.getComicChapter(comicId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(data -> {
-                    if (data == null) return ;
-                    List<String> chapterNames = new ArrayList<>();
-                    chapterIds = new ArrayList<>();
-                    for (int i = 0; i < data.getDataCount(); i++) {
-                        chapterIds.add(data.getData(i).getChapterId() + "");
-                        chapterNames.add(data.getData(i).getChapterTitle());
+                .subscribe(new Observer<ComicDetailRes.ComicDetailChapterResponse>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
                     }
-                    binding.catalogCount.setText(getString(R.string.catalog, data.getDataCount()));
-                    binding.catalogRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-                    ComicViewCatalogAdapter adapter = new ComicViewCatalogAdapter(this);
-                    binding.catalogRecyclerview.setAdapter(adapter);
-                    adapter.setCurrentChapterName(chapterId);
-                    adapter.setList(chapterNames);
-                    adapter.setOnItemClickListener((adapter1, view, position) -> {
-                        String selectedId = chapterIds.get(position);
-                        if (chapterId.equals(selectedId)) {
-                            return;
+
+                    @Override
+                    public void onNext(ComicDetailRes.@NonNull ComicDetailChapterResponse data) {
+                        for (ComicDetailRes.ComicDetailChapterInfoResponse d: data.getDataList()) {
+                            chapterIdList.add(d.getChapterId() + "");
+                            chapterNameList.add(d.getChapterTitle());
                         }
-                        chapterId = selectedId;
-                        getResponse();
-                        binding.drawerLayout.closeDrawer(binding.catalog);
-                        adapter.setCurrentChapterName(chapterId);
-                        adapter.setList(adapter.getData());
-                    });
+
+                        binding.catalogCount.setText(getString(R.string.catalog, data.getDataCount()));
+                        binding.catalogRecyclerview.setLayoutManager(new LinearLayoutManager(ComicViewActivity.this));
+                        ComicViewCatalogAdapter adapter = new ComicViewCatalogAdapter(ComicViewActivity.this);
+                        binding.catalogRecyclerview.setAdapter(adapter);
+
+                        adapter.setOnItemClickListener((a, view, position) -> {
+                            String selectChapterId = chapterIdList.get(position);
+                            if (!selectChapterId.equals(vm.currentChapterId.getValue())) {
+                                vm.currentChapterId.postValue(selectChapterId);
+                                vm.currentChapterName.postValue(chapterIdList.get(position));
+                            }
+                            adapter.setCurrentChapterName(chapterNameList.get(position));
+                            adapter.setList(chapterNameList);
+                            binding.drawerLayout.closeDrawer(binding.catalog);
+                        });
+
+                        adapter.setCurrentChapterName(chapterName);
+                        adapter.setList(chapterNameList);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                 });
 
+
+    }
+
+    private void initViewModel() {
+
+        vm.currentPage.observe(this, integer -> {
+            if (isUserOperate) {
+                binding.viewPager.setCurrentItem(integer); // 是否包括首位空白页
+            }
+
+            if (mIsVerticalMode) {
+
+            } else {
+                binding.pageNum.setText(integer + "/" + binding.seekBar.getMax());
+            }
+        });
+
+        vm.totalPage.observe(this, integer -> {
+            binding.seekBar.setMax(integer);
+        });
+
+        vm.currentChapterId.observe(this, s -> {
+            ViewHelper.addHistory(ComicViewActivity.this, comicId, comicCover, comicName, s, vm.currentChapterName.getValue());
+            getResponse(s);
+        });
+
+    }
+
+    private void updateChapterId(boolean isPreClick) {
+
+        int index = -1;
+        String currentChapterId = vm.currentChapterId.getValue();
+        for (int i = 0; i < chapterIdList.size(); i++) {
+            if (currentChapterId.equals(chapterIdList.get(i))) {
+                index = i;
+                break;
+            }
+        }
+
+        String cId; // 即将浏览的章节
+        String cName;
+        if (isPreClick) {
+            if (index == -1 || index == chapterIdList.size() - 1) {
+                Toast.makeText(this, "已经没有上一章了", Toast.LENGTH_SHORT).show();
+                return ;
+            } else {
+                cId = chapterIdList.get(index + 1);
+                cName = chapterNameList.get(index + 1);
+            }
+        } else {
+            if (index == -1 || index == 0) {
+                Toast.makeText(this, "已经没有下一章了", Toast.LENGTH_SHORT).show();
+                return ;
+            } else {
+                cId = chapterIdList.get(index - 1);
+                cName = chapterNameList.get(index - 1);
+            }
+        }
+        vm.currentChapterId.postValue(cId);
+        vm.currentChapterName.postValue(cName);
 
     }
 
@@ -154,9 +250,9 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
-                    binding.preChapter.callOnClick();
+                    updateChapterId(true);
                 } else if (position == images.size() - 1) {
-                    binding.nextChapter.callOnClick();
+                    updateChapterId(false);
                 } else {
                     binding.seekBar.setProgress(position);
                 }
@@ -166,64 +262,33 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
 
             }
         });
-        binding.chapterList.setOnClickListener(v -> binding.drawerLayout.openDrawer(binding.catalog));
+
         binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @SuppressLint("SetTextI18n")
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                if (mIsVerticalMode) {
-//                    if (seekBar.isPressed()) {
-//                        binding.recyclerview.scrollToPosition(progress);
-//                        binding.pageNum.setText((progress + 1) + "/" + images.size());
-//                    }
-                } else {
-//                    binding.viewPager.setCurrentItem(progress + 1);
-                    binding.pageNum.setText((progress) + "/" + (images.size() - 2));
-                }
+                vm.currentPage.postValue(progress);
             }
+
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                isUserOperate = true;
+            }
+
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                isUserOperate = false;
+            }
         });
+        binding.chapterList.setOnClickListener(v -> binding.drawerLayout.openDrawer(binding.catalog));
 
         binding.setting.setOnClickListener(v -> popup.show());
 
         binding.subscribe.setOnClickListener(v -> ViewHelper.controlSubscribe(this, binding.subscribe, comicId, "cover", "title", "author"));
 
         // 设置上一话/下一话监听器
-        binding.preChapter.setOnClickListener(v -> {
-
-            int currentIndex = chapterIds.size();
-            for (int i = 0; i < chapterIds.size(); i++) {
-                if (chapterId.equals(chapterIds.get(i))) {
-                    currentIndex = i;
-                    break;
-                }
-            }
-            if (currentIndex >= chapterIds.size() - 1) {
-                Toast.makeText(this, "已经没有哦", Toast.LENGTH_SHORT).show();
-                return ;
-            }
-            chapterId = chapterIds.get(currentIndex + 1);
-            getResponse();
-        });
-        binding.nextChapter.setOnClickListener(v -> {
-            int currentIndex = -1;
-            for (int i = 0; i < chapterIds.size(); i++) {
-                if (chapterId.equals(chapterIds.get(i))) {
-                    currentIndex = i;
-                    break;
-                }
-            }
-            if (currentIndex <= 0) {
-                Toast.makeText(this, "已经没有哦", Toast.LENGTH_SHORT).show();
-                return ;
-            }
-            chapterId = chapterIds.get(currentIndex - 1);
-            getResponse();
-        });
+        binding.preChapter.setOnClickListener(v -> updateChapterId(true));
+        binding.nextChapter.setOnClickListener(v -> updateChapterId(false));
 
 //         下拉前往上一章，只有竖屏阅读模式生效
         binding.refresh.setOnRefreshListener(() -> {
@@ -235,8 +300,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
         });
     }
 
-
-    private void getResponse() {
+    private void getResponse(String chapterId) {
         service.getChapterInfo(comicId, chapterId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

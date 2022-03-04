@@ -31,7 +31,6 @@ public class UserSubscribedFragment extends Fragment {
 
     private static final String ARG_TYPE = "arg_type";
 
-    private boolean isLoaded = false;
     private int type;
 
     private FragmentUserSubscribedBinding binding;
@@ -72,12 +71,6 @@ public class UserSubscribedFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (isLoaded) return ;
-        isLoaded = true;
-        lazyLoad();
-    }
-
-    private void lazyLoad() {
         binding.refreshLayout.setRefreshing(true);
         getResponse();
     }
@@ -136,6 +129,5 @@ public class UserSubscribedFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        isLoaded = false;
     }
 }

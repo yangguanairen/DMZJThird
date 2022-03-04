@@ -1,5 +1,6 @@
 package com.sena.dmzjthird;
 
+import com.sena.dmzjthird.account.bean.DmzjUserSubscribedBean;
 import com.sena.dmzjthird.account.bean.LoginBean;
 import com.sena.dmzjthird.account.bean.UserComicCommentBean;
 import com.sena.dmzjthird.account.bean.UserNovelCommentBean;
@@ -269,8 +270,24 @@ public interface RetrofitService {
             @Path("query") String query,
             @Path("page") int page
     );
+/**************************************** 漫画 ****************************************/
 
 
+/**************************************** 用户 ****************************************/
+
+    // 动漫之家用户已订阅漫画
+    // https://nnv3api.muwai.com/UCenter/subscribe?uid=109697332&sub_type=1&page=0&type=0
+    @GET("UCenter/subscribe")
+    Observable<List<DmzjUserSubscribedBean>> getDmzjUserSubscribed(
+            @Query("uid") String uid,        // 动漫之家用户uid
+            @Query("type") int type,         // 0=漫画； 1=轻小说
+            @Query("sub_type") int subType,  // 1=全部； 2=未读； 3=已读； 4=完结
+            @Query("page") int page          // 页数
+    );
+
+
+
+/**************************************** 用户 ****************************************/
 
 
 

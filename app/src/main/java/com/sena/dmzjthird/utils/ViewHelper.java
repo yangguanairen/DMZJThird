@@ -1,14 +1,24 @@
 package com.sena.dmzjthird.utils;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.example.application.ComicDetailRes;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.account.bean.ResultBean;
+import com.sena.dmzjthird.comic.adapter.ComicViewCatalogAdapter;
+import com.sena.dmzjthird.databinding.ActivityComicViewBinding;
+import com.sena.dmzjthird.utils.api.ComicApi;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -144,6 +154,36 @@ public class ViewHelper {
                     } else {
                         imageView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_subscribe, 0, 0);
                         Toast.makeText(context, "取消订阅成功", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public static void addHistory(Context context, String comicId, String cover, String title, String chapterId, String chapterName) {
+
+        long uid = MyDataStore.getInstance(context).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+        if (uid == 0L) return ;
+        MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
+        service.addHistory(uid, comicId, cover, title, chapterId, chapterName)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<ResultBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ResultBean resultBean) {
+                        LogUtil.e("更新历史记录成功!!");
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        LogUtil.e("更新历史记录失败!!");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
     }

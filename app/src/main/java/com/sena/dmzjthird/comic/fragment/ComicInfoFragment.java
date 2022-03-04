@@ -80,9 +80,7 @@ public class ComicInfoFragment extends Fragment {
 
         binding = FragmentComicInfoBinding.inflate(inflater, container, false);
 
-        binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new ComicInfoAdapter(getActivity(), comicId);
-        binding.recyclerview.setAdapter(adapter);
+
 
         binding.cover.setOnClickListener(v -> IntentUtil.goToLargeImageActivity(getActivity(), coverUrl));
 
@@ -99,6 +97,10 @@ public class ComicInfoFragment extends Fragment {
                 mCallbacks.loadingDataFinish(null, null, null);
                 return;
             }
+
+            binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+            adapter = new ComicInfoAdapter(getContext(), data.getId() + "", data.getCover(), data.getTitle());
+            binding.recyclerview.setAdapter(adapter);
 
             coverUrl = data.getCover() == null ? "" : data.getCover();
             GlideUtil.loadImageWithCookie(getActivity(), coverUrl, binding.cover);
