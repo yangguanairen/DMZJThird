@@ -13,6 +13,7 @@ import com.sena.dmzjthird.comic.view.CommentReplyActivity;
 import com.sena.dmzjthird.comic.view.UserInfoActivity;
 import com.sena.dmzjthird.custom.LargeImageActivity;
 import com.sena.dmzjthird.custom.WebViewActivity;
+import com.sena.dmzjthird.novel.view.NovelInfoActivity;
 
 /**
  * Created by Android Studio.
@@ -95,6 +96,13 @@ public class IntentUtil {
         intent.putExtra(USERNAME, toReplyUsername);
         intent.putExtra(CONTENT, toReplyContent);
         intent.putExtra(CLASSIFY_ID, classify);
+        context.startActivity(intent);
+    }
+
+
+    public static void goToNovelInfoActivity(Context context, String novelId) {
+        Intent intent = new Intent(context, NovelInfoActivity.class);
+        intent.putExtra(OBJECT_ID, novelId);
         context.startActivity(intent);
     }
 

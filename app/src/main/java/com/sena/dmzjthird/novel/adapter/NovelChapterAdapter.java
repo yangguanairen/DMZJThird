@@ -3,6 +3,7 @@ package com.sena.dmzjthird.novel.adapter;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.example.application.NovelChapterRes;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.databinding.ItemObjectExpandChildBinding;
 import com.sena.dmzjthird.databinding.ItemObjectExpandGroupBinding;
+import com.sena.dmzjthird.novel.view.NovelViewActivity;
 
 import java.util.List;
 
@@ -64,7 +66,10 @@ public class NovelChapterAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
             int volumeId = mDataList.get(groupPosition).getVolumeId();
             int chapterId = mDataList.get(groupPosition).getChapters(childPosition).getChapterId();
             // 跳转轻小说观看
-
+            Intent intent = new Intent(mContext, NovelViewActivity.class);
+            intent.putExtra("volumeId", volumeId);
+            intent.putExtra("chapterId", chapterId);
+            mContext.startActivity(intent);
         });
     }
 

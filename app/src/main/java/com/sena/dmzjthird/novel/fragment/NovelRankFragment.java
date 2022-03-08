@@ -17,6 +17,7 @@ import com.sena.dmzjthird.databinding.FragmentNovelRankBinding;
 import com.sena.dmzjthird.novel.adapter.NovelRankAdapter;
 import com.sena.dmzjthird.novel.bean.NovelRankBean;
 import com.sena.dmzjthird.novel.bean.NovelRankTagBean;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import java.util.ArrayList;
@@ -169,7 +170,7 @@ public class NovelRankFragment extends Fragment {
             NovelRankBean bean = (NovelRankBean) a.getData().get(position);
             String novelId = bean.getId();
             // 跳转小说详情页
-
+            IntentUtil.goToNovelInfoActivity(getContext(), novelId);
         });
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);
         adapter.getLoadMoreModule().setAutoLoadMore(true);

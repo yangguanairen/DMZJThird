@@ -13,6 +13,7 @@ import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.databinding.FragmentNovelLatestBinding;
 import com.sena.dmzjthird.novel.adapter.NovelLatestAdapter;
 import com.sena.dmzjthird.novel.bean.NovelLatestBean;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class NovelLatestFragment extends Fragment {
             NovelLatestBean bean = (NovelLatestBean) a.getData().get(position);
             String novelId = bean.getId();
             // 跳转小说详情页
-
+            IntentUtil.goToNovelInfoActivity(getContext(), novelId);
         });
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);
         adapter.getLoadMoreModule().setAutoLoadMore(true);

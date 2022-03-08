@@ -11,6 +11,7 @@ import android.os.Bundle;
 import com.sena.dmzjthird.databinding.ActivityNovelInfoBinding;
 import com.sena.dmzjthird.novel.fragment.NovelChapterFragment;
 import com.sena.dmzjthird.novel.fragment.NovelInfoFragment;
+import com.sena.dmzjthird.utils.IntentUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,7 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
         binding = ActivityNovelInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String novelId = getIntent().getStringExtra("novelId");
+        String novelId = IntentUtil.getObjectId(this);
 
         fragmentList = Arrays.asList(NovelInfoFragment.newInstance(novelId), NovelChapterFragment.newInstance(novelId));
         titleList = Arrays.asList("详情", "章节");

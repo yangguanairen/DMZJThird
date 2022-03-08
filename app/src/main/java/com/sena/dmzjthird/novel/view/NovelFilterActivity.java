@@ -16,6 +16,7 @@ import com.sena.dmzjthird.novel.adapter.NovelFilterAdapter;
 import com.sena.dmzjthird.novel.adapter.NovelFilterTagAdapter;
 import com.sena.dmzjthird.novel.bean.NovelFilterBean;
 import com.sena.dmzjthird.novel.bean.NovelFilterTagBean;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
@@ -71,7 +72,7 @@ public class NovelFilterActivity extends AppCompatActivity implements NovelFilte
             NovelFilterBean bean = (NovelFilterBean) a.getData().get(position);
             String novelId = bean.getId();
             // 跳转轻小说详情页
-
+            IntentUtil.goToNovelInfoActivity(this, novelId);
         });
 
         filterAdapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);

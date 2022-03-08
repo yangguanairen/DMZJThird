@@ -13,6 +13,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.novel.bean.NovelRecommendBean;
 import com.sena.dmzjthird.novel.view.NovelInfoActivity;
+import com.sena.dmzjthird.utils.IntentUtil;
 
 /**
  * Created by Android Studio.
@@ -41,9 +42,11 @@ public class NovelRecommendAdapter extends BaseQuickAdapter<NovelRecommendBean, 
             NovelRecommendBean.NovelRecommendData data = (NovelRecommendBean.NovelRecommendData) a.getData().get(position);
             String objId = data.getObj_id();
             // 跳转轻小说详情页
-            Intent intent = new Intent(mContext, NovelInfoActivity.class);
-            intent.putExtra("novelId", objId);
-            mContext.startActivity(intent);
+//            Intent intent = new Intent(mContext, NovelInfoActivity.class);
+//            intent.putExtra("novelId", objId);
+//            mContext.startActivity(intent);
+
+            IntentUtil.goToNovelInfoActivity(mContext, objId);
 
         });
         adapter.setList(bean.getData());
