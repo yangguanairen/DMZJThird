@@ -68,7 +68,7 @@ public class NovelFilterActivity extends AppCompatActivity implements NovelFilte
         filterAdapter = new NovelFilterAdapter(this);
         binding.recyclerView.setAdapter(filterAdapter);
 
-        filterAdapter.setOnItemChildClickListener((a, view, position) -> {
+        filterAdapter.setOnItemClickListener((a, view, position) -> {
             NovelFilterBean bean = (NovelFilterBean) a.getData().get(position);
             String novelId = bean.getId();
             // 跳转轻小说详情页
@@ -91,8 +91,6 @@ public class NovelFilterActivity extends AppCompatActivity implements NovelFilte
     }
 
     private void initDrawerLayout() {
-
-
 
         service.getNovelFilterTag()
                 .subscribeOn(Schedulers.io())

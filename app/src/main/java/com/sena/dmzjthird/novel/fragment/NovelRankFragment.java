@@ -131,7 +131,8 @@ public class NovelRankFragment extends Fragment {
                         selectedTagIndex = position;
                         binding.tag.setText(text);
 
-                        initAdapter();
+//                        initAdapter();
+                        page = 0;
                         getResponse();
 
                     })
@@ -152,7 +153,8 @@ public class NovelRankFragment extends Fragment {
                         selectSortIndex = position;
                         binding.sort.setText(text);
 
-                        initAdapter();
+//                        initAdapter();
+                        page = 0;
                         getResponse();
                     })
                     .show();
@@ -166,7 +168,7 @@ public class NovelRankFragment extends Fragment {
         adapter = new NovelRankAdapter(getContext());
         binding.recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemChildClickListener((a, view, position) -> {
+        adapter.setOnItemClickListener((a, view, position) -> {
             NovelRankBean bean = (NovelRankBean) a.getData().get(position);
             String novelId = bean.getId();
             // 跳转小说详情页
@@ -181,7 +183,7 @@ public class NovelRankFragment extends Fragment {
 
         int tag = tagIdList == null ? 0 : tagIdList.get(selectedTagIndex);
 
-        service.getNovelRank(tag, selectedTagIndex, page)
+        service.getNovelRank(selectSortIndex, tag, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<NovelRankBean>>() {
@@ -193,7 +195,7 @@ public class NovelRankFragment extends Fragment {
                     @Override
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<NovelRankBean> beanList) {
                         binding.refreshLayout.setRefreshing(false);
-                        if (beanList.size() == 0) {
+                        if (page == 0 && beanList.size() == 0) {
                             // 出错处理
                             return ;
                         }
@@ -206,8 +208,9 @@ public class NovelRankFragment extends Fragment {
 
                         if (beanList.size() == 0) {
                             adapter.getLoadMoreModule().loadMoreEnd();
+                        } else {
+                            adapter.getLoadMoreModule().loadMoreComplete();
                         }
-                        adapter.getLoadMoreModule().loadMoreComplete();
                         page++;
                     }
 

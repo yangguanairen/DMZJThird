@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.sena.dmzjthird.utils.LogUtil;
@@ -19,10 +21,12 @@ public class ReaderPageAdapter extends PagerAdapter {
 
     private final Context mContext;
     private final ReaderData readerData;
+    private final ReaderVM vm;
 
     public ReaderPageAdapter(Context context, String content, float viewWidth, float viewHeight, float textSize, float lineSpace) {
         mContext = context;
         readerData = new ReaderData(content, viewWidth, viewHeight, textSize, lineSpace);
+        vm = new ViewModelProvider((AppCompatActivity) context).get(ReaderVM.class);
     }
 
     @Override
@@ -41,6 +45,14 @@ public class ReaderPageAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         ReaderView readerView = new ReaderView(mContext);
         readerView.setReaderData(readerData.mTextSize, readerData.mLineSpace,  readerData.pageContents.get(position), readerData.xOffset, readerData.yOffset);
+
+        readerView.setOnClickListener(v -> {
+            // headView & bottomView
+            // 控制顶部和底部工具栏的显现与隐藏
+            boolean isShowToolView = vm.isShowToolView.getValue() != null && vm.isShowToolView.getValue();
+            vm.isShowToolView.postValue(!isShowToolView);
+        });
+
         container.addView(readerView);
         return readerView;
     }

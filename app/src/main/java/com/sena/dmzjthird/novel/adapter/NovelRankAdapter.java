@@ -13,6 +13,7 @@ import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.novel.bean.NovelRankBean;
+import com.sena.dmzjthird.utils.GlideUtil;
 import com.sena.dmzjthird.utils.TimeUtil;
 
 import java.util.Arrays;
@@ -35,9 +36,8 @@ public class NovelRankAdapter extends BaseQuickAdapter<NovelRankBean, BaseViewHo
     @Override
     protected void convert(@NonNull BaseViewHolder holder, NovelRankBean bean) {
 
-        Glide.with(mContext).load(bean.getCover())
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
-                .into((ImageView) holder.getView(R.id.cover));
+
+        GlideUtil.loadImage(mContext, bean.getCover(), holder.getView(R.id.cover));
 
         holder.setText(R.id.title, bean.getName());
         holder.setText(R.id.author, bean.getAuthors());

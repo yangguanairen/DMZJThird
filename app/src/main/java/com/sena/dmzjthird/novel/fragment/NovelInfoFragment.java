@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.application.NovelDetailRes;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.databinding.FragmentNovelInfoBinding;
+import com.sena.dmzjthird.utils.GlideUtil;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.TimeUtil;
 import com.sena.dmzjthird.utils.api.NovelApi;
@@ -87,9 +88,7 @@ public class NovelInfoFragment extends Fragment {
                     public void onNext(NovelDetailRes.@io.reactivex.rxjava3.annotations.NonNull NovelDetailInfoResponse data) {
                         mCoverUrl = data.getCover();
 
-                        Glide.with(getContext()).load(data.getCover())
-                                .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
-                                .into(binding.cover);
+                        GlideUtil.loadImage(getContext(), data.getCover(), binding.cover);
 
                         binding.title.setText(data.getName());
                         binding.author.setText(getString(R.string.object_info_author, data.getAuthors()));

@@ -67,7 +67,7 @@ public class NovelLatestFragment extends Fragment {
         adapter = new NovelLatestAdapter(getContext());
         binding.recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemChildClickListener((a, view, position) -> {
+        adapter.setOnItemClickListener((a, view, position) -> {
             NovelLatestBean bean = (NovelLatestBean) a.getData().get(position);
             String novelId = bean.getId();
             // 跳转小说详情页
