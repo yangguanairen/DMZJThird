@@ -93,7 +93,7 @@ public class NovelChapterFragment extends Fragment {
                         }
                         binding.noData.setVisibility(View.INVISIBLE);
                         binding.recyclerView.setVisibility(View.VISIBLE);
-                        NovelChapterAdapter adapter = new NovelChapterAdapter(getContext(), dataList);
+                        NovelChapterAdapter adapter = new NovelChapterAdapter(getContext(), dataList, mNovelId);
                         binding.recyclerView.setAdapter(adapter);
                     }
 

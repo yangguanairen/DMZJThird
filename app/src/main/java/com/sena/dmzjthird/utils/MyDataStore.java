@@ -28,6 +28,7 @@ public class MyDataStore {
     // 文件名
     public static String DATA_STORE_USER = "user";
     public static String DATA_STORE_READ_SETTING = "read_setting";
+    public static String DATA_STORE_NOVEL_READ_SETTING = "novel_read_setting";
 
     // key
     public static String USER_UID = "uid";
@@ -44,9 +45,14 @@ public class MyDataStore {
     public static String SETTING_FULL_SCREEN = "full_screen";
     public static String SETTING_SHOW_STATE = "show_state";
 
+    public static String SETTING_NOVEL_TEXT_SIZE = "novel_text_size";
+    public static String SETTING_NOVEL_SPACE_LIN = "novel_space_line";
+    public static String SETTING_NOVEL_BG = "novel_bg";
+
     static {
         names.add(DATA_STORE_USER);
         names.add(DATA_STORE_READ_SETTING);
+        names.add(DATA_STORE_NOVEL_READ_SETTING);
     }
 
 

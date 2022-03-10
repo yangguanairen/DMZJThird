@@ -8,6 +8,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import android.os.Bundle;
 
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
+import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.databinding.ActivityNovelInfoBinding;
 import com.sena.dmzjthird.novel.fragment.NovelChapterFragment;
 import com.sena.dmzjthird.novel.fragment.NovelInfoFragment;
@@ -28,6 +31,12 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
         super.onCreate(savedInstanceState);
         binding = ActivityNovelInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        ImmersionBar.with(this)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .statusBarColor(R.color.theme_blue)
+                .titleBarMarginTop(binding.toolbar)
+                .init();
 
         String novelId = IntentUtil.getObjectId(this);
 

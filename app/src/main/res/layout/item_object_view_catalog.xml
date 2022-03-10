@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/chapterName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:textColor="@color/white"
+        android:text="@string/default_text"
+        android:gravity="center"
+        android:background="?selectableItemBackground"/>
+
+
+</LinearLayout>

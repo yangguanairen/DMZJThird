@@ -32,13 +32,15 @@ public class NovelChapterAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
 
     private final Context mContext;
     private final List<NovelChapterRes.NovelChapterVolumeResponse> mDataList;
+    private final String mNovelId;
 
     private int mGroupPosition = -1;
     private int mChildPosition = -1;
 
-    public NovelChapterAdapter(Context context, List<NovelChapterRes.NovelChapterVolumeResponse> dataList) {
+    public NovelChapterAdapter(Context context, List<NovelChapterRes.NovelChapterVolumeResponse> dataList, String novelId) {
         mContext = context;
         mDataList = dataList;
+        mNovelId = novelId;
     }
 
     @Override
@@ -65,10 +67,13 @@ public class NovelChapterAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
 
             int volumeId = mDataList.get(groupPosition).getVolumeId();
             int chapterId = mDataList.get(groupPosition).getChapters(childPosition).getChapterId();
+            String chapterName = mDataList.get(groupPosition).getChapters(childPosition).getChapterName();
             // 跳转轻小说观看
             Intent intent = new Intent(mContext, NovelViewActivity.class);
+            intent.putExtra("novelId", mNovelId);
             intent.putExtra("volumeId", volumeId);
             intent.putExtra("chapterId", chapterId);
+            intent.putExtra("chapterName", chapterName);
             mContext.startActivity(intent);
         });
     }

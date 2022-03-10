@@ -70,6 +70,39 @@ public class NovelApi {
     }
 
     /**
+     * 获取轻小说某一卷章节列表
+     */
+    public static Observable<List<NovelChapterRes.NovelChapterItemResponse>> getNovelVolumeChapter(String novelId, int volumeId) {
+
+        return Observable.create(emitter -> {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url("https://nnv4api.muwai.com/novel/chapter/" + novelId).build();
+            Response response = client.newCall(request).execute();
+
+            String bodyStr = response.body().string();
+            byte[] decryptByte = RsaUtil.decrypt(bodyStr);
+
+            List<NovelChapterRes.NovelChapterItemResponse> data = null;
+            try {
+                NovelChapterRes.NovelChapterResponse tmp = NovelChapterRes.NovelChapterResponse.parseFrom(decryptByte);
+                for (NovelChapterRes.NovelChapterVolumeResponse volumeResponse: tmp.getDataList()) {
+                    if (volumeResponse.getVolumeId() == volumeId) {
+                        data = volumeResponse.getChaptersList();
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+            if (data == null) {
+                emitter.onError(new Exception());
+            } else {
+                emitter.onNext(data);
+            }
+        });
+    }
+
+    /**
      * 获取轻小说章节正文
      */
     public static Observable<String> getNovelContent(int volumeId, int chapterId) {

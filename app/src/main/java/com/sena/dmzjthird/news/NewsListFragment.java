@@ -15,7 +15,12 @@ import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.api.NewsApi;
 
+import java.util.List;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -105,11 +110,11 @@ public class NewsListFragment extends Fragment {
         super.onResume();
         if (isLoaded) return ;
         isLoaded = true;
-        binding.refreshLayout.setRefreshing(true);
         lazyLoad();
     }
 
     private void lazyLoad() {
+        binding.refreshLayout.setRefreshing(true);
         getResponse();
     }
 
@@ -117,23 +122,44 @@ public class NewsListFragment extends Fragment {
         NewsApi.getNewsList(mSortId, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(newsList -> {
-                    if (binding.refreshLayout.isRefreshing()) {
-                        binding.refreshLayout.setRefreshing(false);
+                .subscribe(new Observer<List<NewsListRes.NewsListItemResponse>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
                     }
-                    if (newsList == null) {
+
+                    @Override
+                    public void onNext(@NonNull List<NewsListRes.NewsListItemResponse> dataList) {
+                        binding.refreshLayout.setRefreshing(false);
+                        if (page == 1 && dataList.size() == 0) {
+                            // 出错处理
+                            return ;
+                        }
+
+                        if (page == 1) {
+                            adapter.setList(dataList);
+                        } else {
+                            adapter.addData(dataList);
+                        }
+                        if (dataList.size() == 0) {
+                            adapter.getLoadMoreModule().loadMoreEnd();
+                        } else {
+                            adapter.getLoadMoreModule().loadMoreComplete();
+                        }
+                        page++;
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        binding.refreshLayout.setRefreshing(false);
                         // 出错处理
-                        adapter.getLoadMoreModule().loadMoreEnd();
                         return ;
                     }
 
-                    if (page == 1) {
-                        adapter.setList(newsList);
-                    } else {
-                        adapter.addData(newsList);
+                    @Override
+                    public void onComplete() {
+
                     }
-                    adapter.getLoadMoreModule().loadMoreComplete();
-                    page++;
                 });
     }
 
