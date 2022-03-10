@@ -88,7 +88,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
     private void initData() {
         MyDataStore dataStore = MyDataStore.getInstance(this);
         currentTextSize = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_TEXT_SIZE, 50f);
-        currentSpaceLine = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_SPACE_LIN, 70f);
+        currentSpaceLine = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_SPACE_LIN, 25f);
         currentBgColorId = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_BG, R.color.white);
     }
 

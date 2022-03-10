@@ -1,5 +1,9 @@
 package com.sena.dmzjthird.custom.readerBook;
 
+import android.graphics.Paint;
+import android.graphics.Paint.FontMetrics;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +19,7 @@ public class ReaderData {
     public List<String> pageContents;  // 每一页的文本内容
     public float mTextSize;   // 字体大小
     public float mLineSpace;  // 行间距
+    public float mFinalLineSpace;
 
     // 为了文本居中显示
     public float xOffset; // x轴偏移量
@@ -49,10 +54,14 @@ public class ReaderData {
             sb.append("\n");
         }
 
+        Paint paint = new Paint();
+        paint.setTextSize(mTextSize);
+        FontMetrics fontMetrics = paint.getFontMetrics();
+        mFinalLineSpace = fontMetrics.bottom - fontMetrics.top + mLineSpace;
         // 一页的最大行数
-        int maxLine = (int) Math.floor((viewHeight - (BASE_OFFSET * 4)) / mLineSpace);
+        int maxLine = (int) Math.floor((viewHeight - (BASE_OFFSET * 4)) / mFinalLineSpace);
         // y轴偏移量
-        yOffset = (viewHeight - maxLine * mLineSpace) / 2;
+        yOffset = (viewHeight - maxLine * mFinalLineSpace) / 2;
         // 总行数
         String[] lines = sb.toString().split("\n");
         // 总页数

@@ -46,7 +46,7 @@ public class ReaderPageAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         ReaderView readerView = new ReaderView(mContext);
-        readerView.setReaderData(readerData.mTextSize, readerData.mLineSpace,  readerData.pageContents.get(position), readerData.xOffset, readerData.yOffset);
+        readerView.setReaderData(readerData.mTextSize, readerData.mFinalLineSpace,  readerData.pageContents.get(position), readerData.xOffset, readerData.yOffset);
 
         readerView.setOnClickListener(v -> {
             // headView & bottomView

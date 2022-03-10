@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.lxj.xpopup.core.BottomPopupView;
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
 
 /**
@@ -77,7 +78,7 @@ public class NovelBottomPopup extends BottomPopupView {
 
     private void initData() {
         currentTextSize = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_TEXT_SIZE, 50f);
-        currentSpaceLine = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_TEXT_SIZE, 70f);
+        currentSpaceLine = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_TEXT_SIZE, 25f);
         currentBgColorId = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_BG, R.color.white);
     }
 
@@ -101,19 +102,20 @@ public class NovelBottomPopup extends BottomPopupView {
         });
 
         tvIncreaseSpaceLine.setOnClickListener(v -> {
-            if (currentTextSize >= 98) {
+            if (currentSpaceLine >= 40) {
                 Toast.makeText(mContext, "行距无法继续变大!!", Toast.LENGTH_SHORT).show();
                 return ;
             }
-            currentSpaceLine += 7;
+            currentSpaceLine += 3.75;
             callbacks.onSpaceLineChange(currentSpaceLine);
         });
         tvDecreaseSpaceLine.setOnClickListener(v -> {
-            if (currentTextSize <= 42) {
+            if (currentSpaceLine <= 10) {
                 Toast.makeText(mContext, "行距无法继续变小!!", Toast.LENGTH_SHORT).show();
                 return ;
             }
-            currentSpaceLine -= 7;
+            currentSpaceLine -= 3.75;
+            LogUtil.e("行间距: " + currentSpaceLine);
             callbacks.onSpaceLineChange(currentSpaceLine);
         });
 
