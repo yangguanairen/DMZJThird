@@ -4,8 +4,12 @@ import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
 import android.widget.TextView;
 
+import com.sena.dmzjthird.utils.LogUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * FileName: ReaderData
@@ -27,10 +31,22 @@ public class ReaderData {
 
     public int totalPageNum;
 
+    public List<String> imageList;
+
     public ReaderData(String content, float viewWidth, float viewHeight, float textSize, float lineSpace) {
 
         mTextSize = textSize;
         mLineSpace = lineSpace;
+
+        Pattern pattern = Pattern.compile("img.*?src=[' '\"\"](.*?)[' '\"\"].*?>");
+        Matcher matcher = pattern.matcher(content);
+        imageList = new ArrayList<>();
+        while (matcher.find()) {
+            imageList.add(matcher.group(1));
+        }
+        for (String url: imageList) {
+            LogUtil.e("插图: " + url + "\n");
+        }
 
         String fullWidthText = toSBC(content);
 

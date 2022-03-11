@@ -7,14 +7,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.databinding.ActivityNovelInfoBinding;
 import com.sena.dmzjthird.novel.fragment.NovelChapterFragment;
 import com.sena.dmzjthird.novel.fragment.NovelInfoFragment;
 import com.sena.dmzjthird.utils.IntentUtil;
+import com.sena.dmzjthird.utils.ViewHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +28,7 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
 
     private List<Fragment> fragmentList;
     private List<String> titleList;
+    private String novelId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,7 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
                 .titleBarMarginTop(binding.toolbar)
                 .init();
 
-        String novelId = IntentUtil.getObjectId(this);
+        novelId = IntentUtil.getObjectId(this);
 
         fragmentList = Arrays.asList(NovelInfoFragment.newInstance(novelId), NovelChapterFragment.newInstance(novelId));
         titleList = Arrays.asList("详情", "章节");
@@ -80,7 +84,7 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
     }
 
     @Override
-    public void onLoadInfoEnd(String title) {
+    public void onLoadInfoEnd(String title, String cover) {
         binding.toolbar.setBackListener(v -> finish());
 
         if (title == null) {
@@ -89,8 +93,10 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
         }
         binding.toolbar.setTitle(title);
         // 订阅
+        binding.toolbar.setVisibility(View.VISIBLE);
         binding.toolbar.setFavoriteListener(v -> {
-
+            ViewHelper.controlSubscribe(this, novelId, "cover", "title", "author", MyRetrofitService.TYPE_NOVEL,
+                    binding.toolbar.getFavoriteIV(), null);
         });
         // 下载
         binding.toolbar.setOtherListener(v -> {

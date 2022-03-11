@@ -1,5 +1,7 @@
 package com.sena.dmzjthird.custom.readerBook;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.novel.vm.NovelViewVM;
 import com.sena.dmzjthird.utils.LogUtil;
 
@@ -36,8 +43,13 @@ public class ReaderPageAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        LogUtil.e("总页数: " + readerData.totalPageNum);
-        return readerData.totalPageNum;
+        if (readerData.imageList.isEmpty()) {
+            LogUtil.e("文字总页数: " + readerData.totalPageNum);
+            return readerData.totalPageNum;
+        } else {
+            LogUtil.e("图片总页数: " + readerData.totalPageNum);
+            return readerData.imageList.size();
+        }
     }
 
     @Override
@@ -48,20 +60,39 @@ public class ReaderPageAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        ReaderView readerView = new ReaderView(mContext);
-        readerView.setReaderData(readerData.mTextSize, readerData.mFinalLineSpace,  readerData.pageContents.get(position),
-                readerData.xOffset, readerData.yOffset,
-                mIsBlackBg);
+        if (readerData.imageList.isEmpty()) {
+            ReaderView readerView = new ReaderView(mContext);
+            readerView.setReaderData(readerData.mTextSize, readerData.mFinalLineSpace,  readerData.pageContents.get(position),
+                    readerData.xOffset, readerData.yOffset,
+                    mIsBlackBg);
 
-        readerView.setOnClickListener(v -> {
-            // headView & bottomView
-            // 控制顶部和底部工具栏的显现与隐藏
-            boolean isShow = vm.isShowToolView.getValue();
-            vm.isShowToolView.postValue(!isShow);
-        });
+            readerView.setOnClickListener(v -> {
+                // headView & bottomView
+                // 控制顶部和底部工具栏的显现与隐藏
+                boolean isShow = vm.isShowToolView.getValue();
+                vm.isShowToolView.postValue(!isShow);
+            });
 
-        container.addView(readerView);
-        return readerView;
+            container.addView(readerView);
+            return readerView;
+        } else {
+            PhotoView photoView = new PhotoView(mContext);
+            photoView.setOnClickListener(v -> {
+                boolean isShow = vm.isShowToolView.getValue();
+                vm.isShowToolView.postValue(!isShow);
+            });
+
+            Glide.with(mContext)
+                    .load(readerData.imageList.get(position))
+                    .transition(withCrossFade(500))
+                    .skipMemoryCache(false)
+                    .placeholder(R.drawable.selector_default_picture)
+                    .error(R.drawable.selector_default_picture)
+                    .into(photoView);
+            container.addView(photoView);
+            return photoView;
+        }
+
     }
 
     @Override

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.utils.LogUtil;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 public class NormalToolbar extends Toolbar {
 
     private View view;
-    private LinearLayout linear;
+    private ConstraintLayout linear;
     private ImageView backIV;
     private TextView titleTV;
     private ImageView favoriteIV;

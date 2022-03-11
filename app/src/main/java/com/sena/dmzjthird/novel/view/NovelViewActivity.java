@@ -195,7 +195,8 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
         });
 
         vm.totalPageNum.observe(this, totalPage -> {
-            binding.bottomView.seekBar.setMax(totalPage);
+            // 这样写不好，后期改正
+            binding.bottomView.seekBar.setMax(totalPage - 1);
             // viewPager的下标从0开始
             binding.pageNum.setText((binding.bottomView.seekBar.getProgress() + 1) + "/" + totalPage);
         });
@@ -204,7 +205,8 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
                 binding.viewPager.setCurrentItem(currentPage);
             }
             // 设置底部监听
-            binding.pageNum.setText((currentPage + 1) + "/" + binding.bottomView.seekBar.getMax());
+            // 这样写不好，后期改正
+            binding.pageNum.setText((currentPage + 1) + "/" + (binding.bottomView.seekBar.getMax() + 1));
         });
 
     }
@@ -340,8 +342,10 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
                 binding.viewPager.getWidth(), binding.viewPager.getHeight(),
                 currentTextSize, currentSpaceLine, isBlackBg);
         binding.viewPager.setAdapter(pageAdapter);
+        LogUtil.e("当前页面: " + currentPage);
         binding.viewPager.setCurrentItem(currentPage);
         vm.totalPageNum.postValue(pageAdapter.getCount());
+        binding.bottomView.seekBar.setProgress(currentPage);
     }
 
     @Override
