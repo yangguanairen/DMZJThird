@@ -80,11 +80,13 @@ public class UserSubscribedFragment extends Fragment {
         adapter = new UserSubscribedAdapter(getActivity());
         binding.recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter, view, position) -> {
+        adapter.setOnItemClickListener((a, view, position) -> {
+            UserSubscribedBean bean = (UserSubscribedBean) a.getData().get(position);
+            String objectId = bean.getObjectId();
             if (type == MyRetrofitService.TYPE_COMIC) {
-                IntentUtil.goToComicInfoActivity(getActivity(), ((UserSubscribedBean) adapter.getData().get(position)).getObjectId());
+                IntentUtil.goToComicInfoActivity(getActivity(), objectId);
             } else {
-                Toast.makeText(getActivity(), "跳转: 小说Info页面, 没写完", Toast.LENGTH_SHORT).show();
+                IntentUtil.goToNovelInfoActivity(getContext(), objectId);
             }
         });
 

@@ -21,6 +21,7 @@ import com.sena.dmzjthird.account.view.LoginActivity;
 import com.sena.dmzjthird.account.view.SettingActivity;
 import com.sena.dmzjthird.account.view.UpdateProfileActivity;
 import com.sena.dmzjthird.account.view.UserCommentActivity;
+import com.sena.dmzjthird.account.view.UserHistoryActivity;
 import com.sena.dmzjthird.account.view.UserSubscribedActivity;
 import com.sena.dmzjthird.databinding.FragmentAccountBinding;
 import com.sena.dmzjthird.utils.LogUtil;
@@ -67,6 +68,15 @@ public class AccountFragment extends Fragment {
                 XPopUpUtil.showCustomErrorToast(getContext(), getString(R.string.not_login));
             } else {
                 startActivity(new Intent(getContext(), UserSubscribedActivity.class));
+            }
+        });
+
+        binding.accountHistory.setOnClickListener(v -> {
+            long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+            if (uid == 0L) {
+                XPopUpUtil.showCustomErrorToast(getContext(), getString(R.string.not_login));
+            } else {
+                startActivity(new Intent(getContext(), UserHistoryActivity.class));
             }
         });
 

@@ -50,6 +50,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
     private String novelName;
     private String novelCover;
     private int volumeId;
+    private String volumeName;
     private String responseStr;
 
     private NovelViewVM vm;
@@ -74,6 +75,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
         novelName = IntentUtil.getObjectName(this);
         novelCover = IntentUtil.getObjectCover(this);
         volumeId = IntentUtil.getVolumeId(this);
+        volumeName = IntentUtil.getVolumeName(this);
         int chapterId = IntentUtil.getChapterId(this);
         String chapterName = IntentUtil.getChapterName(this);
 
@@ -179,8 +181,13 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
         vm.currentChapterId.observe(this, chapterId -> {
             getResponse(chapterId);
             catalogAdapter.setSelectId(chapterId);
+
         });
-        vm.currentChapterName.observe(this, name -> binding.toolbar.setTitle(name));
+        vm.currentChapterName.observe(this, name -> {
+            binding.toolbar.setTitle(name);
+            ViewHelper.addHistory(this, novelId, novelCover, novelName, MyRetrofitService.TYPE_NOVEL,
+                    volumeId, "volumeName", vm.currentChapterId.getValue(), name);
+        });
 
         vm.isShowToolView.observe(this, isShowToolView -> {
             binding.toolbar.setVisibility(isShowToolView ? View.VISIBLE : View.INVISIBLE);

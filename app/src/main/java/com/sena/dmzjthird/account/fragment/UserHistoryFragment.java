@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,15 +74,17 @@ public class UserHistoryFragment extends Fragment {
 
 
     private void initView() {
-        binding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new UserHistoryAdapter(getContext());
         binding.recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter, view, position) -> {
+        adapter.setOnItemClickListener((a, view, position) -> {
+            UserHistoryBean bean = (UserHistoryBean) a.getData().get(position);
+            String objectId = bean.getObjectId();
             if (mType == MyRetrofitService.TYPE_COMIC) {
-                IntentUtil.goToComicInfoActivity(getActivity(), ((UserHistoryBean) adapter.getData().get(position)).getObjectId());
+                IntentUtil.goToComicInfoActivity(getActivity(), objectId);
             } else {
-                Toast.makeText(getActivity(), "跳转: 小说Info页面, 没写完", Toast.LENGTH_SHORT).show();
+                IntentUtil.goToNovelInfoActivity(getContext(), objectId);
             }
         });
     }

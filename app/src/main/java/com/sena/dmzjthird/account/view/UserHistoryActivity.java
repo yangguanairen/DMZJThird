@@ -64,5 +64,7 @@ public class UserHistoryActivity extends AppCompatActivity {
             }
         });
 
+        binding.tableLayout.setupWithViewPager(binding.viewPager);
+
     }
 }
