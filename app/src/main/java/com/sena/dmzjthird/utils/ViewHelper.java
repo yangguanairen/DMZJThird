@@ -35,11 +35,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ViewHelper {
 
-    public static void setSubscribeStatus(Context context, ImageView imageView, String comicId) {
+    public static void setSubscribeStatus(Context context, String objectId, int type, ImageView imageView, TextView textView) {
         long uid = MyDataStore.getInstance(context).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
 
         MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
-        service.querySubscribe(uid, comicId)
+        service.querySubscribe(uid, objectId, type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ResultBean>() {
@@ -56,39 +56,9 @@ public class ViewHelper {
                         imageView.setImageResource(
                                 "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed : R.drawable.ic_subscribe
                         );
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        // 请求出错，不处理
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
-    public static void setSubscribeStatus(Context context, TextView imageView, String comicId) {
-        long uid = MyDataStore.getInstance(context).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-
-        MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
-        service.querySubscribe(uid, comicId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResultBean>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(@NonNull ResultBean resultBean) {
-                        if (resultBean.getCode() == 100) {
-                            return ;
+                        if (textView != null) {
+                            textView.setText("true".equals(resultBean.getContent()) ? "已订阅" : "订阅");
                         }
-
-                        imageView.setCompoundDrawablesWithIntrinsicBounds(0, "true".equals(resultBean.getContent()) ? R.drawable.ic_subscribed : R.drawable.ic_subscribe, 0, 0);
                     }
 
                     @Override
@@ -103,12 +73,12 @@ public class ViewHelper {
                 });
     }
 
-
-    public static void controlSubscribe(Context context, ImageView imageView, String comicId, String cover, String title, String author) {
+    public static void controlSubscribe(Context context, String objectId, String cover, String title, String author, int type,
+                                        ImageView imageView, TextView textView) {
         MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
 
         long uid = MyDataStore.getInstance(context).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-        service.controlSubscribe(uid, comicId, cover, title, author)
+        service.controlSubscribe(uid, objectId, cover, title, author, type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
@@ -123,47 +93,24 @@ public class ViewHelper {
                     }
                     if ("true".equals(resultBean.getContent())) {
                         imageView.setImageResource(R.drawable.ic_subscribed);
+                        if (textView != null) textView.setText("已订阅");
                         Toast.makeText(context, "订阅成功!!", Toast.LENGTH_SHORT).show();
                     } else {
                         imageView.setImageResource(R.drawable.ic_subscribe);
+                        if (textView != null) textView.setText("订阅");
                         Toast.makeText(context, "取消订阅成功", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    public static void controlSubscribe(Context context, TextView imageView, String comicId, String cover, String title, String author) {
-        MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
 
-        long uid = MyDataStore.getInstance(context).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-        service.controlSubscribe(uid, comicId, cover, title, author)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(resultBean -> {
-                    if (resultBean == null) {
-                        XPopUpUtil.showCustomErrorToast(context, "请求失败，请稍后重试");
-                        return ;
-                    }
-                    if (resultBean.getCode() == 100) {
-                        XPopUpUtil.showCustomErrorToast(context, context.getString(R.string.not_login));
-                        return ;
-                    }
-                    if ("true".equals(resultBean.getContent())) {
-                        imageView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_subscribed, 0, 0);
-                        Toast.makeText(context, "订阅成功!!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        imageView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_subscribe, 0, 0);
-                        Toast.makeText(context, "取消订阅成功", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    public static void addHistory(Context context, String comicId, String cover, String title, String chapterId, String chapterName) {
+    public static void addHistory(Context context, String object, String cover, String title, int type,
+                                  int volumeId, String volumeName, int chapterId, String chapterName) {
 
         long uid = MyDataStore.getInstance(context).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
         if (uid == 0L) return ;
         MyRetrofitService service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
-        service.addHistory(uid, comicId, cover, title, chapterId, chapterName)
+        service.addHistory(uid, object, cover, title, type, volumeId, volumeName, chapterId, chapterName)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<ResultBean>() {
                     @Override

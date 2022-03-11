@@ -31,6 +31,9 @@ public interface MyRetrofitService {
     String DMZJ_UID = "109697332";
     String DMZJ_TOKEN = "ad1c752a57819508ddf6f335491bb126";
 
+    int TYPE_COMIC = 1;
+    int TYPE_NOVEL = 2;
+
     @Multipart
     @POST("user/add")
     Observable<UserResultBean> createAccount(
@@ -70,35 +73,42 @@ public interface MyRetrofitService {
     @GET("subscribe/control")
     Observable<ResultBean> controlSubscribe(
             @Query("uid") long uid,
-            @Query("comicId") String comicId,
-            @Query("cover") String cover,
-            @Query("comicName") String comicName,
-            @Query("author") String author
+            @Query("objectId") String objectId,
+            @Query("objectCover") String objectCover,
+            @Query("objectName") String objectName,
+            @Query("author") String author,
+            @Query("type") int type
     );
 
     @GET("subscribe/query")
     Observable<ResultBean> querySubscribe(
             @Query("uid") long uid,
-            @Query("comicId") String comicId
+            @Query("objectId") String objectId,
+            @Query("type") int type
     );
 
     @GET("subscribe/all")
     Observable<List<UserSubscribedBean>> getAllSubscribe(
-            @Query("uid") long uid
+            @Query("uid") long uid,
+            @Query("type") int type
     );
 
     @GET("history/all")
     Observable<List<UserHistoryBean>> getAllHistory(
-            @Query("uid") long uid
+            @Query("uid") long uid,
+            @Query("type") int type
     );
 
     @GET("history/add")
     Observable<ResultBean> addHistory(
             @Query("uid") long uid,
-            @Query("comicId") String comicId,
-            @Query("cover") String cover,
-            @Query("comicName") String comicName,
-            @Query("chapterId") String chapterId,
+            @Query("objectId") String objectId,
+            @Query("objectCover") String objectCover,
+            @Query("objectName") String objectName,
+            @Query("objectType") int objectType,
+            @Query("volumeId") int volumeId,
+            @Query("volumeName") String volumeName,
+            @Query("chapterId") int chapterId,
             @Query("chapterName") String chapterName
     );
 

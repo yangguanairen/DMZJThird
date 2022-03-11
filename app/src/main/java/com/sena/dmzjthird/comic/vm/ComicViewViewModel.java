@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel;
 
 public class ComicViewViewModel extends ViewModel {
 
-    public MutableLiveData<String> currentChapterId = new MutableLiveData<>();
+    public MutableLiveData<Integer> currentChapterId = new MutableLiveData<>();
     public MutableLiveData<String> currentChapterName = new MutableLiveData<>();
 
     public MutableLiveData<Integer> totalPage = new MutableLiveData<>();

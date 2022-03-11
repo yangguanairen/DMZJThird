@@ -29,6 +29,8 @@ public class NovelChapterFragment extends Fragment {
 
     private static final String ARG_NOVEL_ID = "novel_id";
     private String mNovelId;
+    private String mNovelName;
+    private String mNovelCover;
     private boolean isLoaded = false;
 
     public static NovelChapterFragment newInstance(String novelId) {
@@ -75,7 +77,6 @@ public class NovelChapterFragment extends Fragment {
     }
 
     private void getResponse() {
-
         NovelApi.getNovelChapter(mNovelId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -93,7 +94,7 @@ public class NovelChapterFragment extends Fragment {
                         }
                         binding.noData.setVisibility(View.INVISIBLE);
                         binding.recyclerView.setVisibility(View.VISIBLE);
-                        NovelChapterAdapter adapter = new NovelChapterAdapter(getContext(), dataList, mNovelId);
+                        NovelChapterAdapter adapter = new NovelChapterAdapter(getContext(), dataList, mNovelId, NovelInfoFragment.getNovelName(), NovelInfoFragment.getNovelCover());
                         binding.recyclerView.setAdapter(adapter);
                     }
 
@@ -116,4 +117,5 @@ public class NovelChapterFragment extends Fragment {
         binding = null;
         isLoaded = false;
     }
+
 }

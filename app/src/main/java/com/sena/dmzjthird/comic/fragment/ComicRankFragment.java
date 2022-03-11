@@ -33,7 +33,7 @@ public class ComicRankFragment extends Fragment {
     private int classify = 0;
     private int sort = 0;
     private int time = 0;
-    private int page = 0;
+    private int page = 1;
 
     private boolean isLoaded;
 
@@ -83,7 +83,7 @@ public class ComicRankFragment extends Fragment {
         initAdapter();
 
         binding.refreshLayout.setOnRefreshListener(() -> {
-            page = 0;
+            page = 1;
             getResponse();
         });
 
@@ -104,12 +104,12 @@ public class ComicRankFragment extends Fragment {
                     @Override
                     public void onNext(@NonNull List<ComicRankListRes.ComicRankListItemResponse> dataList) {
                         binding.refreshLayout.setRefreshing(false);
-                        if (page == 0 && dataList.isEmpty()) {
+                        if (page == 1 && dataList.isEmpty()) {
                             // 出错处理
                             return ;
                         }
 
-                        if (page == 0) {
+                        if (page == 1) {
                             adapter.setList(dataList);
                         } else {
                             adapter.addData(dataList);
@@ -170,7 +170,7 @@ public class ComicRankFragment extends Fragment {
                             break;
                     }
 
-                    page = 0;
+                    page = 1;
                     getResponse();
                 })
                 .show();

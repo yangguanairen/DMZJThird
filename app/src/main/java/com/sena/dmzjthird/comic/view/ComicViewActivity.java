@@ -71,7 +71,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
 
     private BasePopupView popup;
 
-    private final List<String> chapterIdList = new ArrayList<>();
+    private final List<Integer> chapterIdList = new ArrayList<>();
     private final List<String> chapterNameList = new ArrayList<>();
 
     private boolean isUserOperate = false;
@@ -92,7 +92,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
         comicId = IntentUtil.getObjectId(this);
         comicCover = IntentUtil.getObjectCover(this);
         comicName = IntentUtil.getObjectName(this);
-        String chapterId = IntentUtil.getChapterId(this);
+        int chapterId = IntentUtil.getChapterId(this);
         String chapterName = IntentUtil.getChapterName(this);
 
         initView(chapterName);
@@ -114,7 +114,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
 
         popup = new XPopup.Builder(this).asCustom(new CustomBottomPopup(this, systemMaxBrightness));
 
-        ViewHelper.setSubscribeStatus(this, binding.subscribe, comicId);
+        ViewHelper.setSubscribeStatus(this, comicId, MyRetrofitService.TYPE_COMIC, binding.bottomView.subscribeIcon, binding.bottomView.subscribeText);
 
         // 侧边栏
         initCatalog(chapterName);
@@ -140,7 +140,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
                     @Override
                     public void onNext(ComicDetailRes.@NonNull ComicDetailChapterResponse data) {
                         for (ComicDetailRes.ComicDetailChapterInfoResponse d: data.getDataList()) {
-                            chapterIdList.add(d.getChapterId() + "");
+                            chapterIdList.add(d.getChapterId());
                             chapterNameList.add(d.getChapterTitle());
                         }
 
@@ -150,10 +150,10 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
                         binding.catalogRecyclerview.setAdapter(adapter);
 
                         adapter.setOnItemClickListener((a, view, position) -> {
-                            String selectChapterId = chapterIdList.get(position);
-                            if (!selectChapterId.equals(vm.currentChapterId.getValue())) {
+                            int selectChapterId = chapterIdList.get(position);
+                            if (selectChapterId != vm.currentChapterId.getValue()) {
                                 vm.currentChapterId.postValue(selectChapterId);
-                                vm.currentChapterName.postValue(chapterIdList.get(position));
+                                vm.currentChapterName.postValue(chapterNameList.get(position));
                             }
                             adapter.setCurrentChapterName(chapterNameList.get(position));
                             adapter.setList(chapterNameList);
@@ -188,17 +188,18 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
             if (mIsVerticalMode) {
 
             } else {
-                binding.pageNum.setText(integer + "/" + binding.seekBar.getMax());
+                binding.pageNum.setText(integer + "/" + binding.bottomView.seekBar.getMax());
             }
         });
 
         vm.totalPage.observe(this, integer -> {
-            binding.seekBar.setMax(integer);
+            binding.bottomView.seekBar.setMax(integer);
         });
 
-        vm.currentChapterId.observe(this, s -> {
-            ViewHelper.addHistory(ComicViewActivity.this, comicId, comicCover, comicName, s, vm.currentChapterName.getValue());
-            getResponse(s);
+        vm.currentChapterId.observe(this, chapterId -> {
+            ViewHelper.addHistory(ComicViewActivity.this, comicId, comicCover, comicName, MyRetrofitService.TYPE_COMIC,
+                    0, "Null", chapterId, vm.currentChapterName.getValue());
+            getResponse(chapterId);
         });
 
     }
@@ -206,15 +207,15 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
     private void updateChapterId(boolean isPreClick) {
 
         int index = -1;
-        String currentChapterId = vm.currentChapterId.getValue();
+        int currentChapterId = vm.currentChapterId.getValue();
         for (int i = 0; i < chapterIdList.size(); i++) {
-            if (currentChapterId.equals(chapterIdList.get(i))) {
+            if (currentChapterId == chapterIdList.get(i)) {
                 index = i;
                 break;
             }
         }
 
-        String cId; // 即将浏览的章节
+        int cId; // 即将浏览的章节
         String cName;
         if (isPreClick) {
             if (index == -1 || index == chapterIdList.size() - 1) {
@@ -254,7 +255,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
                 } else if (position == images.size() - 1) {
                     updateChapterId(false);
                 } else {
-                    binding.seekBar.setProgress(position);
+                    binding.bottomView.seekBar.setProgress(position);
                 }
             }
             @Override
@@ -263,7 +264,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
             }
         });
 
-        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        binding.bottomView.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -280,27 +281,26 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
                 isUserOperate = false;
             }
         });
-        binding.chapterList.setOnClickListener(v -> binding.drawerLayout.openDrawer(binding.catalog));
+        binding.bottomView.chapterListLayout.setOnClickListener(v -> binding.drawerLayout.openDrawer(binding.catalog));
 
-        binding.setting.setOnClickListener(v -> popup.show());
+        binding.bottomView.settingLayout.setOnClickListener(v -> popup.show());
 
-        binding.subscribe.setOnClickListener(v -> ViewHelper.controlSubscribe(this, binding.subscribe, comicId, "cover", "title", "author"));
+        binding.bottomView.subscribeLayout.setOnClickListener(v -> ViewHelper.controlSubscribe(this, comicId, comicCover, comicName, "author", MyRetrofitService.TYPE_COMIC,
+                binding.bottomView.subscribeIcon, binding.bottomView.subscribeText));
 
         // 设置上一话/下一话监听器
-        binding.preChapter.setOnClickListener(v -> updateChapterId(true));
-        binding.nextChapter.setOnClickListener(v -> updateChapterId(false));
+        binding.bottomView.preChapter.setOnClickListener(v -> updateChapterId(true));
+        binding.bottomView.nextChapter.setOnClickListener(v -> updateChapterId(false));
 
 //         下拉前往上一章，只有竖屏阅读模式生效
         binding.refresh.setOnRefreshListener(() -> {
-            binding.preChapter.callOnClick();
+            binding.bottomView.preChapter.callOnClick();
             binding.refresh.setRefreshing(false);
         });
-        binding.complaint.setOnClickListener(v -> {
 
-        });
     }
 
-    private void getResponse(String chapterId) {
+    private void getResponse(int chapterId) {
         service.getChapterInfo(comicId, chapterId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -310,7 +310,6 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
                         return ;
                     }
                     images.clear();
-                    binding.complaint.setText(getString(R.string.complaint, bean.getComment_count()));
                     binding.toolbar.setTitle(bean.getTitle());
                     binding.chapterName.setText(bean.getTitle());
 
@@ -382,7 +381,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
         binding.viewPager.setVisibility(View.VISIBLE);
         binding.recyclerview.setVisibility(View.GONE);
 
-        binding.seekBar.setMax(totalPages - 2);
+        binding.bottomView.seekBar.setMax(totalPages - 2);
 
         binding.viewPager.setAdapter(new MyPageAdapter(this, images));
         binding.viewPager.setOffscreenPageLimit(totalPages + 1);
@@ -395,7 +394,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
     private void setRecyclerViewData() {
 
         binding.refresh.setEnabled(true);
-        binding.seekBar.setMax(images.size());
+        binding.bottomView.seekBar.setMax(images.size());
         binding.viewPager.setVisibility(View.GONE);
         binding.recyclerview.setVisibility(View.VISIBLE);
 
@@ -405,7 +404,7 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
 
         // 点击弹出弹窗
         adapter.setOnItemClickListener((a, view, position) -> isShowTopBottom(view));
-        adapter.getLoadMoreModule().setOnLoadMoreListener(() -> binding.nextChapter.callOnClick());
+        adapter.getLoadMoreModule().setOnLoadMoreListener(() -> binding.bottomView.nextChapter.callOnClick());
         adapter.getLoadMoreModule().setAutoLoadMore(false);
         adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
 
@@ -417,11 +416,11 @@ public class ComicViewActivity extends AppCompatActivity implements CustomBottom
     private void isShowTopBottom(View view) {
         if (view.getTag() == null || "0".equals(view.getTag().toString())) {
             binding.toolbar.setVisibility(View.VISIBLE);
-            binding.bottomView.setVisibility(View.VISIBLE);
+            binding.bottomView.consLayout.setVisibility(View.VISIBLE);
             view.setTag("1");
         } else {
             binding.toolbar.setVisibility(View.INVISIBLE);
-            binding.bottomView.setVisibility(View.INVISIBLE);
+            binding.bottomView.consLayout.setVisibility(View.INVISIBLE);
             view.setTag("0");
         }
     }

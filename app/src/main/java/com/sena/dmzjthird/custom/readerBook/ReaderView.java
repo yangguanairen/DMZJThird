@@ -2,11 +2,14 @@ package com.sena.dmzjthird.custom.readerBook;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+
+import com.sena.dmzjthird.R;
 
 /**
  * FileName: ReaderView
@@ -37,11 +40,12 @@ public class ReaderView extends View {
     }
 
 
-    public void setReaderData(float textSize, float lineSpace, String content, float xOffset, float yOffset) {
+    public void setReaderData(float textSize, float lineSpace, String content, float xOffset, float yOffset, boolean isBlackBg) {
         paint = new TextPaint();
         mTextSize = textSize;
         mLineSpace = lineSpace;
         paint.setTextSize(textSize);
+        if (isBlackBg) paint.setColor(Color.WHITE);
         mContent = content;
         mXOffset = xOffset;
         mYOffset = yOffset;

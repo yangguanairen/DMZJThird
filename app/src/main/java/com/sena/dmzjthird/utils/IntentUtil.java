@@ -14,6 +14,7 @@ import com.sena.dmzjthird.comic.view.UserInfoActivity;
 import com.sena.dmzjthird.custom.LargeImageActivity;
 import com.sena.dmzjthird.custom.WebViewActivity;
 import com.sena.dmzjthird.novel.view.NovelInfoActivity;
+import com.sena.dmzjthird.novel.view.NovelViewActivity;
 
 /**
  * Created by Android Studio.
@@ -31,8 +32,13 @@ public class IntentUtil {
     private static final String OBJECT_ID = "object_id";
     private static final String OBJECT_COVER = "object_cover";
     private static final String OBJECT_NAME = "object_name";
+    private static final String VOLUME_ID = "volume_Id";
+    private static final String VOLUME_NAME = "volume_name";
     private static final String CHAPTER_ID = "chapter_id";
-    private static final String CHAPTER_NAME = "object_chapter_name";
+    private static final String CHAPTER_NAME = "chapter_name";
+
+
+
 
     private static final String TO_UID = "to_uid";
     private static final String TO_COMMENT_ID = "to_comment_id";
@@ -53,7 +59,7 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
-    public static void goToComicViewActivity(Context context, String comicId, String cover, String comicName, String chapterId, String chapterName) {
+    public static void goToComicViewActivity(Context context, String comicId, String cover, String comicName, int chapterId, String chapterName) {
         Intent intent = new Intent(context, ComicViewActivity.class);
         intent.putExtra(OBJECT_ID, comicId);
         intent.putExtra(OBJECT_COVER, cover);
@@ -103,6 +109,19 @@ public class IntentUtil {
     public static void goToNovelInfoActivity(Context context, String novelId) {
         Intent intent = new Intent(context, NovelInfoActivity.class);
         intent.putExtra(OBJECT_ID, novelId);
+        context.startActivity(intent);
+    }
+
+    public static void goToNovelViewActivity(Context context, String novelId, String cover, String title,
+                                             int volumeId, String volumeName, int chapterId, String chapterName) {
+        Intent intent = new Intent(context, NovelViewActivity.class);
+        intent.putExtra(OBJECT_ID, novelId);
+        intent.putExtra(OBJECT_COVER, cover);
+        intent.putExtra(OBJECT_NAME, title);
+        intent.putExtra(VOLUME_ID, volumeId);
+        intent.putExtra(VOLUME_NAME, volumeName);
+        intent.putExtra(CHAPTER_ID, chapterId);
+        intent.putExtra(CHAPTER_NAME, chapterName);
         context.startActivity(intent);
     }
 
@@ -185,6 +204,21 @@ public class IntentUtil {
         return activity.getIntent().getStringExtra(NEWS_PAGE_URL);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static String getObjectId(Activity activity) {
         return activity.getIntent().getStringExtra(OBJECT_ID);
     }
@@ -197,8 +231,16 @@ public class IntentUtil {
         return activity.getIntent().getStringExtra(OBJECT_NAME);
     }
 
-    public static String getChapterId(Activity activity) {
-        return activity.getIntent().getStringExtra(CHAPTER_ID);
+    public static int getVolumeId(Activity activity) {
+        return activity.getIntent().getIntExtra(VOLUME_ID, -1);
+    }
+
+    public static String getVolumeName(Activity activity) {
+        return activity.getIntent().getStringExtra(VOLUME_NAME);
+    }
+
+    public static int getChapterId(Activity activity) {
+        return activity.getIntent().getIntExtra(CHAPTER_ID, -1);
     }
 
     public static String getChapterName(Activity activity) {

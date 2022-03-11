@@ -115,7 +115,6 @@ public class NovelBottomPopup extends BottomPopupView {
                 return ;
             }
             currentSpaceLine -= 3.75;
-            LogUtil.e("行间距: " + currentSpaceLine);
             callbacks.onSpaceLineChange(currentSpaceLine);
         });
 

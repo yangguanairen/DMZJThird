@@ -11,6 +11,8 @@ import android.os.Bundle;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.account.MyRetrofitService;
+import com.sena.dmzjthird.account.fragment.UserHistoryFragment;
 import com.sena.dmzjthird.databinding.ActivityUserHistoryBinding;
 
 import java.util.Arrays;
@@ -39,7 +41,8 @@ public class UserHistoryActivity extends AppCompatActivity {
 
         binding.toolbar.setBackListener(v -> finish());
 
-        List<Fragment> fragmentList = Arrays.asList();
+        List<Fragment> fragmentList = Arrays.asList(UserHistoryFragment.newInstance(MyRetrofitService.TYPE_COMIC),
+                UserHistoryFragment.newInstance(MyRetrofitService.TYPE_NOVEL));
         List<String> titleList = Arrays.asList(getString(R.string.icon_comic_title), getString(R.string.icon_novel_title));
 
         binding.viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

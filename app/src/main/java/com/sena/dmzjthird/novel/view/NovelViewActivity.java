@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.BroadcastReceiver;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SeekBar;
@@ -18,12 +19,18 @@ import com.gyf.immersionbar.ImmersionBar;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.custom.popup.NovelBottomPopup;
 import com.sena.dmzjthird.custom.readerBook.ReaderPageAdapter;
 import com.sena.dmzjthird.databinding.ActivityNovelViewBinding;
 import com.sena.dmzjthird.novel.adapter.NovelViewCatalogAdapter;
 import com.sena.dmzjthird.novel.vm.NovelViewVM;
+import com.sena.dmzjthird.utils.BroadcastHelper;
+import com.sena.dmzjthird.utils.HtmlUtil;
+import com.sena.dmzjthird.utils.IntentUtil;
+import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
+import com.sena.dmzjthird.utils.ViewHelper;
 import com.sena.dmzjthird.utils.api.NovelApi;
 
 import java.util.ArrayList;
@@ -40,14 +47,17 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
     private ActivityNovelViewBinding binding;
 
     private String novelId;
+    private String novelName;
+    private String novelCover;
     private int volumeId;
     private String responseStr;
 
     private NovelViewVM vm;
     private boolean isUserOperate = false;
-    private List<Integer> chapterIdList = new ArrayList<>();
-    private List<String> chapterNameList = new ArrayList<>();
+    private final List<Integer> chapterIdList = new ArrayList<>();
+    private final List<String> chapterNameList = new ArrayList<>();
     private NovelViewCatalogAdapter catalogAdapter;
+    private BroadcastReceiver receiver;
 
     private float currentTextSize;
     private float currentSpaceLine;
@@ -60,18 +70,14 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
         binding = ActivityNovelViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        novelId = getIntent().getStringExtra("novelId");
-        volumeId = getIntent().getIntExtra("volumeId", 0);
-        int chapterId = getIntent().getIntExtra("chapterId", 0);
-        String chapterName = getIntent().getStringExtra("chapterName");
+        novelId = IntentUtil.getObjectId(this);
+        novelName = IntentUtil.getObjectName(this);
+        novelCover = IntentUtil.getObjectCover(this);
+        volumeId = IntentUtil.getVolumeId(this);
+        int chapterId = IntentUtil.getChapterId(this);
+        String chapterName = IntentUtil.getChapterName(this);
 
         vm = new ViewModelProvider(this).get(NovelViewVM.class);
-
-        ImmersionBar.with(this)
-                .statusBarColor(R.color.theme_blue)
-                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-                .titleBarMarginTop(binding.consLayout)
-                .init();
 
         initData();
         initView();
@@ -93,6 +99,15 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
     }
 
     private void initView() {
+
+        ImmersionBar.with(this)
+                .statusBarColor(currentBgColorId)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .titleBarMarginTop(binding.consLayout)
+                .init();
+
+        // Battery And Network
+        receiver = BroadcastHelper.getBatteryAndNetworkBroadcast(this, binding.batteryNum, binding.internetType);
 
         // ToolBar
         binding.toolbar.setBackListener(v -> finish());
@@ -136,7 +151,10 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
         });
         binding.bottomView.preChapter.setOnClickListener(v -> updateChapterId(true));
         binding.bottomView.nextChapter.setOnClickListener(v -> updateChapterId(false));
+        ViewHelper.setSubscribeStatus(this, novelId, MyRetrofitService.TYPE_NOVEL, binding.bottomView.subscribeIcon, binding.bottomView.subscribeText);
         binding.bottomView.subscribeLayout.setOnClickListener(v -> {
+            ViewHelper.controlSubscribe(this, novelId, novelCover, novelName, "author", MyRetrofitService.TYPE_NOVEL,
+                    binding.bottomView.subscribeIcon, binding.bottomView.subscribeText);
         });
         binding.bottomView.settingLayout.setOnClickListener(v -> popupView.show());
         binding.bottomView.chapterListLayout.setOnClickListener(v -> binding.drawerLayout.openDrawer(binding.catalog));
@@ -151,6 +169,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
             String chapterName = data.getChapterName();
             vm.currentChapterId.postValue(chapterId);
             vm.currentChapterName.postValue(chapterName);
+            binding.drawerLayout.closeDrawer(binding.catalog);
         });
 
     }
@@ -170,14 +189,15 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
 
         vm.totalPageNum.observe(this, totalPage -> {
             binding.bottomView.seekBar.setMax(totalPage);
-            binding.pageNum.setText(binding.bottomView.seekBar.getProgress() + "/" + totalPage);
+            // viewPager的下标从0开始
+            binding.pageNum.setText((binding.bottomView.seekBar.getProgress() + 1) + "/" + totalPage);
         });
         vm.currentPageIndex.observe(this, currentPage -> {
             if (isUserOperate) {
                 binding.viewPager.setCurrentItem(currentPage);
             }
             // 设置底部监听
-            binding.pageNum.setText(currentPage + "/" + binding.bottomView.seekBar.getMax());
+            binding.pageNum.setText((currentPage + 1) + "/" + binding.bottomView.seekBar.getMax());
         });
 
     }
@@ -235,22 +255,24 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
                     @Override
                     public void onNext(@NonNull String s) {
 
-                        responseStr = s.replaceAll("\\s+&nbsp;", "  ")
-                                .replace("&nbsp;", " ")
-                                .replace("&hellip;", "...")
-                                .replace("&bull;", "·")
-                                .replace("&ldquo;", "「")
-                                .replace("&rdquo;", "」")
-                                .replace("&mdash;", "-")
-                                .replace("&lsquo;", "‘")
-                                .replace("&rsquo;", "’")
-                                .replace("<br/>", "\n ")
-                                .replace("<br />", "");
+                        String[] tmpArr = s.split("\n");
+                        StringBuilder sb = new StringBuilder();
+                        for (String tmp: tmpArr) {
+                            String a = tmp.replaceAll("<br />\\s++", "")
+                                    .replace("<br />", "")
+                                    .replace("<br/>", "\n  ");
+                            if (a.isEmpty() || "\n".equals(a)) {
+                                continue;
+                            }
+                            sb.append("  ").append(a).append("\n");
+                        }
 
-                        updateViewPager(0);
-//                        binding.viewPager.setAdapter(new ReaderPageAdapter(NovelViewActivity.this, responseStr,
-//                                binding.viewPager.getWidth(), binding.viewPager.getHeight(),
-//                                50f, 70f));
+                        LogUtil.e(sb.toString());
+
+                        responseStr = HtmlUtil.convertSpecialCharacters(sb.toString());
+
+
+                        updateViewPager(0, currentBgColorId == R.color.black);
                     }
 
                     @Override
@@ -283,26 +305,33 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
                 Toast.makeText(this, "已经没有上一章了", Toast.LENGTH_SHORT).show();
                 return;
             } else {
-                cId = chapterIdList.get(index + 1);
-                cName = chapterNameList.get(index + 1);
+                cId = chapterIdList.get(index - 1);
+                cName = chapterNameList.get(index - 1);
+
             }
         } else {
             if (index == -1 || index == chapterIdList.size() - 1) {
                 Toast.makeText(this, "已经没有下一章了", Toast.LENGTH_SHORT).show();
                 return;
             } else {
-                cId = chapterIdList.get(index - 1);
-                cName = chapterNameList.get(index - 1);
+                cId = chapterIdList.get(index + 1);
+                cName = chapterNameList.get(index + 1);
             }
         }
         vm.currentChapterId.postValue(cId);
         vm.currentChapterName.postValue(cName);
     }
 
-    private void updateViewPager(int currentPage) {
+    /**
+     * 字体大小、行间距、背景改变会重新计算页面
+     *
+     * @param currentPage 保留当前阅读状态
+     * @param isBlackBg   黑色背景下，文字变为白色
+     */
+    private void updateViewPager(int currentPage, boolean isBlackBg) {
         ReaderPageAdapter pageAdapter = new ReaderPageAdapter(NovelViewActivity.this, responseStr,
                 binding.viewPager.getWidth(), binding.viewPager.getHeight(),
-                currentTextSize, currentSpaceLine);
+                currentTextSize, currentSpaceLine, isBlackBg);
         binding.viewPager.setAdapter(pageAdapter);
         binding.viewPager.setCurrentItem(currentPage);
         vm.totalPageNum.postValue(pageAdapter.getCount());
@@ -313,22 +342,28 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
         super.onDestroy();
         binding = null;
         popupView.onDestroy();
+        BroadcastHelper.unregisterBroadcast(this, receiver);
     }
 
     @Override
     public void onTextSizeChange(float textSize) {
         currentTextSize = textSize;
-        updateViewPager(binding.viewPager.getCurrentItem());
+        updateViewPager(binding.viewPager.getCurrentItem(), currentBgColorId == R.color.black);
     }
 
     @Override
     public void onSpaceLineChange(float spaceLine) {
         currentSpaceLine = spaceLine;
-        updateViewPager(binding.viewPager.getCurrentItem());
+        updateViewPager(binding.viewPager.getCurrentItem(), currentBgColorId == R.color.black);
     }
 
     @Override
     public void onBgChange(int colorResourcesId) {
+        currentBgColorId = colorResourcesId;
         binding.viewPager.setBackgroundResource(colorResourcesId);
+        updateViewPager(binding.viewPager.getCurrentItem(), currentBgColorId == R.color.black);
+        ImmersionBar.with(this)
+                .statusBarColor(colorResourcesId)
+                .init();
     }
 }

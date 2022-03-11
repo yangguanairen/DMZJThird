@@ -30,9 +30,9 @@ public class UserSubscribedAdapter extends BaseQuickAdapter<UserSubscribedBean, 
     @Override
     protected void convert(@NonNull BaseViewHolder holder, UserSubscribedBean bean) {
 
-        GlideUtil.loadImageWithCookie(mContext, bean.getCover(), holder.getView(R.id.cover));
+        GlideUtil.loadImageWithCookie(mContext, bean.getObjectCover(), holder.getView(R.id.cover));
 
-        holder.setText(R.id.title, bean.getComicName());
+        holder.setText(R.id.title, bean.getObjectName());
         holder.setText(R.id.author, bean.getAuthor());
         holder.setText(R.id.status, "订阅于" + TimeUtil.millConvertToDate(bean.getcTime()));
 

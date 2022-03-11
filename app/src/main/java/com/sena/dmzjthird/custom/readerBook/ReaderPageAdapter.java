@@ -25,10 +25,13 @@ public class ReaderPageAdapter extends PagerAdapter {
     private final ReaderData readerData;
     private final NovelViewVM vm;
 
-    public ReaderPageAdapter(Context context, String content, float viewWidth, float viewHeight, float textSize, float lineSpace) {
+    private final boolean mIsBlackBg;
+
+    public ReaderPageAdapter(Context context, String content, float viewWidth, float viewHeight, float textSize, float lineSpace, boolean isBlackBg) {
         mContext = context;
         readerData = new ReaderData(content, viewWidth, viewHeight, textSize, lineSpace);
         vm = new ViewModelProvider((AppCompatActivity) context).get(NovelViewVM.class);
+        mIsBlackBg = isBlackBg;
     }
 
     @Override
@@ -46,7 +49,9 @@ public class ReaderPageAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         ReaderView readerView = new ReaderView(mContext);
-        readerView.setReaderData(readerData.mTextSize, readerData.mFinalLineSpace,  readerData.pageContents.get(position), readerData.xOffset, readerData.yOffset);
+        readerView.setReaderData(readerData.mTextSize, readerData.mFinalLineSpace,  readerData.pageContents.get(position),
+                readerData.xOffset, readerData.yOffset,
+                mIsBlackBg);
 
         readerView.setOnClickListener(v -> {
             // headView & bottomView

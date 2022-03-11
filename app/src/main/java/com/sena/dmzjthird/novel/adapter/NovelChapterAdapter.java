@@ -3,7 +3,6 @@ package com.sena.dmzjthird.novel.adapter;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,7 @@ import com.example.application.NovelChapterRes;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.databinding.ItemObjectExpandChildBinding;
 import com.sena.dmzjthird.databinding.ItemObjectExpandGroupBinding;
-import com.sena.dmzjthird.novel.view.NovelViewActivity;
+import com.sena.dmzjthird.utils.IntentUtil;
 
 import java.util.List;
 
@@ -33,14 +32,18 @@ public class NovelChapterAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
     private final Context mContext;
     private final List<NovelChapterRes.NovelChapterVolumeResponse> mDataList;
     private final String mNovelId;
+    private final String mNovelName;
+    private final String mNovelCover;
 
     private int mGroupPosition = -1;
     private int mChildPosition = -1;
 
-    public NovelChapterAdapter(Context context, List<NovelChapterRes.NovelChapterVolumeResponse> dataList, String novelId) {
+    public NovelChapterAdapter(Context context, List<NovelChapterRes.NovelChapterVolumeResponse> dataList, String novelId, String novelName, String novelCover) {
         mContext = context;
         mDataList = dataList;
         mNovelId = novelId;
+        mNovelName = novelName;
+        mNovelCover = novelCover;
     }
 
     @Override
@@ -65,16 +68,12 @@ public class NovelChapterAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
             mChildPosition = childPosition;
             notifyDataSetChanged();
 
-            int volumeId = mDataList.get(groupPosition).getVolumeId();
-            int chapterId = mDataList.get(groupPosition).getChapters(childPosition).getChapterId();
-            String chapterName = mDataList.get(groupPosition).getChapters(childPosition).getChapterName();
+            NovelChapterRes.NovelChapterVolumeResponse volumeData = mDataList.get(groupPosition);
+            NovelChapterRes.NovelChapterItemResponse chapterData = volumeData.getChapters(childPosition);
             // 跳转轻小说观看
-            Intent intent = new Intent(mContext, NovelViewActivity.class);
-            intent.putExtra("novelId", mNovelId);
-            intent.putExtra("volumeId", volumeId);
-            intent.putExtra("chapterId", chapterId);
-            intent.putExtra("chapterName", chapterName);
-            mContext.startActivity(intent);
+            IntentUtil.goToNovelViewActivity(mContext, mNovelId, mNovelCover, mNovelName,
+                    volumeData.getVolumeId(), volumeData.getVolumeName(),
+                    chapterData.getChapterId(), chapterData.getChapterName());
         });
     }
 

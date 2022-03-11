@@ -81,8 +81,8 @@ public class UserSubscribedFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            if (type == 0) {
-                IntentUtil.goToComicInfoActivity(getActivity(), ((UserSubscribedBean) adapter.getData().get(position)).getComicId());
+            if (type == MyRetrofitService.TYPE_COMIC) {
+                IntentUtil.goToComicInfoActivity(getActivity(), ((UserSubscribedBean) adapter.getData().get(position)).getObjectId());
             } else {
                 Toast.makeText(getActivity(), "跳转: 小说Info页面, 没写完", Toast.LENGTH_SHORT).show();
             }
@@ -92,7 +92,7 @@ public class UserSubscribedFragment extends Fragment {
 
     private void getResponse() {
         long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-        service.getAllSubscribe(uid)
+        service.getAllSubscribe(uid, type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<UserSubscribedBean>>() {

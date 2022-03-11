@@ -17,6 +17,7 @@ import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.ErrorFragment;
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.comic.fragment.CommentFragment;
 import com.sena.dmzjthird.comic.fragment.ComicInfoFragment;
 import com.sena.dmzjthird.comic.fragment.ComicRelatedFragment;
@@ -87,14 +88,14 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
 
         binding.tableLayout.setupWithViewPager(binding.viewPager);
 
-        ViewHelper.setSubscribeStatus(this, binding.toolbar.getFavoriteIV(), comicId);
+        ViewHelper.setSubscribeStatus(this, comicId, MyRetrofitService.TYPE_COMIC, binding.toolbar.getFavoriteIV(), null);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ViewHelper.setSubscribeStatus(this, binding.toolbar.getFavoriteIV(), comicId);
+        ViewHelper.setSubscribeStatus(this, comicId, MyRetrofitService.TYPE_COMIC, binding.toolbar.getFavoriteIV(), null);
     }
 
     @Override
@@ -128,7 +129,7 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
                 binding.toolbar.setFavoriteIVVisibility(View.VISIBLE);
                 binding.toolbar.setOtherTVVisibility(View.VISIBLE);
 
-                binding.toolbar.setFavoriteListener(v -> ViewHelper.controlSubscribe(this, binding.toolbar.getFavoriteIV(), comicId, cover, title, author));
+                binding.toolbar.setFavoriteListener(v -> ViewHelper.controlSubscribe(this, comicId, cover, title, author, MyRetrofitService.TYPE_COMIC, binding.toolbar.getFavoriteIV(), null));
                 binding.toolbar.setOtherListener(v -> {});
             }
         }, 3000);

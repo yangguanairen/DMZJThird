@@ -11,6 +11,7 @@ import android.os.Bundle;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.account.fragment.UserSubscribedFragment;
 import com.sena.dmzjthird.databinding.ActivityUserSubscribedBinding;
 
@@ -40,8 +41,8 @@ public class UserSubscribedActivity extends AppCompatActivity {
 
         binding.toolbar.setBackListener(v -> finish());
 
-        List<Fragment> fragments = Arrays.asList(UserSubscribedFragment.newInstance(0),
-                UserSubscribedFragment.newInstance(1));
+        List<Fragment> fragments = Arrays.asList(UserSubscribedFragment.newInstance(MyRetrofitService.TYPE_COMIC),
+                UserSubscribedFragment.newInstance(MyRetrofitService.TYPE_NOVEL));
         List<String> tabTitles = Arrays.asList(getString(R.string.icon_comic_title), getString(R.string.icon_novel_title));
 
         binding.viewPager.setOffscreenPageLimit(1);

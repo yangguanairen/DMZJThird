@@ -52,7 +52,7 @@ public class UserHistoryFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@androidx.annotation.NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
@@ -78,8 +78,8 @@ public class UserHistoryFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            if (mType == 0) {
-                IntentUtil.goToComicInfoActivity(getActivity(), ((UserHistoryBean) adapter.getData().get(position)).getComicId());
+            if (mType == MyRetrofitService.TYPE_COMIC) {
+                IntentUtil.goToComicInfoActivity(getActivity(), ((UserHistoryBean) adapter.getData().get(position)).getObjectId());
             } else {
                 Toast.makeText(getActivity(), "跳转: 小说Info页面, 没写完", Toast.LENGTH_SHORT).show();
             }
@@ -89,7 +89,7 @@ public class UserHistoryFragment extends Fragment {
     private void getResponse() {
 
         long uid = MyDataStore.getInstance(getContext()).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
-        service.getAllHistory(uid)
+        service.getAllHistory(uid, mType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<UserHistoryBean>>() {

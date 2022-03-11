@@ -29,8 +29,8 @@ public class UserHistoryAdapter extends BaseQuickAdapter<UserHistoryBean, BaseVi
     @Override
     protected void convert(@NonNull BaseViewHolder holder, UserHistoryBean bean) {
 
-        GlideUtil.loadImageWithCookie(mContext, bean.getCover(), holder.getView(R.id.cover));
-        holder.setText(R.id.title, bean.getComicName());
+        GlideUtil.loadImageWithCookie(mContext, bean.getObjectCover(), holder.getView(R.id.cover));
+        holder.setText(R.id.title, bean.getObjectName());
         holder.setText(R.id.tag, bean.getChapterName() == null ? "未读" : "上次观看至" + bean.getChapterName());
         holder.setText(R.id.description, TimeUtil.millConvertToDate(bean.getaTime()));
 

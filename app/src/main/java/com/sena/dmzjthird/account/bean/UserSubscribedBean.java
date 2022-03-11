@@ -8,52 +8,53 @@ package com.sena.dmzjthird.account.bean;
  */
 public class UserSubscribedBean {
 
-    private long id;
-    private long uid;
-    private String comicId;
-    private String cover;
-    private String comicName;
+    private Long id;
+    private Long uid;
+    private String objectId;
+    private String objectCover;
+    private String objectName;
     private String author;
-    private long cTime;
+    private int objectType;
+    private Long cTime;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getUid() {
+    public Long getUid() {
         return uid;
     }
 
-    public void setUid(long uid) {
+    public void setUid(Long uid) {
         this.uid = uid;
     }
 
-    public String getComicId() {
-        return comicId;
+    public String getObjectId() {
+        return objectId;
     }
 
-    public void setComicId(String comicId) {
-        this.comicId = comicId;
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
-    public String getCover() {
-        return cover;
+    public String getObjectCover() {
+        return objectCover;
     }
 
-    public void setCover(String cover) {
-        this.cover = cover;
+    public void setObjectCover(String objectCover) {
+        this.objectCover = objectCover;
     }
 
-    public String getComicName() {
-        return comicName;
+    public String getObjectName() {
+        return objectName;
     }
 
-    public void setComicName(String comicName) {
-        this.comicName = comicName;
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
     }
 
     public String getAuthor() {
@@ -64,11 +65,19 @@ public class UserSubscribedBean {
         this.author = author;
     }
 
-    public long getcTime() {
+    public int getObjectType() {
+        return objectType;
+    }
+
+    public void setObjectType(int objectType) {
+        this.objectType = objectType;
+    }
+
+    public Long getcTime() {
         return cTime;
     }
 
-    public void setcTime(long cTime) {
+    public void setcTime(Long cTime) {
         this.cTime = cTime;
     }
 }

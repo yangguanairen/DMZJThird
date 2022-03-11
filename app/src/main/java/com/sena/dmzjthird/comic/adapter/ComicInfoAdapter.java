@@ -59,7 +59,7 @@ public class ComicInfoAdapter extends BaseQuickAdapter<ComicDetailRes.ComicDetai
 
         holder.setText(R.id.classifyName, data.getTitle());
         adapter.setOnItemClickListener((a, view, position) -> {
-            String selectChapterId = String.valueOf(data.getData(position).getChapterId());
+            int selectChapterId = data.getData(position).getChapterId();
             String selectChapterName = data.getData(position).getChapterTitle();
             IntentUtil.goToComicViewActivity(mContext, mComicId, mCover, mComicName, selectChapterId, selectChapterName);
         });

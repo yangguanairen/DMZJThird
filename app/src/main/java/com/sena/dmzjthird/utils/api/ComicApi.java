@@ -119,7 +119,7 @@ public class ComicApi {
                     + "?tag_id=" + tagId
                     + "&by_time=" + time
                     + "&rank_type=" + rankType
-                    + "&page" + page
+                    + "&page=" + page
             ).build();
             Response response = client.newCall(request).execute();
 

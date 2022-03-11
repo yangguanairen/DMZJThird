@@ -10,9 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.application.NovelDetailRes;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.databinding.FragmentNovelInfoBinding;
@@ -33,7 +30,8 @@ public class NovelInfoFragment extends Fragment {
 
     private static final String ARG_NOVEL_ID = "novel_id";
     private String mNovelId;
-    private String mCoverUrl;
+    private static String mNovelName;
+    private static String mCoverUrl;
 
     public static NovelInfoFragment newInstance(String novelId) {
         NovelInfoFragment fragment = new NovelInfoFragment();
@@ -87,6 +85,7 @@ public class NovelInfoFragment extends Fragment {
                     @Override
                     public void onNext(NovelDetailRes.@io.reactivex.rxjava3.annotations.NonNull NovelDetailInfoResponse data) {
                         mCoverUrl = data.getCover();
+                        mNovelName = data.getName();
 
                         GlideUtil.loadImage(getContext(), data.getCover(), binding.cover);
 
@@ -127,5 +126,13 @@ public class NovelInfoFragment extends Fragment {
 
     public interface Callbacks {
         void onLoadInfoEnd(String title);
+    }
+
+    public static String getNovelName() {
+        return mNovelName;
+    }
+
+    public static String getNovelCover() {
+        return mCoverUrl;
     }
 }

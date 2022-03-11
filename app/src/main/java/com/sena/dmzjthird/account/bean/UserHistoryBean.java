@@ -10,10 +10,13 @@ public class UserHistoryBean {
 
     private long id;
     private long uid;
-    private String comicId;
-    private String cover;
-    private String comicName;
-    private String chapterId;
+    private String objectId;
+    private String objectCover;
+    private String objectName;
+    private int objectType;
+    private int volumeId;       // 轻小说卷id
+    private String volumeName;  // 轻小说卷名
+    private int chapterId;
     private String chapterName;
     private long cTime;
     private long aTime;
@@ -34,35 +37,59 @@ public class UserHistoryBean {
         this.uid = uid;
     }
 
-    public String getComicId() {
-        return comicId;
+    public String getObjectId() {
+        return objectId;
     }
 
-    public void setComicId(String comicId) {
-        this.comicId = comicId;
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
-    public String getCover() {
-        return cover;
+    public String getObjectCover() {
+        return objectCover;
     }
 
-    public void setCover(String cover) {
-        this.cover = cover;
+    public void setObjectCover(String objectCover) {
+        this.objectCover = objectCover;
     }
 
-    public String getComicName() {
-        return comicName;
+    public String getObjectName() {
+        return objectName;
     }
 
-    public void setComicName(String comicName) {
-        this.comicName = comicName;
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
     }
 
-    public String getChapterId() {
+    public int getObjectType() {
+        return objectType;
+    }
+
+    public void setObjectType(int objectType) {
+        this.objectType = objectType;
+    }
+
+    public int getVolumeId() {
+        return volumeId;
+    }
+
+    public void setVolumeId(int volumeId) {
+        this.volumeId = volumeId;
+    }
+
+    public String getVolumeName() {
+        return volumeName;
+    }
+
+    public void setVolumeName(String volumeName) {
+        this.volumeName = volumeName;
+    }
+
+    public int getChapterId() {
         return chapterId;
     }
 
-    public void setChapterId(String chapterId) {
+    public void setChapterId(int chapterId) {
         this.chapterId = chapterId;
     }
 
