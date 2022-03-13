@@ -51,6 +51,12 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ViewHelper.setSubscribeStatus(this, novelId, MyRetrofitService.TYPE_NOVEL, binding.toolbar.getFavoriteIV(), null);
+    }
+
     private void initView() {
 
         binding.viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
@@ -75,6 +81,17 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
 
         binding.tableLayout.setupWithViewPager(binding.viewPager);
 
+        // 订阅
+        binding.toolbar.setFavoriteListener(v -> {
+            ViewHelper.controlSubscribe(this, novelId, "cover", "title", "author", MyRetrofitService.TYPE_NOVEL,
+                    binding.toolbar.getFavoriteIV(), null);
+        });
+
+//        // 下载
+//        binding.toolbar.setOtherListener(v -> {
+//
+//        });
+
     }
 
     @Override
@@ -92,15 +109,7 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
             return ;
         }
         binding.toolbar.setTitle(title);
-        // 订阅
-        binding.toolbar.setVisibility(View.VISIBLE);
-        binding.toolbar.setFavoriteListener(v -> {
-            ViewHelper.controlSubscribe(this, novelId, "cover", "title", "author", MyRetrofitService.TYPE_NOVEL,
-                    binding.toolbar.getFavoriteIV(), null);
-        });
-        // 下载
-        binding.toolbar.setOtherListener(v -> {
 
-        });
+
     }
 }

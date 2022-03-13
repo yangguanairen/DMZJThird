@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.example.application.ComicDetailRes;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.bean.ComicInfoBean;
 
@@ -18,31 +19,29 @@ import com.sena.dmzjthird.comic.bean.ComicInfoBean;
  * Date: 2021/8/17
  * Time: 13:33
  */
-public class ComicViewCatalogAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class ComicViewCatalogAdapter extends BaseQuickAdapter<ComicDetailRes.ComicDetailChapterInfoResponse, BaseViewHolder> {
 
     private final Context mContext;
-    private String currentChapterName;
+    private int currentChapterId;
 
     public ComicViewCatalogAdapter(Context context) {
-        super(R.layout.item_comic_info_child);
+        super(R.layout.item_object_view_catalog);
         this.mContext = context;
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder holder, String s) {
-        TextView textView = holder.getView(R.id.chapterName);
-        textView.setText(s);
-        if (currentChapterName.equals(s)) {
-            textView.setTextColor(mContext.getColor(R.color.theme_blue));
+    protected void convert(@NonNull BaseViewHolder holder, ComicDetailRes.ComicDetailChapterInfoResponse data) {
+        holder.setText(R.id.chapterName, data.getChapterTitle());
+        if (data.getChapterId() == currentChapterId) {
+            holder.setTextColor(R.id.chapterName, mContext.getColor(R.color.theme_blue));
         } else {
-            textView.setTextColor(Color.WHITE);
+            holder.setTextColor(R.id.chapterName, Color.WHITE);
         }
-        textView.setBackgroundColor(Color.BLACK);
-        textView.setGravity(Gravity.CENTER_VERTICAL);
     }
 
-    public void setCurrentChapterName(String name) {
-        currentChapterName = name;
+    public void setCurrentChapterId(int chapterId) {
+        currentChapterId = chapterId;
+        notifyDataSetChanged();
     }
 
 

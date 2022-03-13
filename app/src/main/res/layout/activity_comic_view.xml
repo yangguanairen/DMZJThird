@@ -19,13 +19,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.sena.dmzjthird.custom.NormalToolbar
+            <com.sena.dmzjthird.custom.readerComic.ComicTopView
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
+                android:layout_height="wrap_content"
                 android:background="@color/view_top_bottom_color"
                 android:elevation="20dp"
-                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -35,69 +34,21 @@
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="0"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/state"
+            <com.sena.dmzjthird.custom.readerComic.ComicStateView
+                android:id="@+id/stateView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/view_top_bottom_color"
-                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintEnd_toEndOf="parent" />
 
-                <TextView
-                    android:id="@+id/chapterName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:textSize="13sp"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/pageNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:textSize="13sp"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/internetType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:textSize="13sp"
-                    android:textColor="@color/white" />
-
-
-                <TextView
-                    android:id="@+id/batteryNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:textSize="13sp"
-                    android:textColor="@color/white" />
-            </LinearLayout>
-
-            <include
+            <com.sena.dmzjthird.custom.readerComic.ComicBottomView
                 android:id="@id/bottomView"
-                layout="@layout/content_object_bottom_tool_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent" />

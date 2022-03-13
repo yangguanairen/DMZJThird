@@ -9,16 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.utils.LogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 public class NormalToolbar extends Toolbar {
 
     private View view;
-    private ConstraintLayout linear;
     private ImageView backIV;
     private TextView titleTV;
     private ImageView favoriteIV;
@@ -79,7 +75,6 @@ public class NormalToolbar extends Toolbar {
             LayoutInflater inflater = LayoutInflater.from(context);
             view = inflater.inflate(R.layout.toolbar_normal, null);
 
-            linear = view.findViewById(R.id.linear);
             backIV = view.findViewById(R.id.back);
             titleTV = view.findViewById(R.id.title);
             favoriteIV = view.findViewById(R.id.favorite);

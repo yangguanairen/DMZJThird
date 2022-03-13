@@ -20,9 +20,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class BroadcastHelper {
 
+    /**
+     * 不能使用本地广播注册
+     * 无法接收到系统广播
+     */
     public static BroadcastReceiver getBatteryAndNetworkBroadcast(Context context, TextView tvBattery, TextView tvNetwork) {
-
-        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(context);
 
         BroadcastReceiver receiver = new BroadcastReceiver() {
             @SuppressLint("SetTextI18n")
@@ -62,14 +64,13 @@ public class BroadcastHelper {
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
 
-        manager.registerReceiver(receiver, filter);
+        context.registerReceiver(receiver, filter);
 
         return receiver;
     }
 
     public static void unregisterBroadcast(Context context, BroadcastReceiver receiver) {
-        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(context);
-        manager.unregisterReceiver(receiver);
+        context.unregisterReceiver(receiver);
     }
 
 }
