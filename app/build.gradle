@@ -125,6 +125,10 @@ dependencies {
     //
     implementation "com.github.pokercc:ExpandableRecyclerView:0.9.3"
 
+    // Room数据库
+    implementation "androidx.room:room-runtime:2.4.2"
+    annotationProcessor "androidx.room:room-compiler:2.4.2"
+
 
 
 
