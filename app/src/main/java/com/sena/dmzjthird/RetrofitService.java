@@ -201,6 +201,14 @@ public interface RetrofitService {
             @Path("page") int page  // defValue = 0
     );
 
+    // 漫画章节详情
+    // https://nnv3api.muwai.com/chapter/51283/116808.json
+    @GET("chapter/{comicId}/{chapterId}.json")
+    Observable<ComicChapterInfoBean> getChapterInfo(
+            @Path("comicId") String comicId,
+            @Path("chapterId") int chapterId
+    );
+
     // nnv3api.muwai.com/UCenter/author/7470.json
     @GET("/UCenter/author/{id}.json")
     Observable<AuthorInfoBean> getAuthorInfo(
@@ -263,12 +271,6 @@ public interface RetrofitService {
 
 
 
-    // m.dmzj.com/chapinfo/45854/113148.html
-    @GET("chapter/{comicId}/{chapterId}.json")
-    Observable<ComicChapterInfoBean> getChapterInfo(
-            @Path("comicId") String comicId,
-            @Path("chapterId") int chapterId
-    );
 
     // nnv3api.muwai.com/subscribe/0/109697332/61539
     @GET("subscribe/0/{uid}/{obj_id}")

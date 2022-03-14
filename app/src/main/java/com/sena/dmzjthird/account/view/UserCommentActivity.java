@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import android.os.Bundle;
 
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.account.fragment.UserCommentFragment;
 import com.sena.dmzjthird.databinding.ActivityUserCommentBinding;
 import com.sena.dmzjthird.utils.MyDataStore;
@@ -29,8 +30,9 @@ public class UserCommentActivity extends AppCompatActivity {
 
         binding.toolbar.setBackListener(v -> finish());
 
-        String uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, "");
+//        long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
 
+        String uid = MyRetrofitService.DMZJ_UID;
         List<Fragment> fragments = Arrays.asList(UserCommentFragment.newInstance(0, uid),
                 UserCommentFragment.newInstance(1, uid));
         List<String> tabTitles = Arrays.asList(getString(R.string.icon_comic_title), getString(R.string.icon_novel_title));
