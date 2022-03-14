@@ -97,12 +97,12 @@ public class NovelInfoFragment extends Fragment {
                         binding.updateTime.setText(getString(R.string.object_info_last_update_time, TimeUtil.millConvertToDate(data.getLastUpdateTime() * 1000)));
                         binding.description.setText(data.getIntroduction());
 
-                        callbacks.onLoadInfoEnd(data.getName(), data.getCover());
+                        callbacks.onLoadInfoEnd(data.getName(), data.getCover(), data.getAuthors());
                     }
 
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                        callbacks.onLoadInfoEnd(null,null);
+                        callbacks.onLoadInfoEnd(null,null, null);
                     }
 
                     @Override
@@ -125,7 +125,7 @@ public class NovelInfoFragment extends Fragment {
     }
 
     public interface Callbacks {
-        void onLoadInfoEnd(String title, String cover);
+        void onLoadInfoEnd(String title, String cover, String author);
     }
 
     public static String getNovelName() {

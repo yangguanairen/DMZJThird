@@ -30,6 +30,7 @@ import com.sena.dmzjthird.novel.bean.NovelLatestBean;
 import com.sena.dmzjthird.novel.bean.NovelRankBean;
 import com.sena.dmzjthird.novel.bean.NovelRankTagBean;
 import com.sena.dmzjthird.novel.bean.NovelRecommendBean;
+import com.sena.dmzjthird.novel.bean.NovelSearchBean;
 
 import java.util.List;
 import java.util.Map;
@@ -120,6 +121,16 @@ public interface RetrofitService {
         @Path("sort") int sort,
         @Path("page") int page
     );
+
+    // 轻小说搜索
+    //https://nnv3api.muwai.com/search/show/1/一/1.json
+    @GET("/search/show/1/{query}/{page}.json")
+    Observable<List<NovelSearchBean>> getNovelSearch(
+            @Path("query") String query,
+            @Path("page") int page  // defValue = 0
+    );
+
+
     /**************************************** 轻小说 ****************************************/
 
 
@@ -180,6 +191,14 @@ public interface RetrofitService {
     @GET("v3/comic/related/{id}.json")
     Observable<ComicRelatedBean> getComicRelated(
             @Path("id") String id
+    );
+
+    // 漫画搜索
+    //https://nnv3api.muwai.com/search/show/1/一/1.json
+    @GET("/search/show/0/{query}/{page}.json")
+    Observable<List<ComicSearchResultBean>> getComicSearch(
+            @Path("query") String query,
+            @Path("page") int page  // defValue = 0
     );
 
     // nnv3api.muwai.com/UCenter/author/7470.json

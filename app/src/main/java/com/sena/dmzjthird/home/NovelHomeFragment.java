@@ -21,6 +21,8 @@ import com.sena.dmzjthird.novel.fragment.NovelCategoryFragment;
 import com.sena.dmzjthird.novel.fragment.NovelLatestFragment;
 import com.sena.dmzjthird.novel.fragment.NovelRankFragment;
 import com.sena.dmzjthird.novel.fragment.NovelRecommendFragment;
+import com.sena.dmzjthird.novel.view.NovelSearchActivity;
+import com.sena.dmzjthird.utils.IntentUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -83,7 +85,7 @@ public class NovelHomeFragment extends Fragment {
 
         binding.search.setOnClickListener(v -> {
             // 跳转小说搜索
-
+            IntentUtil.goToActivity(getContext(), NovelSearchActivity.class);
         });
     }
 

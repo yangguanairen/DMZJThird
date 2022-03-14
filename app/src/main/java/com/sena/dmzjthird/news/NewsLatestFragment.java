@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.application.NewsListRes;
 import com.sena.dmzjthird.RetrofitService;
-import com.sena.dmzjthird.custom.AutoBannerData;
+import com.sena.dmzjthird.custom.autoBanner.AutoBannerData;
 import com.sena.dmzjthird.databinding.FragmentNewsLatestBinding;
 import com.sena.dmzjthird.news.bean.NewsBannerBean;
 import com.sena.dmzjthird.utils.IntentUtil;

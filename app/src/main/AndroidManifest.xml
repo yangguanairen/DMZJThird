@@ -19,6 +19,9 @@
         android:theme="@style/AppThemeNoAction"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".novel.view.NovelSearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".novel.view.NovelViewActivity"
             android:exported="false" />
         <activity

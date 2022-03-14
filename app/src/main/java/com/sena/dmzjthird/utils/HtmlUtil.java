@@ -22,7 +22,8 @@ public class HtmlUtil {
                 .replace("&rsquo;", "’")
                 .replace("&amp;", "&")
                 .replace("&middot;", "·")
-                .replace("&#12316;", "〜");
+                .replace("&#12316;", "〜")
+                .replace("&quot;", "\"");
 
     }
 

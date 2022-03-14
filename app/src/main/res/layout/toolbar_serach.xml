@@ -9,7 +9,8 @@
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_back_gray"
+        android:src="@drawable/ic_back_gray"
+        android:background="?selectableItemBackground"
         android:layout_marginStart="20dp"/>
 
     <EditText
@@ -26,7 +27,8 @@
         android:id="@+id/search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_search_gray"
+        android:src="@drawable/ic_search_gray"
+        android:background="?selectableItemBackground"
         android:layout_marginEnd="@dimen/dp_10"/>
 
 

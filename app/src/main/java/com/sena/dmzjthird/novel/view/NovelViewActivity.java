@@ -124,7 +124,13 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
 
             @Override
             public void onPageSelected(int position) {
-                binding.bottomView.seekBar.setProgress(position);
+                if (position == 0) {
+                    updateChapterId(true);
+                } else if (position == binding.viewPager.getAdapter().getCount() - 1) {
+                    updateChapterId(false);
+                } else {
+                    binding.bottomView.seekBar.setProgress(position);
+                }
             }
 
             @Override
@@ -198,7 +204,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
             // 这样写不好，后期改正
             binding.bottomView.seekBar.setMax(totalPage - 1);
             // viewPager的下标从0开始
-            binding.pageNum.setText((binding.bottomView.seekBar.getProgress() + 1) + "/" + totalPage);
+            binding.pageNum.setText((binding.bottomView.seekBar.getProgress() == 0 ? 1 : binding.bottomView.seekBar.getProgress()) + "/" + totalPage);
         });
         vm.currentPageIndex.observe(this, currentPage -> {
             if (isUserOperate) {
@@ -206,7 +212,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
             }
             // 设置底部监听
             // 这样写不好，后期改正
-            binding.pageNum.setText((currentPage + 1) + "/" + (binding.bottomView.seekBar.getMax() + 1));
+            binding.pageNum.setText((currentPage == 0 ? 1 : currentPage) + "/" + (binding.bottomView.seekBar.getMax()));
         });
 
     }
@@ -281,7 +287,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
                         responseStr = HtmlUtil.convertSpecialCharacters(sb.toString());
 
 
-                        updateViewPager(0, currentBgColorId == R.color.black);
+                        updateViewPager(1, currentBgColorId == R.color.black);
                     }
 
                     @Override
@@ -343,8 +349,13 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
                 currentTextSize, currentSpaceLine, isBlackBg);
         binding.viewPager.setAdapter(pageAdapter);
         LogUtil.e("当前页面: " + currentPage);
+        // 防止位于最后一位，缩小字号和行距，导致该页为空白，则跳到有文字的最后一页
+        /**
+         * important
+         */
+        currentPage = currentPage >= pageAdapter.getCount() - 1 ? pageAdapter.getCount()- 2 : currentPage;
         binding.viewPager.setCurrentItem(currentPage);
-        vm.totalPageNum.postValue(pageAdapter.getCount());
+        vm.totalPageNum.postValue(pageAdapter.getCount() - 1);
         binding.bottomView.seekBar.setProgress(currentPage);
     }
 

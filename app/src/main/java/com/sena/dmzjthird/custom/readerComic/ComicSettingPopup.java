@@ -35,7 +35,6 @@ public class ComicSettingPopup extends BottomPopupView {
     private boolean isUseSystemBrightness;
     private int brightness;
     private boolean isVerticalMode;
-    private boolean isComicMode;
     private boolean isKeepLight;
     private boolean isFullScreen;
     private boolean isShowState;
@@ -47,8 +46,6 @@ public class ComicSettingPopup extends BottomPopupView {
     SeekBar lightSeekBar;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch verticalSwitch;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    Switch modeSwitch;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch keepSwitch;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
@@ -91,12 +88,11 @@ public class ComicSettingPopup extends BottomPopupView {
         );
 
         isUseSystemBrightness = dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_SYSTEM_BRIGHTNESS, false);
-        brightness = dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_BRIGHTNESS, 0);
+        brightness = dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_BRIGHTNESS, systemMaxBrightness / 2);
         isVerticalMode = dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_VERTICAL_MODE, false);
-        isComicMode = dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_COMIC_MODE, false);
         isKeepLight = dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_KEEP_LIGHT, false);
         isFullScreen = dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_FULL_SCREEN, false);
-        isShowState = dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_SHOW_STATE, false);
+        isShowState = dataStore.getValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_SHOW_STATE, true);
 
 
         if (isUseSystemBrightness) {
@@ -114,7 +110,6 @@ public class ComicSettingPopup extends BottomPopupView {
         lightSwitch = findViewById(R.id.lightSwitch);
         lightSeekBar = findViewById(R.id.lightSeekBar);
         verticalSwitch = findViewById(R.id.verticalSwitch);
-        modeSwitch = findViewById(R.id.modeSwitch);
         keepSwitch = findViewById(R.id.keepSwitch);
         fullSwitch = findViewById(R.id.fullSwitch);
         stateSwitch = findViewById(R.id.stateSwitch);
@@ -129,16 +124,12 @@ public class ComicSettingPopup extends BottomPopupView {
         lightSeekBar.setMax(systemMaxBrightness);
         lightSeekBar.setProgress(brightness);
         verticalSwitch.setChecked(isVerticalMode);
-        modeSwitch.setChecked(isComicMode);
         keepSwitch.setChecked(isKeepLight);
         fullSwitch.setChecked(isFullScreen);
         stateSwitch.setChecked(isShowState);
 
         if (isUseSystemBrightness) {
             brightnessLayout.setVisibility(GONE);
-        }
-        if (isVerticalMode) {
-            modeLayout.setVisibility(View.GONE);
         }
 
         addClick();
@@ -176,9 +167,6 @@ public class ComicSettingPopup extends BottomPopupView {
         });
 
         verticalSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-        });
-
-        modeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
         });
 
         fullSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -235,7 +223,6 @@ public class ComicSettingPopup extends BottomPopupView {
         dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_SYSTEM_BRIGHTNESS, isUseSystemBrightness);
         dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_BRIGHTNESS, brightness);
         dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_VERTICAL_MODE, isVerticalMode);
-        dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_COMIC_MODE, isComicMode);
         dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_FULL_SCREEN, isFullScreen);
         dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_KEEP_LIGHT, isKeepLight);
         dataStore.saveValue(MyDataStore.DATA_STORE_READ_SETTING, MyDataStore.SETTING_SHOW_STATE, isShowState);

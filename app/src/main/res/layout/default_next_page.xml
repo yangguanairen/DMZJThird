@@ -10,6 +10,6 @@
         android:maxEms="1"
         android:text="下一话"
         android:textSize="30sp"
-        android:textColor="@color/white" />
+        android:textColor="#808080" />
 
 </LinearLayout>

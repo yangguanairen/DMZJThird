@@ -13,7 +13,7 @@ import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicRecommendAdapter;
 import com.sena.dmzjthird.comic.bean.ComicRecommendLikeBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendNewBean;
-import com.sena.dmzjthird.custom.AutoBannerData;
+import com.sena.dmzjthird.custom.autoBanner.AutoBannerData;
 import com.sena.dmzjthird.databinding.FragmentComicRecommendBinding;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 

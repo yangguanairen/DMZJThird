@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sena.dmzjthird.RetrofitService;
-import com.sena.dmzjthird.custom.AutoBannerData;
+import com.sena.dmzjthird.custom.autoBanner.AutoBannerData;
 import com.sena.dmzjthird.databinding.FragmentNovelRecommendBinding;
 import com.sena.dmzjthird.novel.adapter.NovelRecommendAdapter;
 import com.sena.dmzjthird.novel.bean.NovelRecommendBean;
@@ -107,6 +107,7 @@ public class NovelRecommendFragment extends Fragment {
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
                         // 出错处理
+                        binding.refreshLayout.setRefreshing(false);
                     }
 
                     @Override

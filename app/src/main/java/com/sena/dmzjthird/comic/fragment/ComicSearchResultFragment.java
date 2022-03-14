@@ -1,6 +1,5 @@
 package com.sena.dmzjthird.comic.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,11 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicSearchResultAdapter;
 import com.sena.dmzjthird.comic.bean.ComicSearchResultBean;
-import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.databinding.FragmentComicSearchResultBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
@@ -60,19 +57,25 @@ public class ComicSearchResultFragment extends Fragment {
         binding = FragmentComicSearchResultBinding.inflate(inflater, container, false);
         service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
 
+        initView();
+        getResponse();
+
+        return binding.getRoot();
+    }
+
+    private void initView() {
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ComicSearchResultAdapter(getActivity());
         binding.recyclerview.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter, view, position) ->
-                IntentUtil.goToComicInfoActivity(getActivity(), ((ComicSearchResultBean) adapter.getData().get(position)).getId()));
+        adapter.setOnItemClickListener((a, view, position) -> {
+            ComicSearchResultBean bean = (ComicSearchResultBean) a.getData().get(position);
+            String comicId = bean.getId();
+            IntentUtil.goToComicInfoActivity(getActivity(), comicId);
+        });
         adapter.getLoadMoreModule().setOnLoadMoreListener(this::getResponse);
         adapter.getLoadMoreModule().setAutoLoadMore(true);
         adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
-
-        getResponse();
-
-        return binding.getRoot();
     }
 
     private void getResponse() {
@@ -89,29 +92,28 @@ public class ComicSearchResultFragment extends Fragment {
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<ComicSearchResultBean> beans) {
 
                         if (page == 0 && beans.size() == 0) {
-                            binding.noData.setVisibility(View.VISIBLE);
-                            binding.recyclerview.setVisibility(View.GONE);
+                            onErrorAppear(true);
                             return ;
                         }
-                        binding.noData.setVisibility(View.GONE);
-                        binding.recyclerview.setVisibility(View.VISIBLE);
+                        onErrorAppear(false);
                         if (beans.size() == 0) {
                             adapter.getLoadMoreModule().loadMoreEnd();
                         } else {
                             adapter.getLoadMoreModule().loadMoreComplete();
-                            page++;
                         }
                         if (page == 0) {
                             adapter.setList(beans);
                         } else {
                             adapter.addData(beans);
                         }
+                        page++;
 
                     }
 
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
                         LogUtil.internetError(e);
+                        onErrorAppear(true);
                     }
 
                     @Override
@@ -121,4 +123,14 @@ public class ComicSearchResultFragment extends Fragment {
                 });
     }
 
+    private void onErrorAppear(boolean isError) {
+        binding.recyclerview.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
+        binding.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

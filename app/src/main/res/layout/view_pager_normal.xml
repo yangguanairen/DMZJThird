@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
 
-    <view class="com.sena.dmzjthird.custom.AutoBanner$MyViewPager"
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

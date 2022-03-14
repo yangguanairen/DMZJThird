@@ -10,7 +10,7 @@ public class ComicSearchResultBean {
     private String _biz;
     private long addtime;
     private String alias_name;
-    private String author;
+    private String authors;
     private int copyright;
     private String cover;
     private int device_show;
@@ -48,12 +48,12 @@ public class ComicSearchResultBean {
         this.alias_name = alias_name;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getAuthors() {
+        return authors;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthors(String authors) {
+        this.authors = authors;
     }
 
     public int getCopyright() {

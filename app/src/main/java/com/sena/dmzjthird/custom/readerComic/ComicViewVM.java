@@ -30,7 +30,6 @@ public class ComicViewVM extends ViewModel {
     public MutableLiveData<Integer> sysMaxBright = new MutableLiveData<>();
     public MutableLiveData<Integer> seekbarBright = new MutableLiveData<>();
     public MutableLiveData<Boolean> isVerticalMode = new MutableLiveData<>();
-    public MutableLiveData<Boolean> isJapanMode = new MutableLiveData<>();
     public MutableLiveData<Boolean> isKeepLight = new MutableLiveData<>();
     public MutableLiveData<Boolean> isFullMode = new MutableLiveData<>();
     public MutableLiveData<Boolean> isShowState = new MutableLiveData<>();

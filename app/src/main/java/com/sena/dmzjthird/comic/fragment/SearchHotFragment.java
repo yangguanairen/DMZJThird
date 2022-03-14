@@ -1,6 +1,5 @@
 package com.sena.dmzjthird.comic.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,18 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
-import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
+import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.comic.adapter.SearchHotAdapter;
 import com.sena.dmzjthird.comic.bean.SearchHotBean;
-import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.databinding.FragmentSearchHotBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
@@ -60,7 +56,7 @@ public class SearchHotFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@androidx.annotation.NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSearchHotBinding.inflate(inflater, container, false);
 
@@ -72,11 +68,12 @@ public class SearchHotFragment extends Fragment {
         binding.recyclerview.setLayoutManager(manager);
         adapter = new SearchHotAdapter();
         binding.recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener((adapter, view, position) -> {
-            if (mType == 0) {
-                IntentUtil.goToComicInfoActivity(getActivity(), ((SearchHotBean) adapter.getData().get(position)).getId());
-            } else {
-
+        adapter.setOnItemClickListener((a, view, position) -> {
+            String objectId = ((SearchHotBean) a.getData().get(position)).getId();
+            if (mType == MyRetrofitService.TYPE_COMIC) {
+                IntentUtil.goToComicInfoActivity(getActivity(), objectId);
+            } else if (mType == MyRetrofitService.TYPE_NOVEL) {
+                IntentUtil.goToNovelInfoActivity(getActivity(), objectId);
             }
         });
 
@@ -87,7 +84,7 @@ public class SearchHotFragment extends Fragment {
 
     private void getResponse() {
         RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
-        service.getSearchHot(mType)
+        service.getSearchHot(mType == MyRetrofitService.TYPE_COMIC ? 0 : 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<SearchHotBean>>() {

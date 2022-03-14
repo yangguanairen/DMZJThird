@@ -29,6 +29,9 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
     private List<Fragment> fragmentList;
     private List<String> titleList;
     private String novelId;
+    private String novelCover;
+    private String novelName;
+    private String novelAuthor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,7 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
 
         // 订阅
         binding.toolbar.setFavoriteListener(v -> {
-            ViewHelper.controlSubscribe(this, novelId, "cover", "title", "author", MyRetrofitService.TYPE_NOVEL,
+            ViewHelper.controlSubscribe(this, novelId, novelCover, novelName, novelAuthor, MyRetrofitService.TYPE_NOVEL,
                     binding.toolbar.getFavoriteIV(), null);
         });
 
@@ -101,15 +104,17 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
     }
 
     @Override
-    public void onLoadInfoEnd(String title, String cover) {
+    public void onLoadInfoEnd(String title, String cover, String author) {
         binding.toolbar.setBackListener(v -> finish());
 
         if (title == null) {
             // 出错处理
+            binding.toolbar.setFavoriteIVVisibility(View.GONE);
             return ;
         }
         binding.toolbar.setTitle(title);
-
-
+        novelCover = cover;
+        novelName = title;
+        novelAuthor = author;
     }
 }

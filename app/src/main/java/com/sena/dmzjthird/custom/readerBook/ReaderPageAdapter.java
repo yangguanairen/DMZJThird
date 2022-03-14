@@ -3,6 +3,7 @@ package com.sena.dmzjthird.custom.readerBook;
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -45,10 +46,10 @@ public class ReaderPageAdapter extends PagerAdapter {
     public int getCount() {
         if (readerData.imageList.isEmpty()) {
             LogUtil.e("文字总页数: " + readerData.totalPageNum);
-            return readerData.totalPageNum;
+            return readerData.totalPageNum + 2;
         } else {
-            LogUtil.e("图片总页数: " + readerData.totalPageNum);
-            return readerData.imageList.size();
+            LogUtil.e("图片总页数: " + readerData.imageList.size());
+            return readerData.imageList.size() + 2;
         }
     }
 
@@ -60,9 +61,22 @@ public class ReaderPageAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
+
+        if (position == 0) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.default_pre_page, null);
+            container.addView(view);
+            return view;
+        }
+        if (position == getPageNum() + 1) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.default_next_page, null);
+            container.addView(view);
+            return view;
+        }
+
+
         if (readerData.imageList.isEmpty()) {
             ReaderView readerView = new ReaderView(mContext);
-            readerView.setReaderData(readerData.mTextSize, readerData.mFinalLineSpace,  readerData.pageContents.get(position),
+            readerView.setReaderData(readerData.mTextSize, readerData.mFinalLineSpace,  readerData.pageContents.get(position - 1),
                     readerData.xOffset, readerData.yOffset,
                     mIsBlackBg);
 
@@ -98,5 +112,17 @@ public class ReaderPageAdapter extends PagerAdapter {
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
+    }
+
+    /**
+     * 不包括首尾上下章节页面
+     * @return
+     */
+    public int getPageNum() {
+        if (readerData.imageList.isEmpty()) {
+            return readerData.totalPageNum;
+        } else {
+            return readerData.imageList.size();
+        }
     }
 }

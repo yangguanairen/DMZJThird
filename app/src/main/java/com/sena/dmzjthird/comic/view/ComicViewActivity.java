@@ -21,6 +21,7 @@ import com.sena.dmzjthird.comic.bean.ComicChapterInfoBean;
 import com.sena.dmzjthird.custom.readerComic.ComicViewVM;
 import com.sena.dmzjthird.databinding.ActivityComicViewBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
+import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 import com.sena.dmzjthird.utils.ViewHelper;
 import com.sena.dmzjthird.utils.api.ComicApi;
@@ -280,7 +281,7 @@ public class ComicViewActivity extends AppCompatActivity {
 
                         binding.viewPager.setAdapter(new ComicViewPagerAdapter(ComicViewActivity.this, images));
                         binding.viewPager.setOffscreenPageLimit(images.size() + 1);
-                        binding.viewPager.setCurrentItem(1);
+                        binding.viewPager.setCurrentItem(1, false);
 
                         ViewHelper.addHistory(ComicViewActivity.this, comicId, comicCover, comicName, MyRetrofitService.TYPE_COMIC,
                                 0, "Null", chapterId, vm.currentChapterName.getValue());

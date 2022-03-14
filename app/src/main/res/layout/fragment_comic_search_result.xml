@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".comic.fragment.ComicSearchResultFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -11,10 +12,15 @@
         android:layout_height="match_parent" />
 
     <TextView
-        android:id="@+id/no_data"
-        android:visibility="gone"
+        android:id="@+id/noData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/no_data" />
+        android:padding="20dp"
+        android:visibility="invisible"
+        android:text="@string/no_data"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
