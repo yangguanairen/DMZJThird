@@ -14,11 +14,13 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
  * Time: 20:30
  */
 
-@Database(entities = {Comic.class}, version = 1, exportSchema = false)
+@Database(entities = {Comic.class, Chapter.class, Url.class}, version = 1, exportSchema = false)
 public abstract class MyRoomDatabase extends RoomDatabase {
 
     public abstract ComicDao comicDao();
 
+    public abstract ChapterDao chapterDao();
 
+    public abstract UrlDao urlDao();
 
 }

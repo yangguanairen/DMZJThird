@@ -18,13 +18,17 @@ import java.io.Serializable;
 @Entity(tableName = "comic")
 public class Comic implements Serializable {
 
-    @PrimaryKey
-    @NonNull
+    @PrimaryKey @NonNull
+    @ColumnInfo(name = "comic_id")
     public String comicId;
+    @ColumnInfo(name = "comic_name")
     public String comicName;
+    @ColumnInfo(name = "comic_cover")
     public String comicCover;
-    public String totalPages;
-    public String totalSize;
+    @ColumnInfo(name = "total_pages")
+    public int totalPages;
+    @ColumnInfo(name = "total_size")
+    public int totalSize;
 
 
 }
