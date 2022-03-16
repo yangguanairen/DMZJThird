@@ -25,8 +25,8 @@ public class Comic implements Serializable {
     public String comicName;
     @ColumnInfo(name = "comic_cover")
     public String comicCover;
-    @ColumnInfo(name = "total_pages")
-    public int totalPages;
+    @ColumnInfo(name = "total_chapter")
+    public int totalChapter;
     @ColumnInfo(name = "total_size")
     public int totalSize;
 

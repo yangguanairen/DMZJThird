@@ -16,12 +16,12 @@
 
 
     <TextView
-        android:id="@+id/noData"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/no_data"
-        android:textSize="18sp"
-        android:textColor="@color/black" />
+    android:id="@+id/noData"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:text="@string/no_data"
+    android:textSize="18sp"
+    android:textColor="@color/black" />
 
 
 

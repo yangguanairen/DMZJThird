@@ -14,7 +14,7 @@ public class RoomHelper {
 
     private static MyRoomDatabase INSTANCE;
 
-    public MyRoomDatabase getInstance(Context context) {
+    public static MyRoomDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (RoomHelper.class) {
                 if (INSTANCE == null) {
