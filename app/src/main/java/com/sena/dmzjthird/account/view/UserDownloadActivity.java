@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
+import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.account.adapter.UserDownloadAdapter;
 import com.sena.dmzjthird.databinding.ActivityUserDownloadBinding;
 import com.sena.dmzjthird.download.DownloadChapterBean;
 import com.sena.dmzjthird.download.DownloadComicBean;
@@ -32,6 +36,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class UserDownloadActivity extends AppCompatActivity {
 
     private ActivityUserDownloadBinding binding;
+    private UserDownloadAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +44,20 @@ public class UserDownloadActivity extends AppCompatActivity {
         binding = ActivityUserDownloadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        initView();
+        initData();
 
     }
 
     private void initView() {
-        binding.toolbar.setBackListener(v -> finish());
 
+        ImmersionBar.with(this)
+                .statusBarColor(R.color.theme_blue)
+                .titleBarMarginTop(binding.toolbar)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .init();
+
+        binding.toolbar.setBackListener(v -> finish());
     }
 
     /**
@@ -67,15 +80,18 @@ public class UserDownloadActivity extends AppCompatActivity {
                     @Override
                     public void onNext(@NonNull List<DownloadComicBean> dataList) {
                         if (dataList.isEmpty()) {
-                            binding.error.noData.setVisibility(View.INVISIBLE);
+                            onErrorAppear(true);
                             return ;
                         }
+                        onErrorAppear(false);
                         // 设置数据
+                        adapter = new UserDownloadAdapter(UserDownloadActivity.this, dataList);
+                        binding.recyclerView.setAdapter(adapter);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        onErrorAppear(true);
                     }
 
                     @Override
@@ -83,6 +99,11 @@ public class UserDownloadActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void onErrorAppear(boolean isError) {
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 
 

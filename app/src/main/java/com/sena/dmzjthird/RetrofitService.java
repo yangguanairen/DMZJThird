@@ -5,6 +5,7 @@ import com.sena.dmzjthird.account.bean.LoginBean;
 import com.sena.dmzjthird.account.bean.UserComicCommentBean;
 import com.sena.dmzjthird.account.bean.UserNovelCommentBean;
 import com.sena.dmzjthird.account.bean.UserSubscribedBean;
+import com.sena.dmzjthird.comic.bean.ComicDownloadBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendLikeBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendOtherBean;
 import com.sena.dmzjthird.comic.bean.AuthorInfoBean;
@@ -207,6 +208,14 @@ public interface RetrofitService {
     Observable<ComicChapterInfoBean> getChapterInfo(
             @Path("comicId") String comicId,
             @Path("chapterId") int chapterId
+    );
+
+    // 漫画章节详情（用于漫画下载）
+    // https://m.dmzj.com/chapinfo/51283/114970.html
+    @GET("chapinfo/{comicId}/{chapterId}.html")
+    Observable<ComicDownloadBean> getChapterInfoForDownload(
+            @Path("comicId") String comicId,
+            @Path("chapterId") String chapterId
     );
 
     // nnv3api.muwai.com/UCenter/author/7470.json

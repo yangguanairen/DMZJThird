@@ -104,7 +104,7 @@ public class NovelChapterAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
         GroupViewHolder holder = (GroupViewHolder) viewHolder;
         float targetRotation = expand ? 180f : 0f;
 
-        ObjectAnimator.ofFloat((View) holder.binding.icon, View.ROTATION, targetRotation)
+        ObjectAnimator.ofFloat(holder.binding.icon, View.ROTATION, targetRotation)
                 .setDuration(animDuration)
                 .start();
 

@@ -45,7 +45,7 @@ public class ComicInfoAdapter extends BaseQuickAdapter<ComicDetailRes.ComicDetai
     @Override
     protected void convert(@NonNull BaseViewHolder holder, ComicDetailRes.ComicDetailChapterResponse data) {
 
-        RecyclerView recyclerView = holder.getView(R.id.recyclerview);
+        RecyclerView recyclerView = holder.getView(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
         ComicInfoChildAdapter adapter = new ComicInfoChildAdapter();
         recyclerView.setAdapter(adapter);
