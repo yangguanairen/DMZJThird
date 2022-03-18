@@ -10,26 +10,16 @@ import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.adapter.UserDownloadAdapter;
 import com.sena.dmzjthird.databinding.ActivityUserDownloadBinding;
-import com.sena.dmzjthird.download.DownloadChapterBean;
-import com.sena.dmzjthird.download.DownloadComicBean;
+import com.sena.dmzjthird.download.DownloadBean;
 import com.sena.dmzjthird.download.DownloadHelper;
-import com.sena.dmzjthird.download.DownloadUrlBean;
-import com.sena.dmzjthird.room.Chapter;
-import com.sena.dmzjthird.room.Comic;
-import com.sena.dmzjthird.room.MyRoomDatabase;
-import com.sena.dmzjthird.room.RoomHelper;
-import com.sena.dmzjthird.room.Url;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableEmitter;
 import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -66,19 +56,19 @@ public class UserDownloadActivity extends AppCompatActivity {
      * 异步操作
      */
     private void initData() {
-        Observable.create((ObservableOnSubscribe<List<DownloadComicBean>>) emitter -> {
+        Observable.create((ObservableOnSubscribe<List<DownloadBean>>) emitter -> {
 
             emitter.onNext(DownloadHelper.getAllData(this));
 
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<DownloadComicBean>>() {
+                .subscribe(new Observer<List<DownloadBean>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
                     }
 
                     @Override
-                    public void onNext(@NonNull List<DownloadComicBean> dataList) {
+                    public void onNext(@NonNull List<DownloadBean> dataList) {
                         if (dataList.isEmpty()) {
                             onErrorAppear(true);
                             return ;

@@ -130,7 +130,10 @@ public class ComicInfoActivity extends AppCompatActivity implements ComicInfoFra
                 binding.toolbar.setOtherTVVisibility(View.VISIBLE);
 
                 binding.toolbar.setFavoriteListener(v -> ViewHelper.controlSubscribe(this, comicId, cover, title, author, MyRetrofitService.TYPE_COMIC, binding.toolbar.getFavoriteIV(), null));
-                binding.toolbar.setOtherListener(v -> {});
+
+
+
+                binding.toolbar.setOtherListener(v -> IntentUtil.goToComicDownloadActivity(this, comicId, title, cover));
             }
         }, 3000);
 

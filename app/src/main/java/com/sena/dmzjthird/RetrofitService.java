@@ -215,7 +215,7 @@ public interface RetrofitService {
     @GET("chapinfo/{comicId}/{chapterId}.html")
     Observable<ComicDownloadBean> getChapterInfoForDownload(
             @Path("comicId") String comicId,
-            @Path("chapterId") String chapterId
+            @Path("chapterId") int chapterId
     );
 
     // nnv3api.muwai.com/UCenter/author/7470.json

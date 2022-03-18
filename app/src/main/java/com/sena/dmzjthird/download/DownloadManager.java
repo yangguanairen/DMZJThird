@@ -1,5 +1,6 @@
 package com.sena.dmzjthird.download;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import java.io.File;
@@ -11,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableEmitter;
@@ -31,11 +31,12 @@ import okhttp3.Response;
 
 public class DownloadManager {
 
+    @SuppressLint("StaticFieldLeak")
     private static  Context mContext;
 
     private static final AtomicReference<DownloadManager> INSTANCE = new AtomicReference<>();
-    private HashMap<String, Call> downCalls;
-    private OkHttpClient mClient;
+    private final HashMap<String, Call> downCalls;
+    private final OkHttpClient mClient;
 
     public static DownloadManager getInstance(Context context) {
         mContext = context;
@@ -56,13 +57,13 @@ public class DownloadManager {
         mClient = new Builder().build();
     }
 
-    public void download(List<DownloadUrlBean> urlList, String comicId, String chapterId, String comicName, String chapterName, DownloadObserver downloadObserver) {
+    public void download(List<String> urlList, String folderName, DownloadObserver downloadObserver) {
         Observable.just(urlList)
                 .filter(s -> !downCalls.containsKey(s))
-                .flatMap(s -> Observable.just(createDownInfo(urlList, comicId + "-" + chapterId, comicName, chapterName)))
-                .map(this::checkFolder)
+                .flatMap(s -> Observable.just(createDownInfo(urlList, folderName)))
+//                .map(this::checkFolder)
                 .flatMap(downloadInfo -> Observable.create(new DownloadSubscribe(downloadInfo)))
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(downloadObserver);
     }
@@ -76,62 +77,35 @@ public class DownloadManager {
         downCalls.remove(url);
     }
 
-    private DownloadInfo createDownInfo(List<DownloadUrlBean> list, String tag, String comicName, String chapterName) {
+    private DownloadInfo createDownInfo(List<String> list, String folderName) {
 
-        DownloadInfo downloadInfo = new DownloadInfo(list);
-        List<String> fileNameList = new ArrayList<>();
-        for (DownloadUrlBean url: list) {
-            fileNameList.add(url.getUrl().replace("https://images.dmzj.com/l/", "").replace("/","-"));
+        DownloadInfo downloadInfo = new DownloadInfo();
+        List<String> urlList = new ArrayList<>();  // 需要下载的url
+        List<String> nameList = new ArrayList<>();
+        for (String url: list) {
+            String fileName = url.replace("https://images.dmzj.com/l/","下载 ");
+            File file = new File(mContext.getCacheDir(), fileName);
+            if (file.exists() && file.length() == getContentLength(url)) {
+                continue;
+            }
+            urlList.add(url);
+            nameList.add(fileName);
         }
-        downloadInfo.setFileNameList(fileNameList);
-        downloadInfo.setTotal(list.size());
-        downloadInfo.setTag(tag);
-        downloadInfo.setComicName(comicName);
-        downloadInfo.setChapterName(chapterName);
+
+        downloadInfo.setUrlList(urlList);
+        downloadInfo.setNameList(nameList);
+        downloadInfo.setTotalPage(list.size());
+        downloadInfo.setFinishPage(list.size() - urlList.size());
+        downloadInfo.setTag(folderName);
 
         return downloadInfo;
     }
-
-
-    private DownloadInfo checkFolder(DownloadInfo downloadInfo) {
-        String folder = "/" + downloadInfo.getComicName() + "/" + downloadInfo.getChapterName();
-        File file = new File(mContext.getCacheDir(), folder);
-        if (!file.exists()) file.mkdirs();
-        return downloadInfo;
-    }
-//    private DownloadInfo getRealFileName(DownloadInfo downloadInfo) {
-//        String fileName = downloadInfo.getFileName();
-//        long downloadLength = 0;
-//        long contentLength = downloadInfo.getTotal();
-//        File file = new File(mContext.getCacheDir(), fileName)   ;
-//        if (file.exists()) {
-//            downloadLength = file.length();
-//        }
-//        int i = 1;
-//        while (downloadLength >= contentLength) {
-//            int dotIndex = fileName.lastIndexOf(".");
-//            String fileNameOther;
-//            if (dotIndex == -1) {
-//                fileNameOther = fileName + "(" + i + ")";
-//            } else {
-//                fileNameOther = fileName.substring(0, dotIndex)
-//                         + "(" + i + ")" + fileName.substring(dotIndex);
-//            }
-//            File newFile = new File(mContext.getCacheDir(), fileNameOther);
-//            file = newFile;
-//            downloadLength = newFile.length();
-//            i++;
-//        }
-//        downloadInfo.setProgress(downloadLength);
-//        downloadInfo.setFileName(file.getName());
-//        return downloadInfo;
-//    }
 
     private long getContentLength(String downloadUrl) {
         Request request = new Request.Builder().url(downloadUrl).build();
         try {
             Response response = mClient.newCall(request).execute();
-            if (response != null && response.isSuccessful()) {
+            if (response.isSuccessful()) {
                 long contentLength = response.body().contentLength();
                 response.close();
                 return contentLength == 0 ? DownloadInfo.TOTAL_ERROR : contentLength;
@@ -144,7 +118,7 @@ public class DownloadManager {
 
     private class DownloadSubscribe implements ObservableOnSubscribe<DownloadInfo> {
 
-        private DownloadInfo downloadInfo;
+        private final DownloadInfo downloadInfo;
 
         public DownloadSubscribe(DownloadInfo downloadInfoList) {
             this.downloadInfo = downloadInfoList;
@@ -154,16 +128,16 @@ public class DownloadManager {
         public void subscribe(@NonNull ObservableEmitter<DownloadInfo> emitter) throws Throwable {
 
 
-            List<DownloadUrlBean> urlList = downloadInfo.getUrlList();
-            List<String> fileNameUrlList = downloadInfo.getFileNameList();
+            List<String> urlList = downloadInfo.getUrlList();
+            List<String> nameList = downloadInfo.getNameList();
 
             emitter.onNext(downloadInfo);
 
             for (int i = 0; i < urlList.size(); i++) {
-                DownloadUrlBean url = urlList.get(i);
-                String fileName = fileNameUrlList.get(i);
+                String url = urlList.get(i);
+                String fileName = nameList.get(i);
 
-                Request request = new Request.Builder().url(url.getUrl()).build();
+                Request request = new Request.Builder().url(url).build();
                 Call call = mClient.newCall(request);
 
                 downCalls.put(downloadInfo.getTag(), call);
@@ -180,7 +154,7 @@ public class DownloadManager {
                     while ((len = is.read(buffer)) != -1) {
                         fos.write(buffer, 0, len);
                     }
-                    downloadInfo.setDownloadedNum(downloadInfo.getDownloadedNum() + 1);
+                    downloadInfo.setFinishPage(downloadInfo.getFinishPage() + 1);
                     emitter.onNext(downloadInfo);
                     fos.flush();
                     fos.close();
@@ -188,50 +162,10 @@ public class DownloadManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                Thread.sleep(1000);
             }
             downCalls.remove(downloadInfo.getTag());
             emitter.onComplete();
 
-
-//            String url = downloadInfo.getUrl();
-//            long downloadLength = downloadInfo.getProgress();
-//            long contentLength = downloadInfo.getTotal();
-//
-//            emitter.onNext(downloadInfo);
-//
-//            Request request = new Request.Builder()
-//                    .addHeader("RANGE", "bytes=" + downloadLength + "-" + contentLength)
-//                    .url(url).build();
-//
-//            Call call = mClient.newCall(request);
-//            downCalls.put(url, call);
-//            Response response = call.execute();
-//
-//            File file = new File(mContext.getCacheDir(), downloadInfo.getFileName());
-//            InputStream is;
-//            FileOutputStream fos;
-//            try {
-//                is = response.body().byteStream();
-//                fos = new FileOutputStream(file, true);
-//                byte[] buffer = new byte[1024];
-//                int len;
-//                while ((len = is.read(buffer)) != -1) {
-//                    fos.write(buffer, 0, len);
-//                    downloadLength += len;
-//                    downloadInfo.setProgress(downloadLength);
-//                    emitter.onNext(downloadInfo);
-//                }
-//                fos.flush();
-//                fos.close();
-//                is.close();
-//                downCalls.remove(url);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } finally {
-//
-//            }
         }
     }
 }

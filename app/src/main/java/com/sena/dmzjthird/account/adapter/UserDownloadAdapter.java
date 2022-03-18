@@ -6,19 +6,22 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.sena.dmzjthird.R;
+import com.sena.dmzjthird.account.view.UserDownloadActivity;
 import com.sena.dmzjthird.databinding.ItemDownloadChildBinding;
 import com.sena.dmzjthird.databinding.ItemDownloadGroupBinding;
-import com.sena.dmzjthird.download.DownloadChapterBean;
-import com.sena.dmzjthird.download.DownloadComicBean;
+import com.sena.dmzjthird.download.DownloadBean;
 import com.sena.dmzjthird.download.DownloadInfo;
 import com.sena.dmzjthird.download.DownloadManager;
 import com.sena.dmzjthird.download.DownloadObserver;
-import com.sena.dmzjthird.novel.adapter.NovelChapterAdapter;
+import com.sena.dmzjthird.room.RoomHelper;
+import com.sena.dmzjthird.room.chapter.Chapter;
+import com.sena.dmzjthird.room.comic.Comic;
 import com.sena.dmzjthird.utils.GlideUtil;
 
 import java.util.ArrayList;
@@ -35,9 +38,9 @@ import pokercc.android.expandablerecyclerview.ExpandableAdapter;
 public class UserDownloadAdapter extends ExpandableAdapter<ExpandableAdapter.ViewHolder> {
 
     private final Context mContext;
-    private final List<DownloadComicBean> mDataList;
+    private final List<DownloadBean> mDataList;
 
-    public UserDownloadAdapter(Context context, List<DownloadComicBean> dataList) {
+    public UserDownloadAdapter(Context context, List<DownloadBean> dataList) {
         mContext = context;
         if (dataList == null) dataList = new ArrayList<>();
         mDataList = dataList;
@@ -45,7 +48,7 @@ public class UserDownloadAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
 
     @Override
     public int getChildCount(int groupPosition) {
-        if (groupPosition < mDataList.size()) return mDataList.get(groupPosition).getTotalChapter();
+        if (groupPosition < mDataList.size()) return mDataList.get(groupPosition).getChapterList().size();
         return 0;
     }
 
@@ -58,20 +61,33 @@ public class UserDownloadAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
     protected void onBindChildViewHolder(@NonNull ViewHolder viewHolder, int groupPosition, int childPosition, @NonNull List<?> payloads) {
         ChildViewHolder holder = (ChildViewHolder) viewHolder;
 
-        DownloadChapterBean chapterBean = mDataList.get(groupPosition).getChapterList().get(childPosition);
+        Chapter chapter = mDataList.get(groupPosition).getChapterList().get(childPosition);
 
-        holder.binding.chapterName.setText(chapterBean.getChapterName());
-        holder.binding.progress.setMaxProgress(chapterBean.getTotalPages());
+        holder.binding.chapterName.setText(chapter.chapterName);
+        holder.binding.progress.setMaxProgress(chapter.totalPage);
         holder.binding.control.setOnClickListener(v -> {
             DownloadManager.getInstance(mContext)
-                    .download(chapterBean.getUrlList(), mDataList.get(groupPosition).getComicId(), chapterBean.getChapterId(),
-                            mDataList.get(groupPosition).getComicName(), chapterBean.getChapterName(), new DownloadObserver() {
-                                @Override
-                                public void onNext(DownloadInfo downloadInfo) {
-                                    super.onNext(downloadInfo);
-                                    holder.binding.progress.setProgress(downloadInfo.getDownloadedNum());
-                                }
-                            });
+                    .download(chapter.urlList, chapter.folder_name, new DownloadObserver() {
+                        @Override
+                        public void onNext(DownloadInfo downloadInfo) {
+                            super.onNext(downloadInfo);
+//                            RoomHelper.getInstance(mContext).chapterDao().updateFinishPage(chapter.comicId, chapter.chapterId, downloadInfo.getFinishPage());
+                            holder.binding.progress.setProgress(downloadInfo.getFinishPage());
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            super.onComplete();
+                            Toast.makeText(mContext, downloadInfo.getTag() + "下载完成",Toast.LENGTH_SHORT).show();
+//                            RoomHelper.getInstance(mContext).chapterDao().updateChapterStatus(chapter.comicId, chapter.chapterId, "已完成");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                        }
+                    });
+
         });
     }
 
@@ -79,9 +95,9 @@ public class UserDownloadAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
     protected void onBindGroupViewHolder(@NonNull ViewHolder viewHolder, int groupPosition, boolean b, @NonNull List<?> payloads) {
         GroupViewHolder holder = (GroupViewHolder) viewHolder;
 
-        DownloadComicBean comicBean = mDataList.get(groupPosition);
-        GlideUtil.loadImage(mContext, comicBean.getComicCover(), holder.binding.cover);
-        holder.binding.title.setText(comicBean.getComicName());
+        Comic comic = mDataList.get(groupPosition).getComic();
+        GlideUtil.loadImage(mContext, comic.comicCover, holder.binding.cover);
+        holder.binding.title.setText(comic.comicName);
 
     }
 

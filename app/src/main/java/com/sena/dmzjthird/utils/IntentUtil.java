@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.sena.dmzjthird.comic.view.AuthorInfoActivity;
+import com.sena.dmzjthird.comic.view.ComicDownloadActivity;
 import com.sena.dmzjthird.comic.view.ComicFilterActivity;
 import com.sena.dmzjthird.comic.view.ComicInfoActivity;
 import com.sena.dmzjthird.comic.view.ComicTopicInfoActivity;
@@ -80,6 +81,16 @@ public class IntentUtil {
         intent.putExtra(TOPIC_ID, topicId);
         context.startActivity(intent);
     }
+
+    public static void goToComicDownloadActivity(Context context, String comicId, String comicName, String comicCover) {
+        Intent intent = new Intent(context, ComicDownloadActivity.class);
+        intent.putExtra(OBJECT_ID, comicId);
+        intent.putExtra(OBJECT_NAME, comicName);
+        intent.putExtra(OBJECT_COVER, comicCover);
+        context.startActivity(intent);
+    }
+
+
 
     public static void goToAuthorInfoActivity(Context context, String authorId) {
         Intent intent = new Intent(context, AuthorInfoActivity.class);
