@@ -3,6 +3,7 @@ package com.sena.dmzjthird.comic.view;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.application.ComicDetailRes;
@@ -10,6 +11,7 @@ import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
+import com.sena.dmzjthird.account.view.UserDownloadActivity;
 import com.sena.dmzjthird.comic.adapter.ComicDownloadAdapter;
 import com.sena.dmzjthird.comic.bean.ComicDownloadBean;
 import com.sena.dmzjthird.databinding.ActivityComicDownloadBinding;
@@ -39,12 +41,14 @@ public class ComicDownloadActivity extends AppCompatActivity {
     private ActivityComicDownloadBinding binding;
     private ComicDownloadAdapter adapter;
 
-    private MyRoomDatabase database;
+    private RoomHelper roomHelper;
 
 
     private String comicId;
     private String comicName;
     private String comicCover;
+
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,30 +56,12 @@ public class ComicDownloadActivity extends AppCompatActivity {
         binding = ActivityComicDownloadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        database = RoomHelper.getInstance(this);
+        roomHelper = RoomHelper.getInstance(this);
 
         comicId = IntentUtil.getObjectId(this);
         comicName = IntentUtil.getObjectName(this);
         comicCover = IntentUtil.getObjectCover(this);
         initView();
-
-
-
-        Comic comic = RoomHelper.getInstance(this)
-                .comicDao()
-                .query(comicId);
-        if (comic == null) {
-            comic = new Comic();
-            comic.comicId = comicId;
-            comic.comicName = comicName;
-            comic.comicCover = comicCover;
-            RoomHelper.getInstance(this)
-                    .comicDao().insert(comic);
-        }
-
-
-
-
 
 
         getResponse();
@@ -87,6 +73,8 @@ public class ComicDownloadActivity extends AppCompatActivity {
                 .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
                 .titleBarMarginTop(binding.toolbar)
                 .init();
+
+        binding.toolbar.setBackListener(v -> finish());
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ComicDownloadAdapter(this);
@@ -109,7 +97,7 @@ public class ComicDownloadActivity extends AppCompatActivity {
                     public void onNext(ComicDetailRes.@NonNull ComicDetailInfoResponse data) {
                         if (data.getChaptersList().isEmpty()) {
                             // 出错处理
-                            return ;
+                            return;
                         }
                         adapter.setList(data.getChaptersList());
                     }
@@ -131,7 +119,9 @@ public class ComicDownloadActivity extends AppCompatActivity {
 
 
         LogUtil.e("带下载数量: " + adapter.getSelectIdSet().size());
-        for (Integer chapterId: adapter.getSelectIdSet()) {
+
+        count = 0;
+        for (Integer chapterId : adapter.getSelectIdSet()) {
             service.getChapterInfoForDownload(comicId, chapterId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
@@ -144,45 +134,16 @@ public class ComicDownloadActivity extends AppCompatActivity {
                         @Override
                         public void onNext(@NonNull ComicDownloadBean bean) {
 
-                            DownloadManager.getInstance(ComicDownloadActivity.this)
-                                    .download(bean.getPage_url(), bean.getFolder(), new DownloadObserver() {
 
-                                        @Override
-                                        public void onSubscribe(Disposable d) {
-                                            super.onSubscribe(d);
-                                            createComicItemInRoom(bean.getFilesize());
-                                            createItemInRoom(bean);
-                                        }
-
-                                        @Override
-                                        public void onNext(DownloadInfo downloadInfo) {
-                                            super.onNext(downloadInfo);
-                                                database.chapterDao()
-                                                        .updateFinishPage(bean.getComic_id(), bean.getId(), downloadInfo.getFinishPage());
-
-                                        }
-
-                                        @Override
-                                        public void onComplete() {
-                                            super.onComplete();
-                                            new Thread(() -> {
-                                                database.chapterDao()
-                                                        .updateChapterStatus(bean.getComic_id(), bean.getId(), "已完成");
-                                            }).start();
-
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-                                            super.onError(e);
-                                        }
-                                    });
-
+                            roomHelper.initComic(comicId, comicName, comicCover);
+                            roomHelper.updateComicTotalChapterAndFileSize(comicId, bean.getFilesize());
+                            roomHelper.insertChapter(comicId, bean);
+                            checkJump(adapter.getSelectIdSet().size());
                         }
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-
+                            LogUtil.e("下载Error");
                         }
 
                         @Override
@@ -193,38 +154,15 @@ public class ComicDownloadActivity extends AppCompatActivity {
         }
 
 
+
+
     }
 
-    /**
-     * 创建ComicItem，会直接覆盖原先数据
-//     * @param fileSize 单个章节的全部图片的总大小
-     */
-    private void createComicItemInRoom(long fileSize) {
-        Comic comic = new Comic();
-        comic.comicId = comicId;
-        comic.comicName = comicName;
-        comic.comicCover = comicCover;
-        comic.totalChapter = comic.totalChapter + 1;
-        comic.totalSize = comic.totalSize + fileSize;
-        database.comicDao().insert(comic);
-    }
-
-
-    /**
-     * 创建ChapterItem，不会覆盖原先数据，下载页会去做冗余处理
-     * @param bean
-     */
-    private void createItemInRoom(ComicDownloadBean bean) {
-        Chapter chapter = new Chapter();
-        chapter.comicId = comicId;
-        chapter.chapterId = bean.getId();
-        chapter.chapterName = bean.getChapter_name();
-        chapter.folder_name = bean.getFolder();
-        chapter.urlList = bean.getPage_url();
-        chapter.totalPage = bean.getSum_pages();
-        chapter.finishPage = 0;
-        chapter.status = "未开始";
-        database.chapterDao().insert(chapter);
+    private synchronized void checkJump(int targetSize) {
+        count++;
+        if (count == targetSize) {
+            startActivity(new Intent(ComicDownloadActivity.this, UserDownloadActivity.class));
+        }
     }
 
     @Override

@@ -19,17 +19,17 @@ import java.util.List;
 public class DownloadHelper {
 
     public static List<DownloadBean> getAllData(Context context) {
-        MyRoomDatabase database = RoomHelper.getInstance(context);
+        RoomHelper roomHelper = RoomHelper.getInstance(context);
 
         List<DownloadBean> downloadBeans = new ArrayList<>();
 
-        List<Comic> comicList = database.comicDao().getAllComic();
+        List<Comic> comicList = roomHelper.getAllComic();
         for (Comic comic: comicList) {
 
             DownloadBean bean = new DownloadBean();
             bean.setComic(comic);
 
-            List<Chapter> chapterList = database.chapterDao().getAllChapter(comic.comicId);
+            List<Chapter> chapterList = roomHelper.getAllChapter(comic.comicId);
             bean.setChapterList(chapterList);
 
             downloadBeans.add(bean);

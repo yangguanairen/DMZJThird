@@ -41,7 +41,7 @@ public class GlideUtil {
     public static void loadImage(Context context, String url, ImageView imageView) {
 
         Glide.with(context).load(url)
-                .transition(withCrossFade(500))
+                .transition(withCrossFade())
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
                 .skipMemoryCache(false)
                 .placeholder(R.drawable.selector_default_picture)

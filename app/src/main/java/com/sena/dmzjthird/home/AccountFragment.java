@@ -21,6 +21,7 @@ import com.sena.dmzjthird.account.view.LoginActivity;
 import com.sena.dmzjthird.account.view.SettingActivity;
 import com.sena.dmzjthird.account.view.UpdateProfileActivity;
 import com.sena.dmzjthird.account.view.UserCommentActivity;
+import com.sena.dmzjthird.account.view.UserDownloadActivity;
 import com.sena.dmzjthird.account.view.UserHistoryActivity;
 import com.sena.dmzjthird.account.view.UserSubscribedActivity;
 import com.sena.dmzjthird.databinding.FragmentAccountBinding;
@@ -90,6 +91,10 @@ public class AccountFragment extends Fragment {
         });
 
         binding.accountExit.setOnClickListener(v -> cancelLogin());
+
+        binding.accountDownload.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), UserDownloadActivity.class));
+        });
 
 
         return binding.getRoot();

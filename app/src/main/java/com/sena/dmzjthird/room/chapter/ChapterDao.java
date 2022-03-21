@@ -28,8 +28,8 @@ public interface ChapterDao {
     @Query("select * from chapter where comic_id = :comicId")
     List<com.sena.dmzjthird.room.chapter.Chapter> getAllChapter(String comicId);
 
-    @Query("select * from chapter where comic_id = :comicId and chapter_id = :chapterId")
-    List<com.sena.dmzjthird.room.chapter.Chapter> queryChapter(String comicId, String chapterId);
+    @Query("select * from chapter where comic_id = :comicId and chapter_id = :chapterId limit 1")
+    com.sena.dmzjthird.room.chapter.Chapter queryChapter(String comicId, String chapterId);
 
     @Query("update chapter set status = :status where comic_id = :comicId and chapter_id = :chapterId")
     int updateChapterStatus(String comicId, String chapterId, String status);

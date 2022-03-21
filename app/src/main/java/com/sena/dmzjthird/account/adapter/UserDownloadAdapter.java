@@ -3,6 +3,8 @@ package com.sena.dmzjthird.account.adapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ import com.sena.dmzjthird.utils.GlideUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.disposables.Disposable;
 import pokercc.android.expandablerecyclerview.ExpandableAdapter;
 
 /**
@@ -40,10 +43,14 @@ public class UserDownloadAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
     private final Context mContext;
     private final List<DownloadBean> mDataList;
 
+
+    private final RoomHelper roomHelper;
+
     public UserDownloadAdapter(Context context, List<DownloadBean> dataList) {
         mContext = context;
         if (dataList == null) dataList = new ArrayList<>();
         mDataList = dataList;
+        roomHelper = RoomHelper.getInstance(context);
     }
 
     @Override
@@ -65,21 +72,47 @@ public class UserDownloadAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
 
         holder.binding.chapterName.setText(chapter.chapterName);
         holder.binding.progress.setMaxProgress(chapter.totalPage);
+        holder.binding.progress.setProgress(chapter.finishPage);
+        holder.binding.pageNum.setText(chapter.finishPage + "/" + chapter.totalPage);
+        if (chapter.finishPage == chapter.totalPage) {
+            holder.binding.control.setImageResource(R.drawable.ic_check);
+        }
         holder.binding.control.setOnClickListener(v -> {
+
+            if (holder.binding.progress.getProgress() == holder.binding.progress.getMaxProgress()) {
+                Toast.makeText(mContext, "已完成，不可重复下载!!", Toast.LENGTH_SHORT).show();
+                return ;
+            }
+
+
             DownloadManager.getInstance(mContext)
                     .download(chapter.urlList, chapter.folder_name, new DownloadObserver() {
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            super.onSubscribe(d);
+//                            roomHelper.updateChapterStatus(chapter.comicId, chapter.chapterId, RoomHelper.STATUS_DOWNLOADING);
+                        }
+
                         @Override
                         public void onNext(DownloadInfo downloadInfo) {
                             super.onNext(downloadInfo);
-//                            RoomHelper.getInstance(mContext).chapterDao().updateFinishPage(chapter.comicId, chapter.chapterId, downloadInfo.getFinishPage());
-                            holder.binding.progress.setProgress(downloadInfo.getFinishPage());
+                            roomHelper.updateChapterFinishPage(chapter.comicId, chapter.chapterId, downloadInfo.getFinishPage());
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                holder.binding.progress.setProgress(downloadInfo.getFinishPage());
+                                holder.binding.pageNum.setText(downloadInfo.getFinishPage() + "/" + downloadInfo.getTotalPage());
+                            });
                         }
 
                         @Override
                         public void onComplete() {
                             super.onComplete();
-                            Toast.makeText(mContext, downloadInfo.getTag() + "下载完成",Toast.LENGTH_SHORT).show();
-//                            RoomHelper.getInstance(mContext).chapterDao().updateChapterStatus(chapter.comicId, chapter.chapterId, "已完成");
+                            roomHelper.updateChapterStatus(chapter.comicId, chapter.chapterId, RoomHelper.STATUS_FINISH);
+                            roomHelper.updateComicFinishChapterAndFileSize(chapter.comicId, chapter.fileSize);
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                holder.binding.control.setImageResource(R.drawable.ic_check);
+                                Toast.makeText(mContext, downloadInfo.getTag() + "下载完成",Toast.LENGTH_SHORT).show();
+                            });
                         }
 
                         @Override

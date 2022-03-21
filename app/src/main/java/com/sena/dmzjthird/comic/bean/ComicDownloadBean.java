@@ -21,12 +21,12 @@ public class ComicDownloadBean {
     private int chaptertype;
     private int chapter_true_type;
     private int chapter_num;
-    private int updatetime;
+    private long updatetime;
     private int sum_pages;
     private int sns_tag;
     private String uid;
     private String username;
-    private int translatorid;
+    private String translatorid;
     private String translator;
     private String link;
     private String message;
@@ -129,11 +129,11 @@ public class ComicDownloadBean {
         this.chapter_num = chapter_num;
     }
 
-    public int getUpdatetime() {
+    public long getUpdatetime() {
         return updatetime;
     }
 
-    public void setUpdatetime(int updatetime) {
+    public void setUpdatetime(long updatetime) {
         this.updatetime = updatetime;
     }
 
@@ -169,11 +169,11 @@ public class ComicDownloadBean {
         this.username = username;
     }
 
-    public int getTranslatorid() {
+    public String getTranslatorid() {
         return translatorid;
     }
 
-    public void setTranslatorid(int translatorid) {
+    public void setTranslatorid(String translatorid) {
         this.translatorid = translatorid;
     }
 

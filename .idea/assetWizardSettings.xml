@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/E:/Editor/AndroidStudio/SDk/icons/material/materialicons/play_circle_outline/baseline_play_circle_outline_24.xml" />
+                                      <entry key="url" value="file:/E:/Editor/AndroidStudio/SDk/icons/material/materialicons/check_circle_outline/baseline_check_circle_outline_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,7 +33,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_start" />
+                            <entry key="outputName" value="ic_check" />
                             <entry key="sourceFile" value="C:\Users\18897\Desktop\DMZJThird" />
                           </map>
                         </option>

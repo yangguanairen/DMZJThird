@@ -31,9 +31,9 @@ public interface ComicDao {
     @Query("select * from comic where comic_id = :comicId limit 1")
     Comic query(String comicId);
 
-    @Query("update comic set total_chapter = :totalChapter and total_size = :totalSize where comic_id = :comicId")
+    @Query("update comic set total_chapter = :totalChapter, total_size = :totalSize where comic_id = :comicId")
     int updateTotalChapterAndTotalSize(String comicId, int totalChapter, long totalSize);
 
-    @Query("update comic set finish_chapter = :finishChapter and finish_size = :finishChapter where comic_id = :comicId")
+    @Query("update comic set finish_chapter = :finishChapter, finish_size = :finishSize where comic_id = :comicId")
     int updateFinishChapterAndFinishSize(String comicId, int finishChapter, long finishSize);
 }

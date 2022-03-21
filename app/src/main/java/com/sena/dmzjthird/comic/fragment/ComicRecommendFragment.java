@@ -149,7 +149,7 @@ public class ComicRecommendFragment extends Fragment {
     }
 
     // 集成所有请求结果，集中发送给adapter
-    private void setRecommendList(ComicRecommendNewBean bean) {
+    private synchronized void setRecommendList(ComicRecommendNewBean bean) {
         list.add(bean);
         if (list.size() != 9) return ;
         list.sort((o1, o2) -> {

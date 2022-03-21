@@ -2,11 +2,15 @@ package com.sena.dmzjthird.download;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
+
+import com.sena.dmzjthird.utils.LogUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +26,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
 import okhttp3.Request;
 import okhttp3.Response;
+import retrofit2.http.Url;
 
 /**
  * FileName: DownloadManager
@@ -59,22 +64,22 @@ public class DownloadManager {
 
     public void download(List<String> urlList, String folderName, DownloadObserver downloadObserver) {
         Observable.just(urlList)
-                .filter(s -> !downCalls.containsKey(s))
-                .flatMap(s -> Observable.just(createDownInfo(urlList, folderName)))
+                .filter(s -> !downCalls.containsKey(folderName))
+                .flatMap(s -> Observable.just(createDownInfo(s, folderName)))
 //                .map(this::checkFolder)
                 .flatMap(downloadInfo -> Observable.create(new DownloadSubscribe(downloadInfo)))
-                .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe(downloadObserver);
     }
 
 
-    public void cancel(String url) {
-        Call call = downCalls.get(url);
+    public void cancel(String tag) {
+        Call call = downCalls.get(tag);
         if (call != null) {
             call.cancel();
         }
-        downCalls.remove(url);
+        downCalls.remove(tag);
     }
 
     private DownloadInfo createDownInfo(List<String> list, String folderName) {
@@ -82,14 +87,22 @@ public class DownloadManager {
         DownloadInfo downloadInfo = new DownloadInfo();
         List<String> urlList = new ArrayList<>();  // 需要下载的url
         List<String> nameList = new ArrayList<>();
+
+        String finalFolderName = "/漫画下载/" + folderName.substring(folderName.indexOf("/") + 1);
+        File folder = new File(mContext.getExternalCacheDir(), finalFolderName);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+
         for (String url: list) {
-            String fileName = url.replace("https://images.dmzj.com/l/","下载 ");
-            File file = new File(mContext.getCacheDir(), fileName);
+            String fileName = url.substring(url.lastIndexOf("/") + 1);
+            File file = new File(finalFolderName, fileName);
             if (file.exists() && file.length() == getContentLength(url)) {
                 continue;
             }
             urlList.add(url);
-            nameList.add(fileName);
+            nameList.add(folder.getPath() + "/" + fileName);
         }
 
         downloadInfo.setUrlList(urlList);
@@ -131,7 +144,6 @@ public class DownloadManager {
             List<String> urlList = downloadInfo.getUrlList();
             List<String> nameList = downloadInfo.getNameList();
 
-            emitter.onNext(downloadInfo);
 
             for (int i = 0; i < urlList.size(); i++) {
                 String url = urlList.get(i);
@@ -143,7 +155,7 @@ public class DownloadManager {
                 downCalls.put(downloadInfo.getTag(), call);
                 Response response = call.execute();
 
-                File file = new File(mContext.getCacheDir(), fileName);
+                File file = new File(fileName);
                 InputStream is;
                 FileOutputStream fos;
                 try {
@@ -160,6 +172,7 @@ public class DownloadManager {
                     fos.close();
                     is.close();
                 } catch (IOException e) {
+                    LogUtil.e("图片下载出错!!");
                     e.printStackTrace();
                 }
             }

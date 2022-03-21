@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".account.view.UserDownloadActivity">
+    tools:context=".account.view.UserDownloadActivity"
+    android:background="@color/layout_bg">
 
     <com.sena.dmzjthird.custom.NormalToolbar
         android:id="@+id/toolbar"
