@@ -72,6 +72,8 @@ public class ComicRecommendFragment extends Fragment {
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ComicRecommendAdapter(getContext());
         binding.recyclerview.setAdapter(adapter);
+
+        binding.refreshLayout.setEnabled(false);
     }
 
     private void getResponse() {
@@ -158,11 +160,9 @@ public class ComicRecommendFragment extends Fragment {
             return i1.compareTo(i2);
         });
         adapter.setList(list);
-//            new Handler().postDelayed(() -> {
         binding.banner.setVisibility(View.VISIBLE);
         binding.progress.stopSpinning();
         binding.progress.setVisibility(View.GONE);
-//            }, 2000);
 
     }
 
