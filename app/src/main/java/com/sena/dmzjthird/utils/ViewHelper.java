@@ -1,5 +1,6 @@
 package com.sena.dmzjthird.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.application.ComicDetailRes;
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.account.bean.ResultBean;
@@ -136,5 +139,17 @@ public class ViewHelper {
     }
 
 
+    /**
+     * 隐藏底部导航栏，设置状态栏颜色
+     * @param activity
+     * @param toolbar
+     */
+    public static void immersiveStatus(Activity activity, View toolbar) {
+        ImmersionBar.with(activity)
+                .statusBarColor(R.color.theme_blue)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+                .titleBarMarginTop(toolbar)
+                .init();
+    }
 
 }

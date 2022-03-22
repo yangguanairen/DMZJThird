@@ -33,11 +33,4 @@ public class Comic implements Serializable {
     @ColumnInfo(name = "finish_chapter")
     public int finishChapter;
 
-    @ColumnInfo(name = "total_size")
-    public long totalSize;
-
-    @ColumnInfo(name = "finish_size")
-    public long finishSize;
-
-
 }

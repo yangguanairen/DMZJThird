@@ -13,7 +13,7 @@
         android:layout_height="?actionBarSize"
         app:isShowFavorite="false"
         app:isShowOther="false"
-        app:toolbarTitle="@string/icon_comic_setting_title"
+        app:toolbarTitle="@string/comic_read_setting"
         android:background="?colorPrimary"
         android:elevation="20dp"/>
 

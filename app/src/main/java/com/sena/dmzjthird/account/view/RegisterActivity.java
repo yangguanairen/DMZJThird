@@ -9,8 +9,10 @@ import android.widget.Toast;
 import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.MyRetrofitService;
+import com.sena.dmzjthird.account.bean.UserResultBean;
 import com.sena.dmzjthird.databinding.ActivityRegisterBinding;
 import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.ViewHelper;
 import com.sena.dmzjthird.utils.XPopUpUtil;
 
 import java.util.HashMap;
@@ -19,6 +21,9 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -37,8 +42,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
 
-        binding.register.setOnClickListener(v -> register());
+        initView();
+    }
 
+    private void initView() {
+        ViewHelper.immersiveStatus(this, binding.toolbar);
+        binding.register.setOnClickListener(v -> register());
     }
 
     private void register() {
@@ -49,13 +58,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (!Pattern.matches("[a-zA-Z0-9\u4e00-\u9fa5]{4,12}", nickname)) {
             XPopUpUtil.showCustomToast(this, R.drawable.ic_error_red, "昵称需要4-12中英文、数字");
-            return ;
-        } else if (!confirm.equals(password)) {
+            return;
+        }
+        if (!confirm.equals(password)) {
             XPopUpUtil.showCustomToast(this, R.drawable.ic_error_red, "两次密码不一致");
-            return ;
-        } else if (!Pattern.matches("[a-zA-Z0-9]{5,16}", password)) {
+            return;
+        }
+        if (!Pattern.matches("[a-zA-Z0-9]{5,16}", password)) {
             XPopUpUtil.showCustomToast(this, R.drawable.ic_error_red, "密码需要6-16英文、数字");
-            return ;
+            return;
         }
 
         Map<String, RequestBody> bodyMap = new HashMap<>();
@@ -67,15 +78,33 @@ public class RegisterActivity extends AppCompatActivity {
         service.createAccount(bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bean -> new Handler(getMainLooper()).postDelayed(() -> {
-                    popup.dismiss();
-                    if (bean.getCode() != 200) {
-                        XPopUpUtil.showCustomToast(this, R.drawable.ic_error_red, "注册失败，请重新尝试!!");
-                    } else {
-                        Toast.makeText(this, "注册成功!!", Toast.LENGTH_SHORT).show();
-                        onBackPressed();
+                .subscribe(new Observer<UserResultBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
                     }
-                }, 500));
+
+                    @Override
+                    public void onNext(@NonNull UserResultBean bean) {
+                        popup.dismiss();
+                        if (bean.getCode() != 200) {
+                            XPopUpUtil.showCustomToast(RegisterActivity.this, R.drawable.ic_error_red, "注册失败，请重新尝试!!");
+                        } else {
+                            XPopUpUtil.showCustomCheckToast(RegisterActivity.this, "注册成功!!");
+                            onBackPressed();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
 

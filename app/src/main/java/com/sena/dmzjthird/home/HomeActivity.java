@@ -21,7 +21,7 @@ public class HomeActivity extends AppCompatActivity {
     private ComicFragment comicFragment;
     private TopicFragment topicFragment;
     private NovelHomeFragment novelHomeFragment;
-    private AccountFragment accountFragment;
+    private AccountHomeFragment accountFragment;
     private Fragment currentFragment;
 
     @Override
@@ -53,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
         comicFragment = ComicFragment.newInstance();
         topicFragment = TopicFragment.newInstance();
         novelHomeFragment = NovelHomeFragment.newInstance();
-        accountFragment = AccountFragment.newInstance();
+        accountFragment = AccountHomeFragment.newInstance();
 
         navigateFragment(comicFragment, "comicFragment");
     }

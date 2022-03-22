@@ -150,4 +150,12 @@ public class MyDataStore {
         }
     }
 
+
+    public static void clearUserData(Context context) {
+        MyDataStore dataStore = MyDataStore.getInstance(context);
+        dataStore.removeEntry(DATA_STORE_USER, USER_UID);
+        dataStore.removeEntry(DATA_STORE_USER, USER_AVATAR);
+        dataStore.removeEntry(DATA_STORE_USER, USER_NICKNAME);
+    }
+
 }

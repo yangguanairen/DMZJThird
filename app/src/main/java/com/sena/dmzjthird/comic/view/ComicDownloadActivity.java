@@ -13,22 +13,13 @@ import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.account.view.UserDownloadActivity;
 import com.sena.dmzjthird.comic.adapter.ComicDownloadAdapter;
-import com.sena.dmzjthird.comic.bean.ComicDownloadBean;
+import com.sena.dmzjthird.comic.bean.ComicChapterInfoBean;
 import com.sena.dmzjthird.databinding.ActivityComicDownloadBinding;
-import com.sena.dmzjthird.download.DownloadInfo;
-import com.sena.dmzjthird.download.DownloadManager;
-import com.sena.dmzjthird.download.DownloadObserver;
-import com.sena.dmzjthird.room.chapter.Chapter;
-import com.sena.dmzjthird.room.comic.Comic;
-import com.sena.dmzjthird.room.MyRoomDatabase;
 import com.sena.dmzjthird.room.RoomHelper;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 import com.sena.dmzjthird.utils.api.ComicApi;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -115,29 +106,29 @@ public class ComicDownloadActivity extends AppCompatActivity {
     }
 
     private void downloadSelect() {
-        RetrofitService service = RetrofitHelper.getServer("https://m.dmzj.com/");
+        RetrofitService service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
 
 
         LogUtil.e("带下载数量: " + adapter.getSelectIdSet().size());
 
         count = 0;
         for (Integer chapterId : adapter.getSelectIdSet()) {
-            service.getChapterInfoForDownload(comicId, chapterId)
+            service.getChapterInfo(comicId, chapterId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-                    .subscribe(new Observer<ComicDownloadBean>() {
+                    .subscribe(new Observer<ComicChapterInfoBean>() {
                         @Override
                         public void onSubscribe(@NonNull Disposable d) {
 
                         }
 
                         @Override
-                        public void onNext(@NonNull ComicDownloadBean bean) {
+                        public void onNext(@NonNull ComicChapterInfoBean bean) {
 
 
                             roomHelper.initComic(comicId, comicName, comicCover);
-                            roomHelper.updateComicTotalChapterAndFileSize(comicId, bean.getFilesize());
-                            roomHelper.insertChapter(comicId, bean);
+                            roomHelper.updateComicTotalChapter(comicId);
+                            roomHelper.insertChapter(comicName, bean);
                             checkJump(adapter.getSelectIdSet().size());
                         }
 

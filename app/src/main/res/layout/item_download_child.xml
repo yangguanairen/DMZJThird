@@ -53,7 +53,7 @@
             android:id="@+id/control"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_pause"
+            android:src="@drawable/ic_start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

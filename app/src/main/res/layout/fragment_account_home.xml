@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.AccountFragment"
+    tools:context=".home.AccountHomeFragment"
     android:background="@color/layout_bg">
 
     <!-- TODO: Update blank fragment layout -->
@@ -37,7 +37,7 @@
                     android:id="@+id/nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_login_title"
+                    android:text="@string/click_login"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -71,7 +71,7 @@
 
             <TextView
                 style="@style/accountItemTitle"
-                android:text="@string/icon_favorite_title"
+                android:text="@string/my_subscribe"
                 app:layout_constraintStart_toEndOf="@+id/imageView1"
                 tools:ignore="MissingConstraints" />
 
@@ -98,7 +98,7 @@
 
             <TextView
                 style="@style/accountItemTitle"
-                android:text="@string/icon_history_title"
+                android:text="@string/my_history"
                 app:layout_constraintStart_toEndOf="@+id/imageView2"
                 tools:ignore="MissingConstraints" />
 
@@ -125,7 +125,7 @@
 
             <TextView
                 style="@style/accountItemTitle"
-                android:text="@string/icon_message_title"
+                android:text="@string/my_comment"
                 app:layout_constraintStart_toEndOf="@+id/imageView3"
                 tools:ignore="MissingConstraints" />
 
@@ -152,7 +152,7 @@
 
             <TextView
                 style="@style/accountItemTitle"
-                android:text="@string/icon_download_title"
+                android:text="@string/my_download"
                 app:layout_constraintStart_toEndOf="@+id/imageView4"
                 tools:ignore="MissingConstraints" />
 
@@ -189,7 +189,7 @@
 
             <TextView
                 style="@style/accountItemTitle"
-                android:text="@string/icon_setting_title"
+                android:text="@string/setting"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
                 tools:ignore="MissingConstraints" />
 
@@ -216,7 +216,7 @@
 
             <TextView
                 style="@style/accountItemTitle"
-                android:text="@string/icon_exit_title"
+                android:text="@string/login_out"
                 app:layout_constraintStart_toEndOf="@+id/imageView5"
                 tools:ignore="MissingConstraints" />
 
@@ -226,13 +226,6 @@
                 tools:ignore="MissingConstraints" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Switch
-            android:id="@+id/switch2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Switch" />
-
 
     </LinearLayout>
 </FrameLayout>

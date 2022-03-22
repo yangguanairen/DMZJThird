@@ -40,9 +40,6 @@ public class Chapter {
     @ColumnInfo(name = "finish_page")
     public int finishPage;
 
-    @ColumnInfo(name = "file_size")
-    public long fileSize;
-
     @ColumnInfo(name = "status")
     public String status;
 }

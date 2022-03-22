@@ -10,6 +10,7 @@ import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.databinding.ActivityChangePasswordBinding;
 import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.ViewHelper;
 import com.sena.dmzjthird.utils.XPopUpUtil;
 
 import java.util.HashMap;
@@ -36,6 +37,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         service = RetrofitHelper.getMyServer(MyRetrofitService.MY_BASE_URL);
 
+        initView();
+    }
+
+    private void initView() {
+        ViewHelper.immersiveStatus(this, binding.toolbar);
+        binding.toolbar.setBackListener(v -> finish());
         binding.save.setOnClickListener(v -> changePassword());
 
     }
@@ -44,8 +51,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
 
         String originalPassword = Objects.requireNonNull(binding.originalLayout.getEditText()).getText().toString();
-        String newPassword = binding.newLayout.getEditText().getText().toString();
-        String confirmPassword = binding.confirmLayout.getEditText().getText().toString();
+        String newPassword = Objects.requireNonNull(binding.newLayout.getEditText()).getText().toString();
+        String confirmPassword = Objects.requireNonNull(binding.confirmLayout.getEditText()).getText().toString();
 
         if (!confirmPassword.equals(newPassword)) {
             XPopUpUtil.showCustomToast(this, R.drawable.ic_error_red, "两次密码不一致");

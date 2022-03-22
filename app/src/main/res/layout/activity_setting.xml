@@ -9,12 +9,12 @@
     android:background="@color/layout_bg">
 
     <com.sena.dmzjthird.custom.NormalToolbar
-        android:id="@+id/normalToolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         app:isShowFavorite="false"
         app:isShowOther="false"
-        app:toolbarTitle="@string/icon_setting_title"
+        app:toolbarTitle="@string/setting"
         android:background="?colorPrimary"
         android:elevation="20dp"/>
 
@@ -43,7 +43,7 @@
 
         <TextView
             style="@style/accountItemTitle"
-            android:text="@string/icon_comic_setting_title"
+            android:text="@string/comic_read_setting"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             tools:ignore="MissingConstraints" />
 
@@ -72,7 +72,7 @@
 
         <TextView
             style="@style/accountItemTitle"
-            android:text="@string/icon_comic_download_title"
+            android:text="@string/comic_download_setting"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             tools:ignore="MissingConstraints" />
 
@@ -134,7 +134,7 @@
 
         <TextView
             style="@style/accountItemTitle"
-            android:text="@string/icon_update_title"
+            android:text="@string/check_update"
             app:layout_constraintStart_toEndOf="@+id/imageView7"
             tools:ignore="MissingConstraints" />
 
@@ -161,7 +161,7 @@
 
         <TextView
             style="@style/accountItemTitle"
-            android:text="@string/icon_about_title"
+            android:text="@string/about"
             app:layout_constraintStart_toEndOf="@+id/imageView8"
             tools:ignore="MissingConstraints" />
 

@@ -13,7 +13,7 @@
         android:background="?colorPrimary"
         app:isShowFavorite="false"
         app:isShowOther="false"
-        app:toolbarTitle="@string/icon_message_title"
+        app:toolbarTitle="@string/my_comment"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

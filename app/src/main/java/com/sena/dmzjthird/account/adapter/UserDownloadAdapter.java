@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.account.view.UserDownloadActivity;
 import com.sena.dmzjthird.databinding.ItemDownloadChildBinding;
 import com.sena.dmzjthird.databinding.ItemDownloadGroupBinding;
 import com.sena.dmzjthird.download.DownloadBean;
@@ -67,70 +66,89 @@ public class UserDownloadAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
     @Override
     protected void onBindChildViewHolder(@NonNull ViewHolder viewHolder, int groupPosition, int childPosition, @NonNull List<?> payloads) {
         ChildViewHolder holder = (ChildViewHolder) viewHolder;
-
+        ItemDownloadChildBinding binding = holder.binding;
         Chapter chapter = mDataList.get(groupPosition).getChapterList().get(childPosition);
 
-        holder.binding.chapterName.setText(chapter.chapterName);
-        holder.binding.progress.setMaxProgress(chapter.totalPage);
-        holder.binding.progress.setProgress(chapter.finishPage);
-        holder.binding.pageNum.setText(chapter.finishPage + "/" + chapter.totalPage);
+        binding.chapterName.setText(chapter.chapterName);
+        binding.progress.setMaxProgress(chapter.totalPage);
+        binding.progress.setProgress(chapter.finishPage);
+        binding.pageNum.setText(chapter.finishPage + "/" + chapter.totalPage);
         if (chapter.finishPage == chapter.totalPage) {
-            holder.binding.control.setImageResource(R.drawable.ic_check);
+            binding.control.setImageResource(R.drawable.ic_check);
         }
-        holder.binding.control.setOnClickListener(v -> {
+        binding.control.setOnClickListener(v -> {
 
             if (holder.binding.progress.getProgress() == holder.binding.progress.getMaxProgress()) {
                 Toast.makeText(mContext, "已完成，不可重复下载!!", Toast.LENGTH_SHORT).show();
                 return ;
             }
+            boolean tag;
+            if (binding.control.getTag() == null) {
+                tag = false;
+            } else {
+                tag = (boolean) binding.control.getTag();
+            }
+
+            // false: 图标为播放，点击开始下载
+            // true:  图标为暂停，点击暂停下载
+            if (!tag) {
+                DownloadManager.getInstance(mContext)
+                        .download(chapter.urlList, chapter.folder_name, new DownloadObserver() {
+
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                super.onSubscribe(d);
+                            }
+
+                            @Override
+                            public void onNext(DownloadInfo downloadInfo) {
+                                super.onNext(downloadInfo);
+                                roomHelper.updateChapterStatus(chapter.comicId, chapter.chapterId, RoomHelper.STATUS_DOWNLOADING);
+                                roomHelper.updateChapterFinishPage(chapter.comicId, chapter.chapterId, downloadInfo.getFinishPage());
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    holder.binding.progress.setProgress(downloadInfo.getFinishPage());
+                                    holder.binding.pageNum.setText(downloadInfo.getFinishPage() + "/" + downloadInfo.getTotalPage());
+                                });
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                super.onComplete();
+                                roomHelper.updateChapterStatus(chapter.comicId, chapter.chapterId, RoomHelper.STATUS_FINISH);
+                                roomHelper.updateComicFinishChapter(chapter.comicId);
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    holder.binding.control.setImageResource(R.drawable.ic_check);
+                                    Toast.makeText(mContext, downloadInfo.getTag() + "下载完成",Toast.LENGTH_SHORT).show();
+                                });
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                            }
+                        });
+            } else {
+                DownloadManager.getInstance(mContext).cancel(chapter.folder_name);
+            }
+
+            binding.control.setTag(!tag);
+            binding.control.setImageResource(tag ? R.drawable.ic_pause : R.drawable.ic_start);
 
 
-            DownloadManager.getInstance(mContext)
-                    .download(chapter.urlList, chapter.folder_name, new DownloadObserver() {
 
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            super.onSubscribe(d);
-//                            roomHelper.updateChapterStatus(chapter.comicId, chapter.chapterId, RoomHelper.STATUS_DOWNLOADING);
-                        }
-
-                        @Override
-                        public void onNext(DownloadInfo downloadInfo) {
-                            super.onNext(downloadInfo);
-                            roomHelper.updateChapterFinishPage(chapter.comicId, chapter.chapterId, downloadInfo.getFinishPage());
-                            new Handler(Looper.getMainLooper()).post(() -> {
-                                holder.binding.progress.setProgress(downloadInfo.getFinishPage());
-                                holder.binding.pageNum.setText(downloadInfo.getFinishPage() + "/" + downloadInfo.getTotalPage());
-                            });
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            super.onComplete();
-                            roomHelper.updateChapterStatus(chapter.comicId, chapter.chapterId, RoomHelper.STATUS_FINISH);
-                            roomHelper.updateComicFinishChapterAndFileSize(chapter.comicId, chapter.fileSize);
-                            new Handler(Looper.getMainLooper()).post(() -> {
-                                holder.binding.control.setImageResource(R.drawable.ic_check);
-                                Toast.makeText(mContext, downloadInfo.getTag() + "下载完成",Toast.LENGTH_SHORT).show();
-                            });
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                        }
-                    });
 
         });
+
     }
 
     @Override
     protected void onBindGroupViewHolder(@NonNull ViewHolder viewHolder, int groupPosition, boolean b, @NonNull List<?> payloads) {
         GroupViewHolder holder = (GroupViewHolder) viewHolder;
+        ItemDownloadGroupBinding binding = holder.binding;
 
         Comic comic = mDataList.get(groupPosition).getComic();
         GlideUtil.loadImage(mContext, comic.comicCover, holder.binding.cover);
-        holder.binding.title.setText(comic.comicName);
+        binding.title.setText(comic.comicName);
 
     }
 
@@ -155,7 +173,7 @@ public class UserDownloadAdapter extends ExpandableAdapter<ExpandableAdapter.Vie
         GroupViewHolder holder = (GroupViewHolder) viewHolder;
         float targetRotation = expand ? 180f : 0f;
 
-        ObjectAnimator.ofFloat((View) holder.binding.icon, View.ROTATION, targetRotation)
+        ObjectAnimator.ofFloat(holder.binding.icon, View.ROTATION, targetRotation)
                 .setDuration(animDuration)
                 .start();
 

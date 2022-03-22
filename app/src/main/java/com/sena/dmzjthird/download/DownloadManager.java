@@ -88,7 +88,7 @@ public class DownloadManager {
         List<String> urlList = new ArrayList<>();  // 需要下载的url
         List<String> nameList = new ArrayList<>();
 
-        String finalFolderName = "/漫画下载/" + folderName.substring(folderName.indexOf("/") + 1);
+        String finalFolderName = "/漫画下载/" + folderName;
         File folder = new File(mContext.getExternalCacheDir(), finalFolderName);
         if (!folder.exists()) {
             folder.mkdirs();
@@ -149,7 +149,7 @@ public class DownloadManager {
                 String url = urlList.get(i);
                 String fileName = nameList.get(i);
 
-                Request request = new Request.Builder().url(url).build();
+                Request request = new Request.Builder().url(url).addHeader("Referer", "http://imgsmall.dmzj.com").build();
                 Call call = mClient.newCall(request);
 
                 downCalls.put(downloadInfo.getTag(), call);

@@ -13,7 +13,7 @@
         android:background="?colorPrimary"
         app:isShowFavorite="false"
         app:isShowOther="false"
-        app:toolbarTitle="@string/icon_history_title"
+        app:toolbarTitle="@string/my_history"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

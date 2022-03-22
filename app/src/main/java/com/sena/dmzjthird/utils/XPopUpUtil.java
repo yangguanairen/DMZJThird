@@ -20,6 +20,7 @@ public class XPopUpUtil {
     public static void showCustomToast(Context context, int imageId, String title, String content) {
         new XPopup.Builder(context)
                 .isDestroyOnDismiss(true)
+                .autoDismiss(true)
                 .asCustom(new CustomToast(context, imageId, title, content))
                 .show();
     }

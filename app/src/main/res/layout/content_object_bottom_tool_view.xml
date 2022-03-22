@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/icon_setting_title"
+                android:text="@string/setting"
                 android:textColor="@color/white" />
 
         </LinearLayout>

@@ -44,7 +44,9 @@ public class NovelSearchActivity extends AppCompatActivity {
     private void init() {
         binding.toolbar.setBackIVListener(v -> finish());
         binding.toolbar.setSearchIVListener(v -> {
-            ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
+                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
 
             String query = binding.toolbar.getQueryETText();
             if (TextUtils.isEmpty(query)) {

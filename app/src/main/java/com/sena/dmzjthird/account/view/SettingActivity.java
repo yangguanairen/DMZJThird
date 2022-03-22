@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.databinding.ActivitySettingBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
+import com.sena.dmzjthird.utils.MyDataStore;
+import com.sena.dmzjthird.utils.ViewHelper;
+import com.sena.dmzjthird.utils.XPopUpUtil;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -20,13 +24,29 @@ public class SettingActivity extends AppCompatActivity {
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        initView();
 
-        binding.normalToolbar.setBackListener(v -> finish());
+    }
 
-        binding.settingComicRead.setOnClickListener(v -> startActivity(new Intent(this, SettingComicReadActivity.class)));
+    private void initView() {
 
-        binding.changePass.setOnClickListener(v -> IntentUtil.goToActivity(this, ChangePasswordActivity.class));
+        ViewHelper.immersiveStatus(this, binding.toolbar);
 
+        binding.toolbar.setBackListener(v -> finish());
+
+        binding.settingComicRead.setOnClickListener(v -> IntentUtil.goToActivity(this, SettingComicReadActivity.class));
+
+        binding.changePass.setOnClickListener(v -> {
+
+            long uid = MyDataStore.getInstance(this).getValue(MyDataStore.DATA_STORE_USER, MyDataStore.USER_UID, 0L);
+            if (uid == 0L) {
+                XPopUpUtil.showCustomErrorToast(this, getString(R.string.not_login));
+                return ;
+            }
+
+            IntentUtil.goToActivity(this, ChangePasswordActivity.class);
+
+        });
     }
 
 }

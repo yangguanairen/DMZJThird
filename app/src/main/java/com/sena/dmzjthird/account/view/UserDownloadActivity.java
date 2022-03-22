@@ -12,6 +12,7 @@ import com.sena.dmzjthird.account.adapter.UserDownloadAdapter;
 import com.sena.dmzjthird.databinding.ActivityUserDownloadBinding;
 import com.sena.dmzjthird.download.DownloadBean;
 import com.sena.dmzjthird.download.DownloadHelper;
+import com.sena.dmzjthird.utils.ViewHelper;
 
 import java.util.List;
 
@@ -41,11 +42,7 @@ public class UserDownloadActivity extends AppCompatActivity {
 
     private void initView() {
 
-        ImmersionBar.with(this)
-                .statusBarColor(R.color.theme_blue)
-                .titleBarMarginTop(binding.toolbar)
-                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-                .init();
+        ViewHelper.immersiveStatus(this, binding.toolbar);
 
         binding.toolbar.setBackListener(v -> finish());
     }

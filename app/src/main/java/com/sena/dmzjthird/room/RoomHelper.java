@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.room.Room;
 
+import com.sena.dmzjthird.comic.bean.ComicChapterInfoBean;
 import com.sena.dmzjthird.comic.bean.ComicDownloadBean;
 import com.sena.dmzjthird.room.chapter.Chapter;
 import com.sena.dmzjthird.room.comic.Comic;
@@ -42,11 +43,11 @@ public class RoomHelper {
         database = Room.databaseBuilder(context, MyRoomDatabase.class, "download.db").build();
     }
 
-    public static List<Comic> getAllComic() {
+    public List<Comic> getAllComic() {
         return database.comicDao().getAllComic();
     }
 
-    public static synchronized void initComic(String comicId, String comicName, String comicCover) {
+    public synchronized void initComic(String comicId, String comicName, String comicCover) {
         Comic comic = database.comicDao().query(comicId);
         if (comic == null) {
             comic = new Comic();
@@ -54,59 +55,56 @@ public class RoomHelper {
             comic.comicName = comicName;
             comic.comicCover = comicCover;
             comic.totalChapter = 0;
-            comic.totalSize = 0;
             comic.finishChapter = 0;
-            comic.finishSize = 0;
             database.comicDao().insert(comic);
         }
     }
 
-    public static void updateComicTotalChapterAndFileSize(String comicId, long fileSize) {
+    public void updateComicTotalChapter(String comicId) {
         Comic comic = database.comicDao().query(comicId);
         if (comic == null) {
             LogUtil.e("Comic为null");
             return ;
         }
-        database.comicDao().updateTotalChapterAndTotalSize(comicId, comic.totalChapter + 1, comic.totalSize + fileSize);
+        database.comicDao().updateTotalChapterAndTotalSize(comicId, comic.totalChapter + 1);
     }
 
-    public static void updateComicFinishChapterAndFileSize(String comicId, long fileSize) {
+    public void updateComicFinishChapter(String comicId) {
         Comic comic = database.comicDao().query(comicId);
         if (comic == null) {
             LogUtil.e("Comic为null");
             return ;
         }
-        database.comicDao().updateFinishChapterAndFinishSize(comicId, comic.finishChapter + 1, comic.finishSize + fileSize);
+        database.comicDao().updateFinishChapterAndFinishSize(comicId, comic.finishChapter + 1);
     }
 
     public static List<Chapter> getAllChapter(String comicId) {
         return database.chapterDao().getAllChapter(comicId);
     }
 
-    public static void insertChapter(String comicId, ComicDownloadBean bean) {
-        if (!queryChapter(comicId, bean.getId())) return ;
+    public void insertChapter(String comicName, ComicChapterInfoBean bean) {
+        if (!queryChapter(bean.getComic_id(), bean.getChapter_id())) return ;
         Chapter chapter = new Chapter();
-        chapter.comicId = comicId;
-        chapter.chapterId = bean.getId();
-        chapter.chapterName = bean.getChapter_name();
-        chapter.folder_name = bean.getFolder();
+        chapter.comicId = bean.getComic_id();
+        chapter.chapterId = bean.getChapter_id();
+        chapter.chapterName = bean.getTitle();
         chapter.urlList = bean.getPage_url();
-        chapter.totalPage = bean.getSum_pages();
+        chapter.folder_name = comicName + "/" + bean.getTitle();
+        chapter.totalPage = bean.getPicnum();
         chapter.finishPage = 0;
-        chapter.fileSize = bean.getFilesize();
         chapter.status = STATUS_NOT_START;
         database.chapterDao().insert(chapter);
     }
 
-    public static void updateChapterFinishPage(String comicId, String chapterId, int finishPage) {
+    public void updateChapterFinishPage(String comicId, String chapterId, int finishPage) {
         database.chapterDao().updateFinishPage(comicId, chapterId, finishPage);
     }
 
-    public static void updateChapterStatus(String comicId, String chapterId, String status) {
+    public void updateChapterStatus(String comicId, String chapterId, String status) {
         database.chapterDao().updateChapterStatus(comicId, chapterId, status);
     }
 
-    public static boolean queryChapter(String comicId, String chapterId) {
+    public boolean queryChapter(String comicId, String chapterId) {
         Chapter chapter = database.chapterDao().queryChapter(comicId, chapterId);
         return chapter == null;
     }

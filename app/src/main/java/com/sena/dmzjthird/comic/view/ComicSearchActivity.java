@@ -32,7 +32,9 @@ public class ComicSearchActivity extends AppCompatActivity {
 
         binding.toolbar.setBackIVListener(v -> finish());
         binding.toolbar.setSearchIVListener(v -> {
-            ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
+                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
             String query = binding.toolbar.getQueryETText();
             if (TextUtils.isEmpty(query)) {
                 Toast.makeText(this, "输入不得为空!!", Toast.LENGTH_SHORT).show();
