@@ -125,7 +125,7 @@ public class ComicSearchResultFragment extends Fragment {
 
     private void onErrorAppear(boolean isError) {
         binding.recyclerview.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
-        binding.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override

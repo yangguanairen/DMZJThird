@@ -33,7 +33,12 @@ public class ComicLatestFragment extends Fragment {
 
     private boolean isLoaded = false;
     private int page = 1;
-    private int mType = 100;
+    // 分类
+    // 全部漫画=100, 原创漫画=10, 译制漫画=0
+    private final int TYPE_ALL = 100;
+    private final int TYPE_ORIGINAL = 1;
+    private final int TYPE_TRANSLATION = 0;
+    private int mType = TYPE_ALL;
 
     private TextView currentSelectTag;
 
@@ -72,15 +77,15 @@ public class ComicLatestFragment extends Fragment {
             getResponse();
         });
 
-        binding.selectAll.setOnClickListener(v -> registerTagClick(binding.selectAll, 100));
-        binding.selectOriginal.setOnClickListener(v -> registerTagClick(binding.selectOriginal, 1));
-        binding.selectTranslate.setOnClickListener(v -> registerTagClick(binding.selectTranslate, 0));
+        binding.selectAll.setOnClickListener(v -> registerTagClick(binding.selectAll, TYPE_ALL));
+        binding.selectOriginal.setOnClickListener(v -> registerTagClick(binding.selectOriginal, TYPE_ORIGINAL));
+        binding.selectTranslate.setOnClickListener(v -> registerTagClick(binding.selectTranslate, TYPE_TRANSLATION));
     }
 
     private void initAdapter() {
-        binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ComicLatestAdapter(getActivity());
-        binding.recyclerview.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((a, view, position) -> {
             ComicUpdateListRes.ComicUpdateListItemResponse data = (ComicUpdateListRes.ComicUpdateListItemResponse) a.getData().get(position);
             String comicId = String.valueOf(data.getComicId());
@@ -98,21 +103,21 @@ public class ComicLatestFragment extends Fragment {
         mType = type;
         page = 1;
         if (currentSelectTag == binding.selectAll) {
-            binding.selectAll.setTextColor(getContext().getColor(R.color.theme_blue));
+            binding.selectAll.setTextColor(getResources().getColor(R.color.theme_blue, null));
             binding.selectAll.setBackgroundResource(R.drawable.shape_object_update_tag);
         } else {
             binding.selectAll.setTextColor(Color.BLACK);
             binding.selectAll.setBackgroundColor(Color.WHITE);
         }
         if (currentSelectTag == binding.selectOriginal) {
-            binding.selectOriginal.setTextColor(getContext().getColor(R.color.theme_blue));
+            binding.selectOriginal.setTextColor(getResources().getColor(R.color.theme_blue, null));
             binding.selectOriginal.setBackgroundResource(R.drawable.shape_object_update_tag);
         } else {
             binding.selectOriginal.setTextColor(Color.BLACK);
             binding.selectOriginal.setBackgroundColor(Color.WHITE);
         }
         if (currentSelectTag == binding.selectTranslate) {
-            binding.selectTranslate.setTextColor(getContext().getColor(R.color.theme_blue));
+            binding.selectTranslate.setTextColor(getResources().getColor(R.color.theme_blue, null));
             binding.selectTranslate.setBackgroundResource(R.drawable.shape_object_update_tag);
         } else {
             binding.selectTranslate.setTextColor(Color.BLACK);
@@ -138,8 +143,10 @@ public class ComicLatestFragment extends Fragment {
                         binding.refreshLayout.setRefreshing(false);
                         if (page == 1 && dataList.size() == 0) {
                             // 出错处理
+                            onRequestError(true);
                             return ;
                         }
+                        onRequestError(false);
                         if (page == 1) {
                             adapter.setList(dataList);
                         } else {
@@ -158,6 +165,7 @@ public class ComicLatestFragment extends Fragment {
                     public void onError(@NonNull Throwable e) {
                         binding.refreshLayout.setRefreshing(false);
                         // 出错处理
+                        onRequestError(true);
                     }
 
                     @Override
@@ -168,16 +176,15 @@ public class ComicLatestFragment extends Fragment {
     }
 
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
+    private void onRequestError(boolean isError) {
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         isLoaded = false;
+        binding = null;
     }
 }

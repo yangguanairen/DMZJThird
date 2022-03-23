@@ -8,10 +8,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.gyf.immersionbar.BarHide;
-import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.databinding.ActivityHomeBinding;
+import com.sena.dmzjthird.utils.ViewHelper;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -27,9 +26,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
-
         setContentView(binding.getRoot());
 
 
@@ -44,11 +41,7 @@ public class HomeActivity extends AppCompatActivity {
     private void initView() {
 
         // 隐藏底部手势导航栏
-        ImmersionBar.with(this)
-                .statusBarColor(R.color.theme_blue)
-                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-                .titleBarMarginTop(binding.container)
-                .init();
+        ViewHelper.immersiveStatus(this, binding.container);
 
         comicFragment = ComicFragment.newInstance();
         topicFragment = TopicFragment.newInstance();

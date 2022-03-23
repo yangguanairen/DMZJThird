@@ -55,16 +55,19 @@ public class ComicCategoryFragment extends Fragment {
     }
 
     private void lazyLoad() {
+        binding.refreshLayout.setRefreshing(true);
         getResponse();
     }
 
     private void initView() {
-        binding.recyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        binding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         adapter = new ComicCategoryAdapter(getActivity());
-        binding.recyclerview.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((adapter, view, position) ->
                 IntentUtil.goToComicClassifyActivity(getActivity(), ((ComicClassifyCoverBean.Data) adapter.getData().get(position)).getTag_id()));
+
+        binding.refreshLayout.setOnRefreshListener(this::getResponse);
     }
 
     private void getResponse() {
@@ -79,27 +82,32 @@ public class ComicCategoryFragment extends Fragment {
 
                     @Override
                     public void onNext(@NonNull ComicClassifyCoverBean bean) {
+                        binding.refreshLayout.setRefreshing(false);
                         if (bean == null) {
                             // 出错处理
+                            onRequestError(true);
                             return ;
                         }
+                        onRequestError(false);
                         adapter.setList(bean.getData());
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        if (e instanceof HttpException) {
-                            LogUtil.d("HttpError: " + ((HttpException) e).code());
-                        } else {
-                            LogUtil.d("OtherError: " + e.getMessage());
-                        }
-
+                        binding.refreshLayout.setRefreshing(false);
+                        onRequestError(true);
+                        LogUtil.internetError(e);
                     }
 
                     @Override
                     public void onComplete() {
                     }
                 });
+    }
+
+    private void onRequestError(boolean isError) {
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 
 }

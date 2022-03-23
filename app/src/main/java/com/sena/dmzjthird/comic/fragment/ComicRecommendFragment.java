@@ -15,6 +15,7 @@ import com.sena.dmzjthird.comic.bean.ComicRecommendLikeBean;
 import com.sena.dmzjthird.comic.bean.ComicRecommendNewBean;
 import com.sena.dmzjthird.custom.autoBanner.AutoBannerData;
 import com.sena.dmzjthird.databinding.FragmentComicRecommendBinding;
+import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import org.jetbrains.annotations.NotNull;
@@ -59,8 +60,6 @@ public class ComicRecommendFragment extends Fragment {
 
         binding.progress.spin();
 
-//        binding.refresh.setOnRefreshListener(() -> new Handler().postDelayed(() -> binding.refresh.setRefreshing(false), 5000));
-
         initView();
         getResponse();
 
@@ -73,7 +72,7 @@ public class ComicRecommendFragment extends Fragment {
         adapter = new ComicRecommendAdapter(getContext());
         binding.recyclerview.setAdapter(adapter);
 
-        binding.refreshLayout.setEnabled(false);
+        binding.refreshLayout.setOnRefreshListener(this::getResponse);
     }
 
     private void getResponse() {
@@ -89,6 +88,7 @@ public class ComicRecommendFragment extends Fragment {
 
                     @Override
                     public void onNext(@NonNull List<ComicRecommendNewBean> beanList) {
+                        binding.refreshLayout.setRefreshing(false);
                         if (beanList.size() == 0) {
                             // 出错处理
                             return ;
@@ -111,6 +111,7 @@ public class ComicRecommendFragment extends Fragment {
                     @Override
                     public void onError(@NonNull Throwable e) {
                         // 出错处理
+                        binding.refreshLayout.setRefreshing(false);
                         binding.progress.stopSpinning();
                         binding.progress.setVisibility(View.INVISIBLE);
                     }
@@ -150,9 +151,11 @@ public class ComicRecommendFragment extends Fragment {
 
     }
 
+    // 多线程，使用同步
     // 集成所有请求结果，集中发送给adapter
     private synchronized void setRecommendList(ComicRecommendNewBean bean) {
         list.add(bean);
+        LogUtil.e("首页Bean Size: " + list.size());
         if (list.size() != 9) return ;
         list.sort((o1, o2) -> {
             Integer i1 = o1.getSort();

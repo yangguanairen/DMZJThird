@@ -61,7 +61,7 @@ public class NormalToolbar extends Toolbar {
 
             Drawable drawable = array.getDrawable(R.styleable.ToolbarNormal_otherSrc);
             if (isShowOther && drawable != null) {
-                otherIV.setBackground(drawable);
+                otherIV.setImageDrawable(drawable);
             }
             array.recycle();
 
@@ -102,11 +102,11 @@ public class NormalToolbar extends Toolbar {
         titleTV.setText(title);
     }
 
-    public void setFavoriteIVVisibility(int status) {
+    public void setFavoriteVisibility(int status) {
         favoriteIV.setVisibility(status);
     }
 
-    public void setOtherTVVisibility(int status) {
+    public void setOtherVisibility(int status) {
         otherIV.setVisibility(status);
     }
 
@@ -114,13 +114,8 @@ public class NormalToolbar extends Toolbar {
         favoriteIV.setImageResource(resourcesId);
     }
 
-    public void setFavoriteContentDescription(String value) {
-        favoriteIV.setContentDescription(value);
-        invalidate();
-    }
+    public void setOtherResource(int resourceId) {
 
-    public String getFavoriteContentDescription() {
-        return favoriteIV.getContentDescription().toString();
     }
 
     public ImageView getFavoriteIV() {

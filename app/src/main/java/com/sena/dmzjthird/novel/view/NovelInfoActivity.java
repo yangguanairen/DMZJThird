@@ -109,7 +109,7 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
 
         if (title == null) {
             // 出错处理
-            binding.toolbar.setFavoriteIVVisibility(View.GONE);
+            binding.toolbar.setFavoriteVisibility(View.GONE);
             return ;
         }
         binding.toolbar.setTitle(title);

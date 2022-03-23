@@ -24,6 +24,8 @@ import com.sena.dmzjthird.utils.TimeUtil;
 import com.sena.dmzjthird.utils.api.ComicApi;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -35,7 +37,6 @@ public class ComicInfoFragment extends Fragment {
 
     private FragmentComicInfoBinding binding;
     private String comicId;
-    private boolean isError = false;
     private ComicInfoAdapter adapter;
 
     private String coverUrl = "";
@@ -92,43 +93,66 @@ public class ComicInfoFragment extends Fragment {
 
     private void getResponse() {
 
-        Consumer<ComicDetailRes.ComicDetailInfoResponse> observer = data -> {
-            if (data == null) {
-                mCallbacks.loadingDataFinish(null, null, null);
-                return;
+        Observer<ComicDetailRes.ComicDetailInfoResponse> observer = new Observer<ComicDetailRes.ComicDetailInfoResponse>() {
+            @Override
+            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
             }
 
-            binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-            adapter = new ComicInfoAdapter(getContext(), data.getId() + "", data.getCover(), data.getTitle());
-            binding.recyclerview.setAdapter(adapter);
+            @Override
+            public void onNext(ComicDetailRes.@io.reactivex.rxjava3.annotations.NonNull ComicDetailInfoResponse data) {
+                if (data == null) {
+                    mCallbacks.loadingDataFinish(null, null, null);
+                    return;
+                }
 
-            coverUrl = data.getCover() == null ? "" : data.getCover();
-            GlideUtil.loadImageWithCookie(getActivity(), coverUrl, binding.cover);
+                binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+                adapter = new ComicInfoAdapter(getContext(), data.getId() + "", data.getCover(), data.getTitle());
+                binding.recyclerview.setAdapter(adapter);
 
-            binding.title.setText(data.getTitle());
+                coverUrl = data.getCover() == null ? "" : data.getCover();
+                GlideUtil.loadImageWithCookie(getActivity(), coverUrl, binding.cover);
 
-            String authors = "";
-            for (ComicDetailRes.ComicDetailTypeItemResponse t: data.getAuthorsList()) {
-                authors += t.getTagName();
+                binding.title.setText(data.getTitle());
+
+                StringBuilder sb = new StringBuilder();
+                String authors;
+                for (ComicDetailRes.ComicDetailTypeItemResponse t: data.getAuthorsList()) {
+                    if (data.getAuthorsList().indexOf(t) == data.getAuthorsList().size() - 1) {
+                        sb.append(t.getTagName());
+                    } else {
+                        sb.append(t.getTagName()).append("/");
+                    }
+                }
+                authors = sb.toString();
+                binding.author.setText(authors);
+
+                binding.updateTime.setText(TimeUtil.millConvertToDate(data.getLastUpdatetime() * 1000));
+
+                binding.description.setText(data.getDescription());
+
+                adapter.setList(data.getChaptersList());
+
+                // 设置tag
+                for (ComicDetailRes.ComicDetailTypeItemResponse t: data.getStatusList()) {
+                    addTagView(t.getTagName(), t.getTagId() + "", binding.tag1);
+                }
+                for (ComicDetailRes.ComicDetailTypeItemResponse t: data.getTypesList()) {
+                    addTagView(t.getTagName(), t.getTagId() + "", binding.tag2);
+                }
+
+                mCallbacks.loadingDataFinish(data.getTitle(), data.getCover(), authors);
             }
-            authors = authors.substring(0, authors.length() - 1);
-            binding.author.setText(authors);
 
-            binding.updateTime.setText(TimeUtil.millConvertToDate(data.getLastUpdatetime()));
+            @Override
+            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
 
-            binding.description.setText(data.getDescription());
-
-            adapter.setList(data.getChaptersList());
-
-            // 设置tag
-            for (ComicDetailRes.ComicDetailTypeItemResponse t: data.getStatusList()) {
-                addTagView(t.getTagName(), t.getTagId() + "", binding.tag1);
-            }
-            for (ComicDetailRes.ComicDetailTypeItemResponse t: data.getTypesList()) {
-                addTagView(t.getTagName(), t.getTagId() + "", binding.tag2);
             }
 
-            mCallbacks.loadingDataFinish(data.getTitle(), data.getCover(), authors);
+            @Override
+            public void onComplete() {
+
+            }
         };
 
         ComicApi.getComicInfo(comicId)

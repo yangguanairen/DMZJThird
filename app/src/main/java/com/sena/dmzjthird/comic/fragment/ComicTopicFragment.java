@@ -14,7 +14,6 @@ import com.sena.dmzjthird.comic.adapter.ComicTopicAdapter;
 import com.sena.dmzjthird.comic.bean.ComicTopicBean;
 import com.sena.dmzjthird.databinding.FragmentComicTopicBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
-import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +23,6 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 
 public class ComicTopicFragment extends Fragment {
@@ -59,9 +57,9 @@ public class ComicTopicFragment extends Fragment {
     }
 
     private void initView() {
-        binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ComicTopicAdapter(getActivity());
-        binding.recyclerview.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((a, view, position) ->
                 IntentUtil.goToComicTopicInfoActivity(getActivity(), ((ComicTopicBean.Data) a.getData().get(position)).getId()));
@@ -88,16 +86,14 @@ public class ComicTopicFragment extends Fragment {
 
                     @Override
                     public void onNext(@NonNull ComicTopicBean bean) {
-//                        if ((beans == null && page == 0) || beans != null && page == 0 && beans.size() == 0) {
-//                            binding.tvNoData.setVisibility(View.VISIBLE);
-//                            binding.recyclerViewRank.setVisibility(View.GONE);
-//                            Toast.makeText(getApplicationContext(), "没有数据了", Toast.LENGTH_LONG).show();
-//                        }
                         binding.refreshLayout.setRefreshing(false);
                         if (page == 0 && bean.getData().size() == 0) {
                             // 出错处理
+                            onRequestError(true);
                             return ;
                         }
+
+                        onRequestError(false);
                         if (page == 0) {
                             adapter.setList(bean.getData());
                         } else {
@@ -115,32 +111,24 @@ public class ComicTopicFragment extends Fragment {
                     @Override
                     public void onError(@NonNull Throwable e) {
                         binding.refreshLayout.setRefreshing(false);
-                        if (e instanceof HttpException) {
-                            LogUtil.d("HttpError: " + ((HttpException) e).code() );
-                        } else {
-                            LogUtil.d("OtherError: " + e.getMessage());
-                        }
+                        onRequestError(true);
                     }
 
                     @Override
                     public void onComplete() {
-                        if (binding.refreshLayout.isRefreshing()) {
-                            binding.refreshLayout.setRefreshing(false);
-                        }
                     }
                 });
     }
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
+    private void onRequestError(boolean isError) {
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        binding = null;
         isLoaded = false;
     }
 }

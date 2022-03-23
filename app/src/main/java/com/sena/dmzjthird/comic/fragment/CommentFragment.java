@@ -187,17 +187,19 @@ public class CommentFragment extends Fragment {
                     out.close();
                     data = out.toString();
                     connection.disconnect();
+
+                    commentCount = data.substring(data.lastIndexOf(",") + 1, data.length() - 1);
+                    data = data.replace("," + commentCount, "");
+
+                    List<ComicCommentBean> beans = generateData(data);
+                    if (beans != null) {
+                        emitter.onNext(beans);
+                        emitter.onComplete();
+                    }
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
-                commentCount = data.substring(data.lastIndexOf(",") + 1, data.length() - 1);
-                data = data.replace("," + commentCount, "");
 
-                List<ComicCommentBean> beans = generateData(data);
-                if (beans != null) {
-                    emitter.onNext(beans);
-                    emitter.onComplete();
-                }
 
             })
                     .subscribeOn(Schedulers.io())

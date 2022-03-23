@@ -8,9 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
-import com.gyf.immersionbar.BarHide;
-import com.gyf.immersionbar.ImmersionBar;
-import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.ComicFilterAdapter;
 import com.sena.dmzjthird.comic.adapter.ComicFilterTagAdapter;
@@ -20,6 +17,7 @@ import com.sena.dmzjthird.databinding.ActivityComicFilterBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.ViewHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +27,6 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 public class ComicFilterActivity extends AppCompatActivity implements ComicFilterTagAdapter.Callbacks {
 
@@ -61,11 +58,7 @@ public class ComicFilterActivity extends AppCompatActivity implements ComicFilte
         binding.progress.spin();
         binding.toolbar.setBackListener(v -> finish());
 
-        ImmersionBar.with(this)
-                .statusBarColor(R.color.theme_blue)
-                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-                .titleBarMarginTop(binding.toolbar)
-                .init();
+        ViewHelper.immersiveStatus(this, binding.drawerLayout);
 
         initAdapter();
         initDrawerLayout();
@@ -109,12 +102,12 @@ public class ComicFilterActivity extends AppCompatActivity implements ComicFilte
                         binding.progress.stopSpinning();
                         binding.progress.setVisibility(View.GONE);
                         if (page == 0 && beans.size() == 0) {
-                            binding.noData.setVisibility(View.VISIBLE);
+                            onRequestError(true);
                             return;
                         }
+
                         // 防止上一次请求导致noData显示
-                        binding.noData.setVisibility(View.INVISIBLE);
-                        binding.recyclerview.setVisibility(View.VISIBLE);
+                        onRequestError(false);
 
                         if (page == 0) {
                             adapter.setList(beans);
@@ -131,11 +124,7 @@ public class ComicFilterActivity extends AppCompatActivity implements ComicFilte
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        if (e instanceof HttpException) {
-                            LogUtil.e("HttpError: " + ((HttpException) e).code());
-                        } else {
-                            LogUtil.e("OtherError: " + e.getMessage());
-                        }
+                        onRequestError(true);
                     }
 
                     @Override
@@ -217,6 +206,11 @@ public class ComicFilterActivity extends AppCompatActivity implements ComicFilte
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
+    }
+
+    private void onRequestError(boolean isError) {
+        binding.recyclerview.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
     }
 
     // 实现接口，tag被点击，刷新数据，drawerLayout关闭

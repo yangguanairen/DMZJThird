@@ -131,6 +131,7 @@ public class AutoBanner extends ConstraintLayout {
         if (list == null) {
             return;
         }
+        dataList.clear();
         dataList.add(list.get(list.size() - 1));
         dataList.addAll(list);
         dataList.add(list.get(0));
@@ -161,6 +162,7 @@ public class AutoBanner extends ConstraintLayout {
      * 初始点的图标，白色
      */
     private void initPoints() {
+        if (linear.getChildCount() != 0) linear.removeAllViews();
         for (int i = 0; i < dataList.size() - 2; i++) {
             View point = new View(mContext);
             point.setBackgroundResource(R.drawable.shape_point_normal);

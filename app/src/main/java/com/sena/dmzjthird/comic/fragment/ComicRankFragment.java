@@ -62,9 +62,9 @@ public class ComicRankFragment extends Fragment {
     }
 
     private void initAdapter() {
-        binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ComicRankAdapter(getContext());
-        binding.recyclerview.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((a, view, position) -> {
             ComicRankListRes.ComicRankListItemResponse data = (ComicRankListRes.ComicRankListItemResponse) a.getData().get(position);
@@ -106,11 +106,15 @@ public class ComicRankFragment extends Fragment {
                         binding.refreshLayout.setRefreshing(false);
                         if (page == 1 && dataList.isEmpty()) {
                             // 出错处理
+                            onRequestError(true);
                             return ;
                         }
+                        onRequestError(false);
 
                         if (page == 1) {
                             adapter.setList(dataList);
+                            // tag更新，回滚至第一项
+                            binding.recyclerView.scrollToPosition(0);
                         } else {
                             adapter.addData(dataList);
                         }
@@ -127,6 +131,7 @@ public class ComicRankFragment extends Fragment {
                     public void onError(@NonNull Throwable e) {
                         // 出错处理
                         binding.refreshLayout.setRefreshing(false);
+                        onRequestError(true);
                     }
 
                     @Override
@@ -174,6 +179,11 @@ public class ComicRankFragment extends Fragment {
                     getResponse();
                 })
                 .show();
+    }
+
+    private void onRequestError(boolean isError) {
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override

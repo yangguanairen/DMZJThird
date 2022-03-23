@@ -9,17 +9,21 @@
     tools:context=".comic.fragment.ComicRankFragment">
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/dp_10">
+        android:paddingTop="@dimen/dp_10"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dialogLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/dp_10">
+            android:padding="@dimen/dp_10"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/rank_classify"
@@ -67,10 +71,20 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialogLayout"/>
 
-    </LinearLayout>
+        <include
+            android:id="@+id/error"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/error_no_data"
+            app:layout_constraintTop_toBottomOf="@+id/dialogLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

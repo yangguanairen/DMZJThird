@@ -7,16 +7,16 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
-import com.gyf.immersionbar.BarHide;
-import com.gyf.immersionbar.ImmersionBar;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.fragment.CommentFragment;
 import com.sena.dmzjthird.comic.fragment.ComicTopicInfoFragment;
 import com.sena.dmzjthird.comic.fragment.ComicTopicInfoRelatedFragment;
 import com.sena.dmzjthird.databinding.ActivityComicTopicInfoBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
+import com.sena.dmzjthird.utils.ViewHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,11 +32,7 @@ public class ComicTopicInfoActivity extends AppCompatActivity implements ComicTo
         binding = ActivityComicTopicInfoBinding.inflate(getLayoutInflater());
         String topicId = IntentUtil.getTopicId(this);
 
-        ImmersionBar.with(this)
-                .statusBarColor(R.color.theme_blue)
-                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-                .titleBarMarginTop(binding.toolbar)
-                .init();
+        ViewHelper.immersiveStatus(this, binding.toolbar);
 
         binding.progress.spin();
         binding.toolbar.setBackListener(v -> finish());
@@ -75,14 +71,14 @@ public class ComicTopicInfoActivity extends AppCompatActivity implements ComicTo
 
     @Override
     public void loadDataFinish(String title) {
-        new Handler().postDelayed(() -> {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (isFinishing()) {
                 return ;
             }
             binding.progress.stopSpinning();
             binding.progress.setVisibility(View.GONE);
             if (title == null) {
-                binding.noData.setVisibility(View.VISIBLE);
+                binding.error.noData.setVisibility(View.VISIBLE);
             } else {
                 binding.toolbar.setTitle(title);
                 binding.tableLayout.setVisibility(View.VISIBLE);

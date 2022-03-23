@@ -11,16 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/noData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:visibility="invisible"
-        android:text="@string/no_data"
-        android:textColor="@color/black"
-        android:textSize="17sp"
-        android:gravity="center_horizontal"
-        app:layout_constraintTop_toTopOf="parent"/>
 
+    <include
+        android:id="@+id/error"
+        android:visibility="invisible"
+        layout="@layout/error_no_data" />
 </androidx.constraintlayout.widget.ConstraintLayout>
