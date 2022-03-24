@@ -70,9 +70,12 @@ public class NovelCategoryFragment extends Fragment {
             startActivity(intent);
         });
 
+        binding.refreshLayout.setOnRefreshListener(this::getResponse);
+
     }
 
     private void lazyLoad() {
+        binding.refreshLayout.setRefreshing(true);
         getResponse();
     }
 
@@ -90,21 +93,31 @@ public class NovelCategoryFragment extends Fragment {
                     public void onNext(@NonNull List<NovelCategoryBean> beanList) {
                         if (beanList.size() == 0) {
                             // 出错处理
+                            onRequestError(true);
                             return ;
                         }
+                        onRequestError(false);
+
                         adapter.setList(beanList);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
                         // 出错处理
+                        binding.refreshLayout.setRefreshing(false);
+                        onRequestError(true);
                     }
 
                     @Override
                     public void onComplete() {
-
+                        binding.refreshLayout.setRefreshing(false);
                     }
                 });
+    }
+
+    private void onRequestError(boolean isError) {
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override

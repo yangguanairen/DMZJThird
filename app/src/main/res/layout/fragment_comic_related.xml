@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".comic.fragment.ComicRelatedFragment">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
 
-    <com.sena.dmzjthird.custom.ProgressWheel xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/progress"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        ProgressWheel:barColor="?colorPrimary"
-        ProgressWheel:barLength="90dp"
-        ProgressWheel:barWidth="6dp"
-        ProgressWheel:delayMillis="75"
-        ProgressWheel:layout_constraintBottom_toBottomOf="parent"
-        ProgressWheel:layout_constraintEnd_toEndOf="parent"
-        ProgressWheel:layout_constraintStart_toStartOf="parent"
-        ProgressWheel:layout_constraintTop_toTopOf="parent"
-        ProgressWheel:rimColor="@color/white"
-        ProgressWheel:rimWidth="2dp"
-        ProgressWheel:spinSpeed="14dp"
-        ProgressWheel:textColor="#222222"
-        ProgressWheel:textSize="14sp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/error"
+            android:visibility="invisible"
+            layout="@layout/error_no_data" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

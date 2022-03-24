@@ -23,12 +23,6 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NewsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-
 
 /**
  * 0 最新
@@ -72,7 +66,7 @@ public class NewsListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@androidx.annotation.NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentNewsListBinding.inflate(inflater, container, false);
 
@@ -130,11 +124,11 @@ public class NewsListFragment extends Fragment {
 
                     @Override
                     public void onNext(@NonNull List<NewsListRes.NewsListItemResponse> dataList) {
-                        binding.refreshLayout.setRefreshing(false);
                         if (page == 1 && dataList.size() == 0) {
-                            // 出错处理
+                            onRequestError(true);
                             return ;
                         }
+                        onRequestError(false);
 
                         if (page == 1) {
                             adapter.setList(dataList);
@@ -152,15 +146,19 @@ public class NewsListFragment extends Fragment {
                     @Override
                     public void onError(@NonNull Throwable e) {
                         binding.refreshLayout.setRefreshing(false);
-                        // 出错处理
-                        return ;
+                        onRequestError(true);
                     }
 
                     @Override
                     public void onComplete() {
-
+                        binding.refreshLayout.setRefreshing(false);
                     }
                 });
+    }
+
+    private void onRequestError(boolean isError) {
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override

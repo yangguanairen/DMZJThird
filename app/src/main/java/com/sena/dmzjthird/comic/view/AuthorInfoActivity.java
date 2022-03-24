@@ -6,23 +6,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.os.Bundle;
 import android.view.View;
 
-import com.gyf.immersionbar.BarHide;
-import com.gyf.immersionbar.ImmersionBar;
-import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.comic.adapter.AuthorInfoAdapter;
 import com.sena.dmzjthird.comic.bean.AuthorInfoBean;
 import com.sena.dmzjthird.databinding.ActivityAuthorInfoBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
-import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.ViewHelper;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 public class AuthorInfoActivity extends AppCompatActivity {
 
@@ -44,22 +40,19 @@ public class AuthorInfoActivity extends AppCompatActivity {
 
     private void initView() {
 
-        ImmersionBar.with(this)
-                .statusBarColor(R.color.theme_blue)
-                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-                .titleBarMarginTop(binding.toolbar)
-                .init();
+        ViewHelper.immersiveStatus(this, binding.toolbar);
 
-        binding.progress.spin();
 
         binding.toolbar.setBackListener(v -> finish());
 
-        binding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AuthorInfoAdapter(this);
-        binding.recyclerview.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) ->
                 IntentUtil.goToComicInfoActivity(this, ((AuthorInfoBean.Data) adapter.getData().get(position)).getId()));
 
+
+        binding.refreshLayout.setOnRefreshListener(this::getResponse);
 
     }
 
@@ -76,31 +69,35 @@ public class AuthorInfoActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(@NonNull AuthorInfoBean bean) {
-                        binding.progress.stopSpinning();
-                        binding.progress.setVisibility(View.GONE);
-                        if (bean.getData().size() == 0) {
-                            binding.noData.setVisibility(View.VISIBLE);
-                        } else {
-                            binding.recyclerview.setVisibility(View.VISIBLE);
-                            binding.toolbar.setTitle(bean.getNickname());
-                            adapter.setList(bean.getData());
+
+                        if (bean.getData().isEmpty()) {
+                            onRequestError(true);
+                            return ;
                         }
+                        onRequestError(false);
+
+                        binding.toolbar.setTitle(bean.getNickname());
+                        adapter.setList(bean.getData());
 
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        if (e instanceof HttpException) {
-                            LogUtil.e("HttpError: " + ((HttpException) e).code());
-                        } else {
-                            LogUtil.e("OtherError: " + e.getMessage());
-                        }
+                        binding.refreshLayout.setRefreshing(false);
+                        onRequestError(true);
                     }
 
                     @Override
                     public void onComplete() {
-
+                        binding.refreshLayout.setRefreshing(false);
                     }
                 });
+    }
+
+
+    private void onRequestError(boolean isError) {
+        binding.toolbar.setTitle("");
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 }

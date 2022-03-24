@@ -1,7 +1,6 @@
 package com.sena.dmzjthird.comic.adapter;
 
 import android.content.Context;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;

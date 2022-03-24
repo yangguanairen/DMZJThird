@@ -41,7 +41,6 @@ public class ComicRecommendChildAdapter extends BaseQuickAdapter<ComicRecommendN
                 holder.setText(R.id.subTitle, item.getSub_title());
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
     }

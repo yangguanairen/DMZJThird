@@ -101,10 +101,6 @@ public class ComicInfoFragment extends Fragment {
 
             @Override
             public void onNext(ComicDetailRes.@io.reactivex.rxjava3.annotations.NonNull ComicDetailInfoResponse data) {
-                if (data == null) {
-                    mCallbacks.loadingDataFinish(null, null, null);
-                    return;
-                }
 
                 binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
                 adapter = new ComicInfoAdapter(getContext(), data.getId() + "", data.getCover(), data.getTitle());
@@ -146,7 +142,7 @@ public class ComicInfoFragment extends Fragment {
 
             @Override
             public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
+                mCallbacks.loadingDataFinish(null, null, null);
             }
 
             @Override

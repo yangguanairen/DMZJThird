@@ -1,6 +1,7 @@
 package com.sena.dmzjthird.comic.adapter;
 
 import android.content.Context;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -10,7 +11,6 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.comic.bean.ComicSearchResultBean;
 import com.sena.dmzjthird.utils.GlideUtil;
-import com.sena.dmzjthird.utils.TimeUtil;
 
 /**
  * Created by Android Studio.
@@ -35,7 +35,9 @@ public class ComicSearchResultAdapter extends BaseQuickAdapter<ComicSearchResult
         holder.setText(R.id.title, bean.getTitle());
         holder.setText(R.id.author, bean.getAuthors());
         holder.setText(R.id.tag, bean.getTypes());
-        holder.setText(R.id.updateTime, TimeUtil.millConvertToDate(bean.getAddtime() * 1000));
+        TextView textView = holder.getView(R.id.updateTime);
+        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_book, 0, 0, 0);
+        textView.setText(bean.getLast_name());
 
     }
 }

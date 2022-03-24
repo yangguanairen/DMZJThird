@@ -92,6 +92,7 @@ public class NewsLatestFragment extends Fragment {
 
         binding.refreshLayout.setOnRefreshListener(() -> {
             page = 1;
+            initBanner();
             getResponse();
         });
 
@@ -191,9 +192,7 @@ public class NewsLatestFragment extends Fragment {
                 });
     }
 
-    private void openUrlInWebView(String url) {
 
-    }
 
     @Override
     public void onDestroyView() {
