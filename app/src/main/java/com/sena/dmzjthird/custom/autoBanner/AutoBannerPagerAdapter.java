@@ -60,6 +60,7 @@ public class AutoBannerPagerAdapter extends PagerAdapter {
             switch (data.getType()) {
                 case 0:
                     // 跳转漫画详情页
+                    IntentUtil.goToComicInfoActivity(mContext, data.getObjectId());
                     break;
                 case 1:
                     // 跳转小说详情页

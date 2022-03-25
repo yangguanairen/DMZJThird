@@ -87,6 +87,7 @@
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/shape_theme_green.xml" value="0.2595" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/shape_theme_white.xml" value="0.2595" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/shape_theme_yellow.xml" value="0.2595" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/drawable/splash_screen_bg.xml" value="0.301" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_account_home.xml" value="0.3342391304347826" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_author_info.xml" value="0.2164855072463768" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_change_password.xml" value="0.3342391304347826" />
@@ -111,6 +112,9 @@
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_setting.xml" value="0.33" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_setting_comic_read.xml" value="0.21739130434782608" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_setting_novel_read.xml" value="0.33" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_splash.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_splash_screen.xml" value="0.32760416666666664" />
+        <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_start.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_update_profile.xml" value="0.26927083333333335" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_user_download.xml" value="0.32971014492753625" />
         <entry key="..\:/Users/18897/Desktop/DMZJThird/app/src/main/res/layout/activity_user_history.xml" value="0.3342391304347826" />

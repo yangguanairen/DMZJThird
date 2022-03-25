@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +102,16 @@ public class ComicRecommendFragment extends Fragment {
                             AutoBannerData bannerData = new AutoBannerData();
                             bannerData.setTitle(item.getTitle());
                             bannerData.setCoverUrl(item.getCover());
+                            bannerData.setObjectId(item.getObj_id());
                             // 区分处理
+                            if (!TextUtils.isEmpty(item.getUrl())) {
+                                bannerData.setType(2);
+                                bannerData.setPageUrl(item.getUrl());
+                            } else if (item.getType() == 1) {
+                                bannerData.setType(0);
+                            } else {
+                                bannerData.setType(-1);
+                            }
                             bannerDataList.add(bannerData);
                         }
                         binding.banner.setDataList(bannerDataList);
