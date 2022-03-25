@@ -5,14 +5,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.application.NovelChapterRes;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
@@ -49,6 +48,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
     private String novelId;
     private String novelName;
     private String novelCover;
+    private String author;
     private int volumeId;
     private String volumeName;
     private String responseStr;
@@ -74,6 +74,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
         novelId = IntentUtil.getObjectId(this);
         novelName = IntentUtil.getObjectName(this);
         novelCover = IntentUtil.getObjectCover(this);
+        author = IntentUtil.getAuthorName(this);
         volumeId = IntentUtil.getVolumeId(this);
         volumeName = IntentUtil.getVolumeName(this);
         int chapterId = IntentUtil.getChapterId(this);
@@ -96,7 +97,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
     private void initData() {
         MyDataStore dataStore = MyDataStore.getInstance(this);
         currentTextSize = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_TEXT_SIZE, 50f);
-        currentSpaceLine = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_SPACE_LIN, 25f);
+        currentSpaceLine = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_SPACE_LINE, 25f);
         currentBgColorId = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_BG, R.color.white);
     }
 
@@ -161,7 +162,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
         binding.bottomView.nextChapter.setOnClickListener(v -> updateChapterId(false));
         ViewHelper.setSubscribeStatus(this, novelId, MyRetrofitService.TYPE_NOVEL, binding.bottomView.subscribeIcon, binding.bottomView.subscribeText);
         binding.bottomView.subscribeLayout.setOnClickListener(v -> {
-            ViewHelper.controlSubscribe(this, novelId, novelCover, novelName, "author", MyRetrofitService.TYPE_NOVEL,
+            ViewHelper.controlSubscribe(this, novelId, novelCover, novelName, author, MyRetrofitService.TYPE_NOVEL,
                     binding.bottomView.subscribeIcon, binding.bottomView.subscribeText);
         });
         binding.bottomView.settingLayout.setOnClickListener(v -> popupView.show());
@@ -182,6 +183,7 @@ public class NovelViewActivity extends AppCompatActivity implements NovelBottomP
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void initVM() {
 
         vm.currentChapterId.observe(this, chapterId -> {

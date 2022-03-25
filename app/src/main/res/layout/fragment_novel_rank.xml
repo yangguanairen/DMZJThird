@@ -8,7 +8,7 @@
     android:background="@color/white"
     tools:context=".novel.fragment.NovelRankFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,8 +16,10 @@
         android:layout_marginBottom="@dimen/dp_10">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dialogLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/tag"
@@ -50,10 +52,21 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp_10"
+            app:layout_constraintTop_toBottomOf="@+id/dialogLayout"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <include
+            android:id="@+id/error"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/error_no_data"
+            app:layout_constraintTop_toBottomOf="@+id/dialogLayout" />
 
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

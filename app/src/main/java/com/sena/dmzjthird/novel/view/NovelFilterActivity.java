@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.databinding.ActivityNovelFilterBinding;
 import com.sena.dmzjthird.novel.adapter.NovelFilterAdapter;
@@ -19,16 +17,15 @@ import com.sena.dmzjthird.novel.bean.NovelFilterTagBean;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
+import com.sena.dmzjthird.utils.ViewHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.HttpException;
 
@@ -53,16 +50,16 @@ public class NovelFilterActivity extends AppCompatActivity implements NovelFilte
 
         service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
 
-        //
-//        int tagId
-
-        tagName = getIntent().getStringExtra("selectTagName");
+        tagName = IntentUtil.getObjectName(this);
 
         initView();
 
     }
 
     private void initView() {
+
+        ViewHelper.immersiveStatus(this, binding.drawerLayout);
+
 
         binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         filterAdapter = new NovelFilterAdapter(this);
@@ -136,11 +133,7 @@ public class NovelFilterActivity extends AppCompatActivity implements NovelFilte
                     @Override
                     public void onError(@NonNull Throwable e) {
                         Toast.makeText(NovelFilterActivity.this, "获取小说筛选Tag失败!!", Toast.LENGTH_SHORT).show();
-                        if (e instanceof HttpException) {
-                            LogUtil.e("HttpError: " + ((HttpException) e).code());
-                        } else {
-                            LogUtil.e("OtherError: " + e.getMessage());
-                        }
+                        getResponseIsError(true);
                     }
 
                     @Override
@@ -176,6 +169,7 @@ public class NovelFilterActivity extends AppCompatActivity implements NovelFilte
 
                         if (page == 0) {
                             filterAdapter.setList(beanList);
+                            binding.recyclerView.scrollToPosition(0);
                         } else {
                             filterAdapter.addData(beanList);
                         }
@@ -211,9 +205,9 @@ public class NovelFilterActivity extends AppCompatActivity implements NovelFilte
         binding.progress.setVisibility(View.GONE);
         if (isError) {
             binding.recyclerView.setVisibility(View.INVISIBLE);
-            binding.noData.setVisibility(View.VISIBLE);
+            binding.error.noData.setVisibility(View.VISIBLE);
         } else {
-            binding.noData.setVisibility(View.INVISIBLE);
+            binding.error.noData.setVisibility(View.INVISIBLE);
             binding.recyclerView.setVisibility(View.VISIBLE);
         }
     }

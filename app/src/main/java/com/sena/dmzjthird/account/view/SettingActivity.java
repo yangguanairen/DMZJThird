@@ -2,7 +2,6 @@ package com.sena.dmzjthird.account.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.sena.dmzjthird.R;
@@ -34,7 +33,7 @@ public class SettingActivity extends AppCompatActivity {
 
         binding.toolbar.setBackListener(v -> finish());
 
-        binding.settingComicRead.setOnClickListener(v -> IntentUtil.goToActivity(this, SettingComicReadActivity.class));
+        binding.comicReadSetting.setOnClickListener(v -> IntentUtil.goToActivity(this, SettingComicReadActivity.class));
 
         binding.changePass.setOnClickListener(v -> {
 
@@ -47,6 +46,8 @@ public class SettingActivity extends AppCompatActivity {
             IntentUtil.goToActivity(this, ChangePasswordActivity.class);
 
         });
+
+        binding.novelReadSetting.setOnClickListener(v -> IntentUtil.goToActivity(this, SettingNovelReadActivity.class));
     }
 
 }

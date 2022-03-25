@@ -50,7 +50,6 @@ public class NovelRankFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         binding = FragmentNovelRankBinding.inflate(inflater, container, false);
         service = RetrofitHelper.getServer(RetrofitService.BASE_V3_URL);
@@ -75,6 +74,9 @@ public class NovelRankFragment extends Fragment {
         initData();
     }
 
+    /**
+     * 获取筛选条件
+     */
     private void initData() {
 
         service.getNovelRankTag()
@@ -194,14 +196,16 @@ public class NovelRankFragment extends Fragment {
 
                     @Override
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<NovelRankBean> beanList) {
-                        binding.refreshLayout.setRefreshing(false);
                         if (page == 0 && beanList.size() == 0) {
                             // 出错处理
+                            onRequestError(true);
                             return ;
                         }
+                        onRequestError(false);
 
                         if (page == 0) {
                             adapter.setList(beanList);
+                            binding.recyclerView.scrollToPosition(0);
                         } else {
                             adapter.addData(beanList);
                         }
@@ -217,12 +221,19 @@ public class NovelRankFragment extends Fragment {
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
                         // 出错处理
+                        binding.refreshLayout.setRefreshing(false);
+                        onRequestError(true);
                     }
 
                     @Override
                     public void onComplete() {
-
+                        binding.refreshLayout.setRefreshing(false);
                     }
                 });
+    }
+
+    private void onRequestError(boolean isError) {
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 }

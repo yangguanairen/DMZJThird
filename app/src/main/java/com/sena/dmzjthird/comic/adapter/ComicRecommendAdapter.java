@@ -212,7 +212,7 @@ public class ComicRecommendAdapter extends BaseQuickAdapter<ComicRecommendNewBea
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+        return position;
     }
 
 }

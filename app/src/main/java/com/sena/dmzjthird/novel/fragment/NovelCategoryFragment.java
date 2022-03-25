@@ -15,6 +15,7 @@ import com.sena.dmzjthird.databinding.FragmentNovelCategoryBinding;
 import com.sena.dmzjthird.novel.adapter.NovelCategoryAdapter;
 import com.sena.dmzjthird.novel.bean.NovelCategoryBean;
 import com.sena.dmzjthird.novel.view.NovelFilterActivity;
+import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 
 import java.util.List;
@@ -65,9 +66,7 @@ public class NovelCategoryFragment extends Fragment {
         adapter.setOnItemClickListener((a, view, position) -> {
             NovelCategoryBean bean = (NovelCategoryBean) a.getData().get(position);
             String selectTagName = bean.getTitle();
-            Intent intent = new Intent(getContext(), NovelFilterActivity.class);
-            intent.putExtra("selectTagName", selectTagName);
-            startActivity(intent);
+            IntentUtil.goToNovelFilterActivity(getContext(), selectTagName);
         });
 
         binding.refreshLayout.setOnRefreshListener(this::getResponse);

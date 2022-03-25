@@ -14,6 +14,7 @@ import com.sena.dmzjthird.comic.view.CommentReplyActivity;
 import com.sena.dmzjthird.comic.view.UserInfoActivity;
 import com.sena.dmzjthird.custom.LargeImageActivity;
 import com.sena.dmzjthird.custom.WebViewActivity;
+import com.sena.dmzjthird.novel.view.NovelFilterActivity;
 import com.sena.dmzjthird.novel.view.NovelInfoActivity;
 import com.sena.dmzjthird.novel.view.NovelViewActivity;
 
@@ -33,12 +34,11 @@ public class IntentUtil {
     private static final String OBJECT_ID = "object_id";
     private static final String OBJECT_COVER = "object_cover";
     private static final String OBJECT_NAME = "object_name";
+    private static final String AUTHOR_NAME = "author_name";
     private static final String VOLUME_ID = "volume_Id";
     private static final String VOLUME_NAME = "volume_name";
     private static final String CHAPTER_ID = "chapter_id";
     private static final String CHAPTER_NAME = "chapter_name";
-
-
 
 
     private static final String TO_UID = "to_uid";
@@ -60,11 +60,13 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
-    public static void goToComicViewActivity(Context context, String comicId, String cover, String comicName, int chapterId, String chapterName) {
+    public static void goToComicViewActivity(Context context, String comicId, String cover, String comicName,
+                                             String author, int chapterId, String chapterName) {
         Intent intent = new Intent(context, ComicViewActivity.class);
         intent.putExtra(OBJECT_ID, comicId);
         intent.putExtra(OBJECT_COVER, cover);
         intent.putExtra(OBJECT_NAME, comicName);
+        intent.putExtra(AUTHOR_NAME, author);
         intent.putExtra(CHAPTER_ID, chapterId);
         intent.putExtra(CHAPTER_NAME, chapterName);
         context.startActivity(intent);
@@ -91,7 +93,6 @@ public class IntentUtil {
     }
 
 
-
     public static void goToAuthorInfoActivity(Context context, String authorId) {
         Intent intent = new Intent(context, AuthorInfoActivity.class);
         intent.putExtra(AUTHOR_ID, authorId);
@@ -105,7 +106,7 @@ public class IntentUtil {
     }
 
     public static void goToCommentReplyActivity(Context context, int classify, String objId, String toUid, String toCommentId,
-                                                 String toReplyUsername, String toReplyContent) {
+                                                String toReplyUsername, String toReplyContent) {
         Intent intent = new Intent(context, CommentReplyActivity.class);
         intent.putExtra(OBJECT_ID, objId);
         intent.putExtra(TO_UID, toUid);
@@ -123,18 +124,26 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
-    public static void goToNovelViewActivity(Context context, String novelId, String cover, String title,
+    public static void goToNovelViewActivity(Context context, String novelId, String cover, String title, String author,
                                              int volumeId, String volumeName, int chapterId, String chapterName) {
         Intent intent = new Intent(context, NovelViewActivity.class);
         intent.putExtra(OBJECT_ID, novelId);
         intent.putExtra(OBJECT_COVER, cover);
         intent.putExtra(OBJECT_NAME, title);
+        intent.putExtra(AUTHOR_NAME, author);
         intent.putExtra(VOLUME_ID, volumeId);
         intent.putExtra(VOLUME_NAME, volumeName);
         intent.putExtra(CHAPTER_ID, chapterId);
         intent.putExtra(CHAPTER_NAME, chapterName);
         context.startActivity(intent);
     }
+
+    public static void goToNovelFilterActivity(Context context, String tagName) {
+        Intent intent = new Intent(context, NovelFilterActivity.class);
+        intent.putExtra(OBJECT_NAME, tagName);
+        context.startActivity(intent);
+    }
+
 
     public static void goToLargeImageActivity(Context context, String url) {
         Intent intent = new Intent(context, LargeImageActivity.class);
@@ -158,9 +167,6 @@ public class IntentUtil {
     public static String getUserId(Activity activity) {
         return activity.getIntent().getStringExtra(USER_ID);
     }
-
-
-
 
 
     public static String getClassifyTagId(Activity activity) {
@@ -216,20 +222,6 @@ public class IntentUtil {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public static String getObjectId(Activity activity) {
         return activity.getIntent().getStringExtra(OBJECT_ID);
     }
@@ -240,6 +232,10 @@ public class IntentUtil {
 
     public static String getObjectName(Activity activity) {
         return activity.getIntent().getStringExtra(OBJECT_NAME);
+    }
+
+    public static String getAuthorName(Activity activity) {
+        return activity.getIntent().getStringExtra(AUTHOR_NAME);
     }
 
     public static int getVolumeId(Activity activity) {

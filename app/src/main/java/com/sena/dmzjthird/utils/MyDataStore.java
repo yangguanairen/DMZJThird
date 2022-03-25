@@ -46,7 +46,7 @@ public class MyDataStore {
     public static String SETTING_SHOW_STATE = "show_state";
 
     public static String SETTING_NOVEL_TEXT_SIZE = "novel_text_size";
-    public static String SETTING_NOVEL_SPACE_LIN = "novel_space_line";
+    public static String SETTING_NOVEL_SPACE_LINE = "novel_space_line";
     public static String SETTING_NOVEL_BG = "novel_bg";
 
     static {

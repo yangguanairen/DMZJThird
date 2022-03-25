@@ -30,15 +30,17 @@ public class ComicInfoAdapter extends BaseQuickAdapter<ComicDetailRes.ComicDetai
     private final String mComicId;
     private final String mCover;
     private final String mComicName;
+    private final String mAuthorName;
 
     private boolean isReverse = true;
 
-    public ComicInfoAdapter(Context context, String comicId, String cover, String comicName) {
+    public ComicInfoAdapter(Context context, String comicId, String cover, String comicName, String authorName) {
         super(R.layout.item_comic_info);
         mContext = context;
         mComicId = comicId;
         mCover = cover;
         mComicName = comicName;
+        mAuthorName = authorName;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -61,10 +63,10 @@ public class ComicInfoAdapter extends BaseQuickAdapter<ComicDetailRes.ComicDetai
         adapter.setOnItemClickListener((a, view, position) -> {
             int selectChapterId = data.getData(position).getChapterId();
             String selectChapterName = data.getData(position).getChapterTitle();
-            IntentUtil.goToComicViewActivity(mContext, mComicId, mCover, mComicName, selectChapterId, selectChapterName);
+            IntentUtil.goToComicViewActivity(mContext, mComicId, mCover, mComicName, mAuthorName, selectChapterId, selectChapterName);
         });
 
-        TextView tvSort = (TextView) holder.getView(R.id.sort);
+        TextView tvSort = holder.getView(R.id.sort);
         tvSort.setOnClickListener(v -> {
             Collections.reverse(chapterNames);
             Collections.reverse(chapterIds);

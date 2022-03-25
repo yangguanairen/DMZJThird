@@ -26,7 +26,6 @@ import com.sena.dmzjthird.utils.api.ComicApi;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ComicInfoFragment extends Fragment {
@@ -102,15 +101,6 @@ public class ComicInfoFragment extends Fragment {
             @Override
             public void onNext(ComicDetailRes.@io.reactivex.rxjava3.annotations.NonNull ComicDetailInfoResponse data) {
 
-                binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-                adapter = new ComicInfoAdapter(getContext(), data.getId() + "", data.getCover(), data.getTitle());
-                binding.recyclerview.setAdapter(adapter);
-
-                coverUrl = data.getCover() == null ? "" : data.getCover();
-                GlideUtil.loadImageWithCookie(getActivity(), coverUrl, binding.cover);
-
-                binding.title.setText(data.getTitle());
-
                 StringBuilder sb = new StringBuilder();
                 String authors;
                 for (ComicDetailRes.ComicDetailTypeItemResponse t: data.getAuthorsList()) {
@@ -122,6 +112,15 @@ public class ComicInfoFragment extends Fragment {
                 }
                 authors = sb.toString();
                 binding.author.setText(authors);
+
+                binding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+                adapter = new ComicInfoAdapter(getContext(), data.getId() + "", data.getCover(), data.getTitle(),authors);
+                binding.recyclerview.setAdapter(adapter);
+
+                coverUrl = data.getCover() == null ? "" : data.getCover();
+                GlideUtil.loadImageWithCookie(getActivity(), coverUrl, binding.cover);
+
+                binding.title.setText(data.getTitle());
 
                 binding.updateTime.setText(TimeUtil.millConvertToDate(data.getLastUpdatetime() * 1000));
 

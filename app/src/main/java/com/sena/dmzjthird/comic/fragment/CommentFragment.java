@@ -28,7 +28,6 @@ import com.sena.dmzjthird.databinding.FragmentCommentBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
-import com.sena.dmzjthird.utils.PreferenceHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,6 +43,8 @@ import java.util.List;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
@@ -60,6 +61,8 @@ public class CommentFragment extends Fragment {
     private int sort = 0;
     private ComicCommentAdapter adapter;
     private String commentCount;
+
+    private boolean isLoaded = false;
 
     public static CommentFragment newInstance(int classify, String id) {
 
@@ -91,6 +94,18 @@ public class CommentFragment extends Fragment {
         initControl();
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isLoaded) return ;
+        isLoaded = true;
+        lazyLoad();
+    }
+
+    private void lazyLoad() {
+        getResponse();
     }
 
     private void initAdapter() {
@@ -161,7 +176,7 @@ public class CommentFragment extends Fragment {
         } else {
             page = 0;
         }
-        getResponse();
+//        getResponse();
 
     }
 
@@ -204,44 +219,60 @@ public class CommentFragment extends Fragment {
             })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(beans -> {
+                    .subscribe(new Observer<List<ComicCommentBean>>() {
+                        @Override
+                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
 
-                        binding.commentCount.setText(getString(R.string.comment_amount, Integer.valueOf(commentCount)));
+                        }
 
-                        if (sort == 0) {
-                            if (page == 1 && beans.size() == 0) {
-                                // 无数据处理
-                                return;
-                            }
-                            if (beans.size() == 0) {
-                                adapter.getLoadMoreModule().loadMoreEnd();
-                            } else {
-                                adapter.getLoadMoreModule().loadMoreComplete();
+                        @Override
+                        public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<ComicCommentBean> beans) {
+                            binding.commentCount.setText(getString(R.string.comment_amount, Integer.valueOf(commentCount)));
+
+                            if (sort == 0) {
+                                if (page == 1 && beans.size() == 0) {
+                                    // 无数据处理
+                                    return;
+                                }
+                                if (beans.size() == 0) {
+                                    adapter.getLoadMoreModule().loadMoreEnd();
+                                } else {
+                                    adapter.getLoadMoreModule().loadMoreComplete();
+                                }
+                                if (page == 1) {
+                                    adapter.setList(beans);
+                                } else {
+                                    adapter.addData(beans);
+                                }
                                 page++;
-                            }
-                            if (page == 1) {
-                                adapter.setList(beans);
                             } else {
-                                adapter.addData(beans);
-                            }
-                        } else {
-                            if (page == 0 && beans.size() == 0) {
-                                // 无数据处理
-                                return;
-                            }
-                            if (beans.size() == 0) {
-                                adapter.getLoadMoreModule().loadMoreEnd();
-                            } else {
-                                adapter.getLoadMoreModule().loadMoreComplete();
+                                if (page == 0 && beans.size() == 0) {
+                                    // 无数据处理
+                                    return;
+                                }
+                                if (beans.size() == 0) {
+                                    adapter.getLoadMoreModule().loadMoreEnd();
+                                } else {
+                                    adapter.getLoadMoreModule().loadMoreComplete();
+                                }
+                                if (page == 0) {
+                                    adapter.setList(beans);
+                                } else {
+                                    adapter.addData(beans);
+                                }
                                 page++;
-                            }
-                            if (page == 0) {
-                                adapter.setList(beans);
-                            } else {
-                                adapter.addData(beans);
                             }
                         }
 
+                        @Override
+                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
                     });
 
     }
@@ -363,5 +394,6 @@ public class CommentFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+        isLoaded = false;
     }
 }

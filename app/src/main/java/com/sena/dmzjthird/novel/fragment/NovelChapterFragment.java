@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.application.NovelChapterRes;
-import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.databinding.FragmentNovelChapterBinding;
 import com.sena.dmzjthird.novel.adapter.NovelChapterAdapter;
 import com.sena.dmzjthird.utils.api.NovelApi;
@@ -29,8 +28,6 @@ public class NovelChapterFragment extends Fragment {
 
     private static final String ARG_NOVEL_ID = "novel_id";
     private String mNovelId;
-    private String mNovelName;
-    private String mNovelCover;
     private boolean isLoaded = false;
 
     public static NovelChapterFragment newInstance(String novelId) {
@@ -50,9 +47,8 @@ public class NovelChapterFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@androidx.annotation.NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         binding = FragmentNovelChapterBinding.inflate(inflater, container, false);
 
@@ -66,11 +62,6 @@ public class NovelChapterFragment extends Fragment {
         isLoaded = true;
         lazyLoad();
     }
-
-    private void initView() {
-
-    }
-
 
     private void lazyLoad() {
         getResponse();
@@ -90,17 +81,19 @@ public class NovelChapterFragment extends Fragment {
                     public void onNext(@NonNull List<NovelChapterRes.NovelChapterVolumeResponse> dataList) {
                         if (dataList.size() == 0) {
                             // 出错处理
+                            onRequestError(true);
                             return ;
                         }
-                        binding.noData.setVisibility(View.INVISIBLE);
-                        binding.recyclerView.setVisibility(View.VISIBLE);
-                        NovelChapterAdapter adapter = new NovelChapterAdapter(getContext(), dataList, mNovelId, NovelInfoFragment.getNovelName(), NovelInfoFragment.getNovelCover());
+                        onRequestError(false);
+
+                        NovelChapterAdapter adapter = new NovelChapterAdapter(getContext(), dataList, mNovelId, NovelInfoFragment.getNovelName(), NovelInfoFragment.getNovelCover(), NovelInfoFragment.getAuthorName());
                         binding.recyclerView.setAdapter(adapter);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
                         // 出错处理
+                        onRequestError(true);
                     }
 
                     @Override
@@ -109,6 +102,11 @@ public class NovelChapterFragment extends Fragment {
                     }
                 });
 
+    }
+
+    private void onRequestError(boolean isError) {
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override

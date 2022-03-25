@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 
 import com.lxj.xpopup.core.BottomPopupView;
 import com.sena.dmzjthird.R;
-import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.MyDataStore;
 
 /**
@@ -72,13 +71,13 @@ public class NovelBottomPopup extends BottomPopupView {
     public void onDestroy() {
         super.onDestroy();
         dataStore.saveValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_TEXT_SIZE, currentTextSize);
-        dataStore.saveValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_SPACE_LIN, currentSpaceLine);
+        dataStore.saveValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_SPACE_LINE, currentSpaceLine);
         dataStore.saveValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_BG, currentBgColorId);
     }
 
     private void initData() {
         currentTextSize = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_TEXT_SIZE, 50f);
-        currentSpaceLine = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_TEXT_SIZE, 25f);
+        currentSpaceLine = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_SPACE_LINE, 25f);
         currentBgColorId = dataStore.getValue(MyDataStore.DATA_STORE_NOVEL_READ_SETTING, MyDataStore.SETTING_NOVEL_BG, R.color.white);
     }
 

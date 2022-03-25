@@ -32,6 +32,7 @@ public class NovelInfoFragment extends Fragment {
     private String mNovelId;
     private static String mNovelName;
     private static String mCoverUrl;
+    private static String mAuthorName;
 
     public static NovelInfoFragment newInstance(String novelId) {
         NovelInfoFragment fragment = new NovelInfoFragment();
@@ -86,6 +87,7 @@ public class NovelInfoFragment extends Fragment {
                     public void onNext(NovelDetailRes.@io.reactivex.rxjava3.annotations.NonNull NovelDetailInfoResponse data) {
                         mCoverUrl = data.getCover();
                         mNovelName = data.getName();
+                        mAuthorName = data.getAuthors();
 
                         GlideUtil.loadImage(getContext(), data.getCover(), binding.cover);
 
@@ -134,5 +136,9 @@ public class NovelInfoFragment extends Fragment {
 
     public static String getNovelCover() {
         return mCoverUrl;
+    }
+
+    public static String getAuthorName() {
+        return mAuthorName;
     }
 }

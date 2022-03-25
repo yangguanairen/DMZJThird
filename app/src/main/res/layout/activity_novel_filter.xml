@@ -72,20 +72,15 @@
             ProgressWheel:textColor="#222222"
             ProgressWheel:textSize="14sp" />
 
-        // 数据出错处理
-        <TextView
-            android:id="@+id/noData"
+
+        <include
+            android:id="@+id/error"
+            android:visibility="invisible"
+            layout="@layout/error_no_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:gravity="center"
-            android:text="@string/no_data"
-            android:textSize="20sp"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

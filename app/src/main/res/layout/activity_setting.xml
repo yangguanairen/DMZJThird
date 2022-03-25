@@ -19,16 +19,14 @@
         android:elevation="20dp"/>
 
 
-
-
     // 模仿阴影效果，底部颜色变深
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="?colorPrimaryDark" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setting_comic_read"
+    <RelativeLayout
+        android:id="@+id/comicReadSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_account_item"
@@ -37,27 +35,25 @@
 
         <ImageView
             style="@style/accountItemImage1"
-            android:id="@+id/imageView3"
-            android:src="@drawable/ic_comic_setting"
-            tools:ignore="MissingConstraints" />
+            android:id="@+id/comicReadIcon"
+            android:src="@drawable/ic_comic_setting" />
 
         <TextView
             style="@style/accountItemTitle"
             android:text="@string/comic_read_setting"
-            app:layout_constraintStart_toEndOf="@+id/imageView3"
-            tools:ignore="MissingConstraints" />
+            android:layout_toEndOf="@+id/comicReadIcon"
+            android:layout_centerVertical="true"/>
 
         <ImageView
             style="@style/accountItemImage2"
             android:src="@drawable/ic_right"
-            tools:ignore="MissingConstraints" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setting_comic_download"
+    <RelativeLayout
+        android:id="@+id/comicDownloadSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_account_item"
@@ -66,28 +62,86 @@
 
         <ImageView
             style="@style/accountItemImage1"
-            android:id="@+id/imageView4"
-            android:src="@drawable/ic_save"
-            tools:ignore="MissingConstraints" />
+            android:id="@+id/comicDownloadIcon"
+            android:src="@drawable/ic_save" />
 
         <TextView
             style="@style/accountItemTitle"
             android:text="@string/comic_download_setting"
-            app:layout_constraintStart_toEndOf="@+id/imageView4"
-            tools:ignore="MissingConstraints" />
+            android:layout_toEndOf="@+id/comicDownloadIcon"
+            android:layout_centerVertical="true"/>
 
         <ImageView
             style="@style/accountItemImage2"
             android:src="@drawable/ic_right"
-            tools:ignore="MissingConstraints" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
+        android:id="@+id/novelReadSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_account_item"
+        android:clickable="true"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/novelReadIcon"
+            style="@style/accountItemImage1"
+            android:src="@drawable/ic_comic_setting" />
+
+        <TextView
+            style="@style/accountItemTitle"
+            android:text="@string/novel_read_setting"
+            android:layout_toEndOf="@+id/novelReadIcon"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            style="@style/accountItemImage2"
+            android:src="@drawable/ic_right"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/novelDownloadSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_account_item"
+        android:clickable="true"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/novelDownloadIcon"
+            style="@style/accountItemImage1"
+            android:src="@drawable/ic_comic_setting" />
+
+        <TextView
+            style="@style/accountItemTitle"
+            android:text="@string/novel_download_setting"
+            android:layout_toEndOf="@+id/novelDownloadIcon"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            style="@style/accountItemImage2"
+            android:src="@drawable/ic_right"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <RelativeLayout
         android:id="@+id/changePass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -97,28 +151,29 @@
 
         <ImageView
             style="@style/accountItemImage1"
-            android:id="@+id/imageView9"
+            android:id="@+id/changePassIcon"
             android:src="@drawable/ic_key"
             tools:ignore="MissingConstraints" />
 
         <TextView
             style="@style/accountItemTitle"
             android:text="@string/icon_change_password"
-            app:layout_constraintStart_toEndOf="@+id/imageView9"
-            tools:ignore="MissingConstraints" />
+            android:layout_toEndOf="@id/changePassIcon"
+            android:layout_centerVertical="true"/>
 
         <ImageView
             style="@style/accountItemImage2"
             android:src="@drawable/ic_right"
-            tools:ignore="MissingConstraints" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/checkUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -128,24 +183,24 @@
 
         <ImageView
             style="@style/accountItemImage1"
-            android:id="@+id/imageView7"
-            android:src="@drawable/ic_update"
-            tools:ignore="MissingConstraints" />
+            android:id="@+id/checkUpdateIcon"
+            android:src="@drawable/ic_update"/>
 
         <TextView
             style="@style/accountItemTitle"
             android:text="@string/check_update"
-            app:layout_constraintStart_toEndOf="@+id/imageView7"
-            tools:ignore="MissingConstraints" />
+            android:layout_toEndOf="@id/checkUpdateIcon"
+            android:layout_centerVertical="true"/>
 
         <ImageView
             style="@style/accountItemImage2"
             android:src="@drawable/ic_right"
-            tools:ignore="MissingConstraints" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -155,21 +210,22 @@
 
         <ImageView
             style="@style/accountItemImage1"
-            android:id="@+id/imageView8"
+            android:id="@+id/aboutIcon"
             android:src="@drawable/ic_about"
             tools:ignore="MissingConstraints" />
 
         <TextView
             style="@style/accountItemTitle"
             android:text="@string/about"
-            app:layout_constraintStart_toEndOf="@+id/imageView8"
-            tools:ignore="MissingConstraints" />
+            android:layout_toEndOf="@id/aboutIcon"
+            android:layout_centerVertical="true"/>
 
         <ImageView
             style="@style/accountItemImage2"
             android:src="@drawable/ic_right"
-            tools:ignore="MissingConstraints" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
 </LinearLayout>

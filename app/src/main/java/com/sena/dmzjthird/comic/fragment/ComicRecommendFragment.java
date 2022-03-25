@@ -72,7 +72,10 @@ public class ComicRecommendFragment extends Fragment {
         adapter = new ComicRecommendAdapter(getContext());
         binding.recyclerview.setAdapter(adapter);
 
-        binding.refreshLayout.setOnRefreshListener(this::getResponse);
+        binding.refreshLayout.setOnRefreshListener(() -> {
+            list.clear();
+            getResponse();
+        });
     }
 
     private void getResponse() {

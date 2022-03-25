@@ -84,7 +84,6 @@ public class NovelRecommendFragment extends Fragment {
 
                     @Override
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<NovelRecommendBean> beanList) {
-//                        binding.refreshLayout.setRefreshing(false);
 
                         if (beanList.size() == 0) {
                             // 出错处理

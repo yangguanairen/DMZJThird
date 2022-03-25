@@ -18,20 +18,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoAction"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".account.view.SettingNovelReadActivity"
+            android:exported="false" />
 
         <provider
-            android:authorities="com.sena.dmzjthird.provider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.sena.dmzjthird.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-
-
         </provider>
-
-
 
         <activity
             android:name=".comic.view.ComicDownloadActivity"

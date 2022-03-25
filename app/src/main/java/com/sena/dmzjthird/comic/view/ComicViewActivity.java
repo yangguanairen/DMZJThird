@@ -21,7 +21,6 @@ import com.sena.dmzjthird.comic.bean.ComicChapterInfoBean;
 import com.sena.dmzjthird.custom.readerComic.ComicViewVM;
 import com.sena.dmzjthird.databinding.ActivityComicViewBinding;
 import com.sena.dmzjthird.utils.IntentUtil;
-import com.sena.dmzjthird.utils.LogUtil;
 import com.sena.dmzjthird.utils.RetrofitHelper;
 import com.sena.dmzjthird.utils.ViewHelper;
 import com.sena.dmzjthird.utils.api.ComicApi;
@@ -42,6 +41,7 @@ public class ComicViewActivity extends AppCompatActivity {
     private String comicId;
     private String comicName;
     private String comicCover;
+    private String authorName;
 
     private ComicViewVM vm;
 
@@ -68,6 +68,7 @@ public class ComicViewActivity extends AppCompatActivity {
         comicId = IntentUtil.getObjectId(this);
         comicCover = IntentUtil.getObjectCover(this);
         comicName = IntentUtil.getObjectName(this);
+        authorName = IntentUtil.getAuthorName(this);
         int chapterId = IntentUtil.getChapterId(this);
         String chapterName = IntentUtil.getChapterName(this);
 
@@ -90,7 +91,7 @@ public class ComicViewActivity extends AppCompatActivity {
         ViewHelper.setSubscribeStatus(this, comicId, MyRetrofitService.TYPE_COMIC,
                 binding.bottomView.getSubscribeIconView(), binding.bottomView.getSubscribeTextView());
         binding.bottomView.setSubscribeListener(v -> {
-            ViewHelper.controlSubscribe(this, comicId, comicCover, comicName, "author",
+            ViewHelper.controlSubscribe(this, comicId, comicCover, comicName, authorName,
                     MyRetrofitService.TYPE_COMIC,
                     binding.bottomView.getSubscribeIconView(), binding.bottomView.getSubscribeTextView());
         });

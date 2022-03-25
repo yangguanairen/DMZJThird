@@ -1,7 +1,6 @@
 package com.sena.dmzjthird.custom.readerBook;
 
-import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +8,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.novel.vm.NovelViewVM;
+import com.sena.dmzjthird.utils.GlideUtil;
 import com.sena.dmzjthird.utils.LogUtil;
 
 /**
@@ -63,11 +59,13 @@ public class ReaderPageAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
         if (position == 0) {
+            @SuppressLint("InflateParams")
             View view = LayoutInflater.from(mContext).inflate(R.layout.default_pre_page, null);
             container.addView(view);
             return view;
         }
         if (position == getPageNum() + 1) {
+            @SuppressLint("InflateParams")
             View view = LayoutInflater.from(mContext).inflate(R.layout.default_next_page, null);
             container.addView(view);
             return view;
@@ -96,13 +94,9 @@ public class ReaderPageAdapter extends PagerAdapter {
                 vm.isShowToolView.postValue(!isShow);
             });
 
-            Glide.with(mContext)
-                    .load(readerData.imageList.get(position))
-                    .transition(withCrossFade(500))
-                    .skipMemoryCache(false)
-                    .placeholder(R.drawable.selector_default_picture)
-                    .error(R.drawable.selector_default_picture)
-                    .into(photoView);
+            // Adapter的Count比imageList多首尾两张
+            GlideUtil.loadImage(mContext, readerData.imageList.get(position - 1), photoView);
+
             container.addView(photoView);
             return photoView;
         }
@@ -116,7 +110,6 @@ public class ReaderPageAdapter extends PagerAdapter {
 
     /**
      * 不包括首尾上下章节页面
-     * @return
      */
     public int getPageNum() {
         if (readerData.imageList.isEmpty()) {

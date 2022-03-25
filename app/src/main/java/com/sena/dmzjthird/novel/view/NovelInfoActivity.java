@@ -7,11 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
-import com.gyf.immersionbar.BarHide;
-import com.gyf.immersionbar.ImmersionBar;
-import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.MyRetrofitService;
 import com.sena.dmzjthird.databinding.ActivityNovelInfoBinding;
 import com.sena.dmzjthird.novel.fragment.NovelChapterFragment;
@@ -39,11 +38,7 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
         binding = ActivityNovelInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ImmersionBar.with(this)
-                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-                .statusBarColor(R.color.theme_blue)
-                .titleBarMarginTop(binding.toolbar)
-                .init();
+        binding.progress.spin();
 
         novelId = IntentUtil.getObjectId(this);
 
@@ -61,6 +56,10 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
     }
 
     private void initView() {
+
+        ViewHelper.immersiveStatus(this, binding.toolbar);
+
+        binding.toolbar.setBackListener(v -> finish());
 
         binding.viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             @NonNull
@@ -85,15 +84,9 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
         binding.tableLayout.setupWithViewPager(binding.viewPager);
 
         // 订阅
-        binding.toolbar.setFavoriteListener(v -> {
-            ViewHelper.controlSubscribe(this, novelId, novelCover, novelName, novelAuthor, MyRetrofitService.TYPE_NOVEL,
-                    binding.toolbar.getFavoriteIV(), null);
-        });
-
-//        // 下载
-//        binding.toolbar.setOtherListener(v -> {
-//
-//        });
+        binding.toolbar.setFavoriteListener(v ->
+                ViewHelper.controlSubscribe(this, novelId, novelCover, novelName, novelAuthor, MyRetrofitService.TYPE_NOVEL,
+                        binding.toolbar.getFavoriteIV(), null));
 
     }
 
@@ -105,16 +98,27 @@ public class NovelInfoActivity extends AppCompatActivity implements NovelInfoFra
 
     @Override
     public void onLoadInfoEnd(String title, String cover, String author) {
-        binding.toolbar.setBackListener(v -> finish());
 
-        if (title == null) {
-            // 出错处理
-            binding.toolbar.setFavoriteVisibility(View.GONE);
-            return ;
-        }
-        binding.toolbar.setTitle(title);
-        novelCover = cover;
-        novelName = title;
-        novelAuthor = author;
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (binding == null) return ;
+            binding.progress.stopSpinning();
+            binding.constLayout.removeView(binding.progress);
+
+
+            if (title == null) {
+                // 出错处理
+                binding.error.noData.setVisibility(View.VISIBLE);
+                return;
+            }
+            binding.contentLayout.setVisibility(View.VISIBLE);
+
+            binding.toolbar.setTitle(title);
+            binding.toolbar.setFavoriteVisibility(View.VISIBLE);
+            novelCover = cover;
+            novelName = title;
+            novelAuthor = author;
+        }, 500);
+
+
     }
 }

@@ -9,19 +9,15 @@
 
     <pokercc.android.expandablerecyclerview.ExpandableRecyclerView
         android:id="@+id/recyclerView"
-        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
-    <TextView
-    android:id="@+id/noData"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="@string/no_data"
-    android:textSize="18sp"
-    android:textColor="@color/black" />
+    <include
+        android:id="@+id/error"
+        android:visibility="invisible"
+        layout="@layout/error_no_data" />
 
 
 

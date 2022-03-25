@@ -19,7 +19,7 @@
 
 
     // 数据出错处理
-    <string name="no_data">没有数据</string>
+    <string name="no_data">没有数据，请重试</string>
     <string name="default_text">默认文字</string>
     <string name="copyright_error">因版权、国家法规等原因，此漫画暂不提供观看，敬请谅解。</string>
 
@@ -57,7 +57,6 @@
     <string name="password">密码</string>
     <string name="click_login">点击登录</string>
     <string name="click_register">点击注册</string>
-
 
 
     // 漫画阅读设置

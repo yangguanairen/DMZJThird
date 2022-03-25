@@ -126,7 +126,7 @@ public class NovelSearchResultFragment extends Fragment {
 
     private void onErrorAppear(boolean isError) {
         binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
-        binding.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override

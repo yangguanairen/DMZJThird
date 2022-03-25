@@ -41,7 +41,6 @@ public class NovelLatestFragment extends Fragment {
     @Override
     public View onCreateView(@androidx.annotation.NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         binding = FragmentNovelLatestBinding.inflate(inflater, container, false);
 
@@ -100,35 +99,46 @@ public class NovelLatestFragment extends Fragment {
 
                     @Override
                     public void onNext(@NonNull List<NovelLatestBean> beanList) {
-                        binding.refreshLayout.setRefreshing(false);
 
-                        if (beanList.size() == 0) {
+                        if (page == 0 && beanList.isEmpty()) {
                             // 出错处理
+                            onRequestError(true);
                             return ;
                         }
+                        onRequestError(false);
+
                         if (page == 0) {
                             adapter.setList(beanList);
                         } else {
                             adapter.addData(beanList);
                         }
-                        if (beanList.size() == 0) {
+                        if (beanList.isEmpty()) {
                             adapter.getLoadMoreModule().loadMoreEnd();
+                        } else {
+                            adapter.getLoadMoreModule().loadMoreComplete();
                         }
-                        adapter.getLoadMoreModule().loadMoreComplete();
+
                         page++;
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
                         // 出错处理
+                        binding.refreshLayout.setRefreshing(false);
+                        onRequestError(true);
                     }
 
                     @Override
                     public void onComplete() {
-
+                        binding.refreshLayout.setRefreshing(false);
                     }
                 });
 
+    }
+
+    private void onRequestError(boolean isError) {
+        binding.error.noData.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        binding.recyclerView.setVisibility(isError ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override

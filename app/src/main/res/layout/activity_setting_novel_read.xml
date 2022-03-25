@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".account.view.SettingNovelReadActivity"
+    android:background="@color/white">
+
+    <com.sena.dmzjthird.custom.NormalToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:isShowFavorite="false"
+        app:isShowOther="false"
+        app:toolbarTitle="@string/novel_read_setting"
+        android:background="?colorPrimary"
+        android:elevation="20dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="字号"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/increaseTextSize"/>
+
+            <TextView
+                android:id="@+id/increaseTextSize"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="大"
+                android:gravity="center"
+                android:padding="5dp"
+                android:layout_marginStart="40dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textSize"
+                app:layout_constraintEnd_toStartOf="@id/textSizeNum"
+                android:background="@drawable/shape_novel_setting"/>
+
+            <EditText
+                android:id="@+id/textSizeNum"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:editable="false"
+                android:gravity="center"
+                android:textSize="17sp"
+                android:inputType="number"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/increaseTextSize"
+                app:layout_constraintEnd_toStartOf="@id/decreaseTextSize"
+                tools:ignore="Deprecated" />
+
+
+            <TextView
+                android:id="@+id/decreaseTextSize"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="小"
+                android:padding="5dp"
+                android:gravity="center"
+                android:background="@drawable/shape_novel_setting"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textSizeNum" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/spaceLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="行距"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/increaseSpaceLine"/>
+
+            <TextView
+                android:id="@+id/increaseSpaceLine"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="增加"
+                android:gravity="center"
+                android:padding="5dp"
+                android:clickable="true"
+                android:layout_marginStart="40dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/spaceLine"
+                app:layout_constraintEnd_toStartOf="@id/spaceLineNum"
+                android:background="@drawable/shape_novel_setting"/>
+
+            <EditText
+                android:id="@+id/spaceLineNum"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="12.25"
+                android:editable="true"
+                android:inputType="number"
+                android:textSize="17sp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/increaseSpaceLine"
+                app:layout_constraintEnd_toStartOf="@id/decreaseSpaceLine"
+                tools:ignore="Deprecated" />
+
+            <TextView
+                android:id="@+id/decreaseSpaceLine"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="减小"
+                android:padding="5dp"
+                android:clickable="true"
+                android:gravity="center"
+                android:background="@drawable/shape_novel_setting"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/spaceLineNum" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="主题"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bgYellow"/>
+
+            <View
+                android:id="@+id/bgYellow"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="40dp"
+                app:layout_constraintStart_toEndOf="@+id/theme"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bgWhite"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/shape_theme_yellow" />
+            <View
+                android:id="@+id/bgWhite"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toEndOf="@+id/bgYellow"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bgGreen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/shape_theme_white" />
+
+            <View
+                android:id="@+id/bgGreen"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toEndOf="@+id/bgWhite"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/bgBlack"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/shape_theme_green" />
+
+            <View
+                android:id="@+id/bgBlack"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toEndOf="@+id/bgGreen"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/shape_theme_black" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
