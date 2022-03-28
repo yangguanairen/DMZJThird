@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.sena.dmzjthird.RetrofitService;
 import com.sena.dmzjthird.custom.autoBanner.AutoBannerData;
@@ -87,6 +88,7 @@ public class NovelRecommendFragment extends Fragment {
 
                         if (beanList.size() == 0) {
                             // 出错处理
+                            Toast.makeText(getContext(), "轻小说首页请求失败!", Toast.LENGTH_SHORT).show();
                             return ;
                         }
 
@@ -107,6 +109,7 @@ public class NovelRecommendFragment extends Fragment {
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
                         // 出错处理
                         binding.refreshLayout.setRefreshing(false);
+                        Toast.makeText(getContext(), "轻小说首页请求失败!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

@@ -67,7 +67,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp">
+        android:padding="15dp"
+        android:visibility="gone">
 
         <TextView
             style="@style/comicReadSettingTitle"
@@ -85,7 +86,8 @@
         android:id="@+id/modeCons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp">
+        android:padding="15dp"
+        android:visibility="gone">
 
         <TextView
             style="@style/comicReadSettingTitle"

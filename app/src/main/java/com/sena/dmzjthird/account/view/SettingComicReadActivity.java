@@ -1,14 +1,13 @@
 package com.sena.dmzjthird.account.view;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import com.sena.dmzjthird.databinding.ActivitySettingComicReadBinding;
 import com.sena.dmzjthird.utils.MyDataStore;
+import com.sena.dmzjthird.utils.ViewHelper;
 
 public class SettingComicReadActivity extends AppCompatActivity {
 
@@ -16,7 +15,6 @@ public class SettingComicReadActivity extends AppCompatActivity {
 
     private MyDataStore dataStore;
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +22,8 @@ public class SettingComicReadActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         dataStore = MyDataStore.getInstance(this);
+
+        ViewHelper.immersiveStatus(this, binding.normalToolbar);
 
         binding.normalToolbar.setBackListener(v -> finish());
 

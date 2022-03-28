@@ -116,6 +116,7 @@ public class ComicRecommendFragment extends Fragment {
                         }
                         binding.banner.setDataList(bannerDataList);
 
+                        LogUtil.e("首页请求数据: " + beanList.size());
                         for (int i = 1; i < beanList.size(); i++) {
                             setRecommendList(beanList.get(i));
                         }

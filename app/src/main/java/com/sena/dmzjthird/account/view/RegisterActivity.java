@@ -47,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void initView() {
         ViewHelper.immersiveStatus(this, binding.toolbar);
+        binding.toolbar.setBackListener(v -> finish());
         binding.register.setOnClickListener(v -> register());
     }
 
@@ -97,7 +98,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        popup.dismiss();
+                        XPopUpUtil.showCustomToast(RegisterActivity.this, R.drawable.ic_error_red, "注册失败，请重新尝试!!");
                     }
 
                     @Override

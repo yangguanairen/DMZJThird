@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.lxj.xpopup.core.BasePopupView;
 import com.sena.dmzjthird.R;
 import com.sena.dmzjthird.account.MyRetrofitService;
+import com.sena.dmzjthird.account.bean.ResultBean;
 import com.sena.dmzjthird.databinding.ActivityChangePasswordBinding;
 import com.sena.dmzjthird.utils.MyDataStore;
 import com.sena.dmzjthird.utils.RetrofitHelper;
@@ -19,6 +20,9 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -74,14 +78,31 @@ public class ChangePasswordActivity extends AppCompatActivity {
         service.updatePassword(bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bean -> {
-                    popupView.dismiss();
-                    if (bean == null ) {
-                        XPopUpUtil.showCustomToast(this, R.drawable.ic_error_red, "更新失败");
-                    } else if (bean.getCode() == 100)  {
-                        XPopUpUtil.showCustomToast(this, R.drawable.ic_error_red, bean.getContent());
-                    } else {
-                        XPopUpUtil.showCustomToast(this, R.drawable.ic_check_green, bean.getContent());
+                .subscribe(new Observer<ResultBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ResultBean bean) {
+                        popupView.dismiss();
+                        if (bean.getCode() == 100)  {
+                            XPopUpUtil.showCustomToast(ChangePasswordActivity.this, R.drawable.ic_error_red, bean.getContent());
+                        } else {
+                            XPopUpUtil.showCustomToast(ChangePasswordActivity.this, R.drawable.ic_check_green, bean.getContent());
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        popupView.dismiss();
+                        XPopUpUtil.showCustomToast(ChangePasswordActivity.this, R.drawable.ic_error_red, "更新失败");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
 
