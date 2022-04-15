@@ -1,9 +1,6 @@
 # DMZJThird
-目前问题   
-1.专题和小说模块使用V4加密，无法继续编写   
-2.数据和api接口需要进行分离
-
-下载链接  https://github.com/yangguanairen/-/blob/main/DMZJThrid.apk 
+1. 基本实现动漫之家的功能
+2. 用户模块使用个人服务器数据，使用时需要替换
 
 截图
 ![img](https://github.com/yangguanairen/-/blob/main/DMZJThird01.jpg)
